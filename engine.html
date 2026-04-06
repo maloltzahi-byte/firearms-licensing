@@ -433,8 +433,94 @@ hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 </main>
 </div><!-- /app -->
 
-<script src="app.config.js"></script>
 <script>
+// ══════════════════════════════════════════════
+// CONFIG + STATE
+// ══════════════════════════════════════════════
+const DEFAULT_SB_URL = 'https://lcvshepgzizrlqbzvjoe.supabase.co';
+const DEFAULT_SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdnNoZXBneml6cmxxYnp2am9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDU5NzEsImV4cCI6MjA5MDk4MTk3MX0.ca4rw8QeRoPdQPwAsqPiLEZD6S-eOCdw6-P4a4BIFNk';
+let CURRENT_SUBMISSION_ID = null;
+let CURRENT_SUBMISSION_RECORD = null;
+
+function getQueryParam(name) {
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function inferCriterionFromApplicant(applicant) {
+  if (applicant.criterion && ROUTES[applicant.criterion]) return applicant.criterion;
+  if (applicant.selected_route && ROUTES[applicant.selected_route]) return applicant.selected_route;
+  const byGroup = {
+    RESIDENCY: 'RESIDENT_ELIGIBLE_LOCALITY_STANDARD',
+    WORK: 'WORK_ELIGIBLE_LOCALITY_EMPLOYEE',
+    SECURITY_FORCES: 'SECURITY_FORCES_OFFICER_NCO',
+    POLICE: 'POLICE_CAREER_ACTIVE_2Y',
+    FARMER: 'FARMER_SELF_EMPLOYED',
+    RESCUE_ORG: 'MEDA_WORKER_OR_VOLUNTEER',
+    SPORT_SHOOTING: 'SPORTS_OLYMPIC',
+    OTHER: 'TOUR_GUIDE_LICENSED'
+  };
+  if (applicant.criterion_group && byGroup[applicant.criterion_group]) return byGroup[applicant.criterion_group];
+  return '';
+}
+
+function fillFormFromSubmission(record) {
+  const d = record.applicant_data || {};
+  document.getElementById('f_name').value = record.full_name || d.name || '';
+  document.getElementById('f_phone').value = record.phone || d.phone || '';
+  document.getElementById('f_age').value = d.age || '';
+  document.getElementById('f_status').value = d.status || '';
+  document.getElementById('f_residency_years').value = d.residency_years ?? '';
+  document.getElementById('f_hebrew').value = d.hebrew || 'yes';
+  document.getElementById('f_service_type').value = d.service_type || 'none';
+  document.getElementById('f_criterion').value = inferCriterionFromApplicant(d);
+  document.getElementById('f_settlement_name').value = d.settlement_name || '';
+  document.getElementById('f_settlement_id').value = d.settlement_id || '';
+  document.getElementById('f_flag_org_auth').checked = !!(d.flags && d.flags.org_auth);
+  document.getElementById('f_flag_criminal').checked = !!(d.flags && d.flags.criminal);
+  document.getElementById('f_flag_medical').checked = !!(d.flags && d.flags.medical);
+  document.getElementById('f_flag_late').checked = !!(d.flags && d.flags.late);
+  const res = document.getElementById('settlement_results');
+  if (d.settlement_name) {
+    res.innerHTML = d.settlement_id ? `<span style="color:var(--green)">✅ ${d.settlement_name} — נטען מליד קיים</span>` : `<span style="color:var(--muted)">${d.settlement_name}</span>`;
+  }
+}
+
+async function updateSubmissionLifecycle(status, extra = {}) {
+  if (!window._sb_connected || !CURRENT_SUBMISSION_ID) return;
+  try {
+    await fetch(`${window._sb_url}/rest/v1/client_submissions?id=eq.${CURRENT_SUBMISSION_ID}`, {
+      method: 'PATCH',
+      headers: {
+        apikey: window._sb_key,
+        Authorization: `Bearer ${window._sb_key}`,
+        'Content-Type': 'application/json',
+        Prefer: 'return=minimal'
+      },
+      body: JSON.stringify({ status, updated_at: new Date().toISOString(), ...extra })
+    });
+  } catch (e) {
+    console.error('Lifecycle update failed', e);
+  }
+}
+
+async function loadSubmission(submissionId) {
+  if (!window._sb_connected || !submissionId) return;
+  try {
+    const res = await fetch(`${window._sb_url}/rest/v1/client_submissions?id=eq.${submissionId}&select=*`, {
+      headers: { apikey: window._sb_key, Authorization: `Bearer ${window._sb_key}` }
+    });
+    if (!res.ok) throw new Error('status ' + res.status);
+    const rows = await res.json();
+    if (!rows.length) return;
+    CURRENT_SUBMISSION_ID = submissionId;
+    CURRENT_SUBMISSION_RECORD = rows[0];
+    fillFormFromSubmission(rows[0]);
+    await updateSubmissionLifecycle('IN_REVIEW');
+  } catch (e) {
+    console.error('Load submission failed', e);
+  }
+}
+
 // ══════════════════════════════════════════════
 // DATA — criteria_routes v1.0 FINAL
 // ══════════════════════════════════════════════
@@ -1484,90 +1570,13 @@ function renderRouteCard(routeResult, isPrimary) {
 // SUPABASE (v1.1 — saves all route results)
 // ══════════════════════════════════════════════
 window._sb_connected = false;
-window._sb_url = window.APP_CONFIG?.SUPABASE_URL || '';
-window._sb_key = window.APP_CONFIG?.SUPABASE_ANON_KEY || '';
-window._current_submission_id = null;
+window._sb_url = '';
+window._sb_key = '';
 
-function getSubmissionIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  const raw = params.get('submission_id');
-  if (!raw) return null;
-  const id = Number(raw);
-  return Number.isFinite(id) ? id : null;
-}
-
-function populateFormFromSubmission(record) {
-  const d = record?.applicant_data || {};
-  window._current_submission_id = record.id || null;
-
-  const name = d.name || record.full_name || '';
-  const phone = d.phone || record.phone || '';
-  const settlementName = d.settlement_name || '';
-  const settlementId = d.settlement_id || '';
-  const age = d.age || '';
-  const status = d.status || '';
-  const residencyYears = d.residency_years || '';
-  const hebrew = d.hebrew || 'yes';
-  const serviceType = d.service_type || 'none';
-  const criterion = d.criterion || '';
-  const flags = d.flags || {};
-
-  document.getElementById('f_name').value = name;
-  document.getElementById('f_phone').value = phone;
-  document.getElementById('f_settlement_name').value = settlementName;
-  document.getElementById('f_settlement_id').value = settlementId;
-  document.getElementById('f_age').value = age;
-  document.getElementById('f_status').value = status;
-  document.getElementById('f_residency_years').value = residencyYears;
-  document.getElementById('f_hebrew').value = hebrew;
-  document.getElementById('f_service_type').value = serviceType;
-  document.getElementById('f_criterion').value = criterion;
-
-  document.getElementById('f_flag_org_auth').checked = !!flags.org_auth;
-  document.getElementById('f_flag_criminal').checked = !!flags.criminal;
-  document.getElementById('f_flag_medical').checked = !!flags.medical;
-  document.getElementById('f_flag_late').checked = !!flags.late;
-
-  if (settlementName && settlementId) {
-    document.getElementById('settlement_results').innerHTML =
-      `<span style="color:var(--green)">✅ ${settlementName} — יישוב טעון מהמערכת</span>`;
-  }
-
-  const hint = document.createElement('div');
-  hint.style.cssText = 'margin-bottom:12px;padding:10px 12px;border:1px solid rgba(59,130,246,.2);background:rgba(59,130,246,.08);border-radius:10px;font-size:12px;color:var(--text)';
-  hint.innerHTML = `נטען ליד קיים מהמערכת · מזהה פנייה: <strong>${record.id}</strong>`;
-  const emptyState = document.getElementById('empty-state');
-  if (emptyState && !document.getElementById('submission-hint')) {
-    hint.id = 'submission-hint';
-    emptyState.parentNode.insertBefore(hint, emptyState);
-  }
-}
-
-async function loadSubmissionFromUrl() {
-  const submissionId = getSubmissionIdFromUrl();
-  if (!submissionId || !window._sb_connected) return false;
-
-  try {
-    const res = await fetch(`${window._sb_url}/rest/v1/client_submissions?id=eq.${submissionId}&select=*`, {
-      headers: { apikey: window._sb_key, Authorization: `Bearer ${window._sb_key}` }
-    });
-    if (!res.ok) throw new Error('status ' + res.status);
-    const rows = await res.json();
-    if (!rows.length) return false;
-
-    populateFormFromSubmission(rows[0]);
-    await runEngine();
-    return true;
-  } catch (e) {
-    console.error('Load submission failed:', e);
-    return false;
-  }
-}
-
-async function connectDB() {
-  const url = document.getElementById('sb_url').value.trim() || window._sb_url;
-  const key = document.getElementById('sb_key').value.trim() || window._sb_key;
-  if (!url || !key) { alert('הכנס URL ו-Key'); return; }
+async function connectDB(silent = false) {
+  const url = document.getElementById('sb_url').value.trim();
+  const key = document.getElementById('sb_key').value.trim();
+  if (!url || !key) { if (!silent) alert('הכנס URL ו-Key'); return false; }
   try {
     const res = await fetch(`${url}/rest/v1/eligible_localities?select=count&limit=1`, {
       headers: { apikey: key, Authorization: `Bearer ${key}` }
@@ -1579,26 +1588,31 @@ async function connectDB() {
       document.getElementById('db-dot').className = 'db-dot ok';
       document.getElementById('db-label').textContent = 'DB מחובר';
       document.getElementById('config-banner').style.display = 'none';
-      await loadSubmissionFromUrl();
+      const submissionId = getQueryParam('submission_id');
+      if (submissionId) await loadSubmission(submissionId);
+      return true;
     } else throw new Error('status ' + res.status);
   } catch(e) {
     document.getElementById('db-dot').className = 'db-dot err';
     document.getElementById('db-label').textContent = 'שגיאת חיבור';
-    alert('לא ניתן להתחבר: ' + e.message);
+    if (!silent) alert('לא ניתן להתחבר: ' + e.message);
+    return false;
   }
 }
 
 async function saveToSupabase(data, eligibility, primaryResult, allRouteResults, flags, score) {
   try {
     const eligibleRoutes = allRouteResults.filter(r => r.status === 'MATCH').map(r => r.route_id);
-    const payload = {
+    const nextStatus = score.eligibility_status === 'NOT_ELIGIBLE' ? 'REJECTED' : 'QUALIFIED';
+    const body = {
       full_name: data.name,
       phone: data.phone,
       applicant_data: {
         ...data,
         eligibility_status: score.eligibility_status,
         readiness_status: score.readiness_status,
-        lawyer_priority: score.lawyer_priority
+        lawyer_priority: score.lawyer_priority,
+        selected_route: primaryResult?.route_id || null
       },
       eligibility_passed: eligibility.status !== 'FAIL',
       failed_gates: eligibility.hard_fails || [],
@@ -1606,11 +1620,12 @@ async function saveToSupabase(data, eligibility, primaryResult, allRouteResults,
       selected_route: primaryResult?.route_id || null,
       risk_flags: flags.map(f => f.code),
       internal_score: score.value,
-      status: 'ANALYZED'
+      status: nextStatus,
+      updated_at: new Date().toISOString()
     };
 
-    if (window._current_submission_id) {
-      await fetch(`${window._sb_url}/rest/v1/client_submissions?id=eq.${window._current_submission_id}`, {
+    if (CURRENT_SUBMISSION_ID) {
+      await fetch(`${window._sb_url}/rest/v1/client_submissions?id=eq.${CURRENT_SUBMISSION_ID}`, {
         method: 'PATCH',
         headers: {
           apikey: window._sb_key,
@@ -1618,10 +1633,7 @@ async function saveToSupabase(data, eligibility, primaryResult, allRouteResults,
           'Content-Type': 'application/json',
           Prefer: 'return=minimal'
         },
-        body: JSON.stringify({
-          ...payload,
-          updated_at: new Date().toISOString()
-        })
+        body: JSON.stringify(body)
       });
     } else {
       await fetch(`${window._sb_url}/rest/v1/client_submissions`, {
@@ -1632,30 +1644,19 @@ async function saveToSupabase(data, eligibility, primaryResult, allRouteResults,
           'Content-Type': 'application/json',
           Prefer: 'return=minimal'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({ ...body, created_at: new Date().toISOString() })
       });
     }
   } catch(e) { console.error('Save failed:', e); }
 }
 
 async function initEngine() {
-  document.getElementById('sb_url').value = window._sb_url;
-  document.getElementById('sb_key').value = window._sb_key;
-  if (window._sb_url && window._sb_key) {
-    await connectDB();
-  }
+  document.getElementById('sb_url').value = DEFAULT_SB_URL;
+  document.getElementById('sb_key').value = DEFAULT_SB_KEY;
+  await connectDB(true);
 }
 
 initEngine();
-
-
-(function initConfig(){
-  const urlEl = document.getElementById('sb_url');
-  const keyEl = document.getElementById('sb_key');
-  if (urlEl) urlEl.value = window._sb_url || '';
-  if (keyEl) keyEl.value = window._sb_key || '';
-  if (window._sb_url && window._sb_key) { connectDB(); }
-})();
 </script>
 </body>
 </html>
