@@ -246,8 +246,8 @@ textarea.notes:focus { outline: none; border-color: var(--accent); }
               <th>טלפון</th>
               <th>מסלול</th>
               <th>ציון</th>
-              <th>זכאות</th>
-              <th>מוכנות</th>
+              <th>הכרעה</th>
+              <th>הסבר קצר</th>
               <th>סטטוס</th>
               <th>תאריך</th>
             </tr>
@@ -575,17 +575,22 @@ function renderTable() {
   tbody.innerHTML = page.map(r => {
     const d = r.applicant_data || {};
     const date = r.created_at ? new Date(r.created_at).toLocaleDateString('he-IL') : '—';
-    const score = r.internal_score || '—';
-    const eligibility = d.eligibility_status || '—';
-    const readiness = d.readiness_status || '—';
+    const scoreText = d.score_numeric ?? (r.internal_score || '—');
+    const routeText = d.route_label || routeLabel(r.selected_route);
+    const decisionLabel = d.decision_label || (
+      d.eligibility_status === 'NOT_ELIGIBLE' ? 'לא מתאים בשלב זה' :
+      d.eligibility_status === 'ELIGIBLE' && d.readiness_status === 'READY' ? 'מתאים להגשה' :
+      d.eligibility_status === 'CONDITIONAL' ? 'דורש בירור והשלמה' : '—'
+    );
+    const decisionReason = d.decision_reason || d.lawyer_priority || '—';
     const normalizedStatus = normalizeStatus(r.status);
     return `<tr onclick="openClient(${r.id})">
       <td><div class="lead-name">${r.full_name || '—'}</div></td>
       <td><div class="lead-phone">${r.phone || '—'}</div></td>
-      <td style="font-size:12px;color:var(--muted2)">${routeLabel(r.selected_route)}</td>
-      <td><span class="score ${score}">${score}</span></td>
-      <td style="font-size:12px">${eligibility === 'ELIGIBLE' ? '<span style="color:var(--green)">✅ זכאי</span>' : eligibility === 'NOT_ELIGIBLE' ? '<span style="color:var(--red)">❌ לא זכאי</span>' : eligibility === 'CONDITIONAL' ? '<span style="color:var(--amber)">⚠️ מותנה</span>' : '—'}</td>
-      <td style="font-size:12px">${readiness === 'READY' ? '<span style="color:var(--green)">מוכן</span>' : readiness === 'PARTIAL' ? '<span style="color:var(--amber)">חלקי</span>' : readiness === 'NOT_READY' ? '<span style="color:var(--red)">לא מוכן</span>' : '—'}</td>
+      <td style="font-size:12px;color:var(--muted2)">${routeText}</td>
+      <td><span class="score ${r.internal_score || ''}">${scoreText}</span></td>
+      <td style="font-size:12px;font-weight:600">${decisionLabel}</td>
+      <td style="font-size:12px;color:var(--muted2);max-width:260px">${decisionReason}</td>
       <td><span class="badge ${normalizedStatus}">${STATUS_HE[normalizedStatus] || normalizedStatus}</span></td>
       <td style="font-size:12px;color:var(--muted)">${date}</td>
     </tr>`;
@@ -616,13 +621,16 @@ async function openClient(id) {
 
   document.getElementById('modal-client-title').textContent = `כרטיס לקוח — ${name}`;
 
-  const routeName = routeLabel(record.selected_route);
+  const routeName = d.route_label || routeLabel(record.selected_route);
   const flags = (record.risk_flags || []).map(f => `<div class="flag-row">🔴 ${f}</div>`).join('');
   const docs = (record.missing_docs || []).map(f => `<div class="doc-row">📄 ${f}</div>`).join('');
   const eligRoutes = (record.eligible_routes || []).map(r => `<span style="font-size:11px;background:rgba(59,130,246,.1);color:#60a5fa;padding:2px 6px;border-radius:4px;margin:2px;display:inline-block">${routeLabel(r)}</span>`).join('');
 
-  const score = record.internal_score || '—';
-  const scoreColor = score === 'HIGH' ? 'var(--green)' : score === 'LOW' ? 'var(--red)' : 'var(--amber)';
+  const score = d.score_numeric ?? (record.internal_score || '—');
+  const scoreBand = record.internal_score || '';
+  const scoreColor = scoreBand === 'HIGH' ? 'var(--green)' : scoreBand === 'LOW' ? 'var(--red)' : 'var(--amber)';
+  const decisionLabel = d.decision_label || '—';
+  const decisionReason = d.decision_reason || '—';
 
   document.getElementById('modal-client-body').innerHTML = `
     <!-- Score banner -->
@@ -632,9 +640,9 @@ async function openClient(id) {
         <div style="font-size:11px;color:var(--muted);margin-top:4px">ציון פנימי</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center">
-        <div style="font-size:12px;color:var(--muted)">זכאות<br><strong style="color:var(--text)">${d.eligibility_status || '—'}</strong></div>
-        <div style="font-size:12px;color:var(--muted)">מוכנות<br><strong style="color:var(--text)">${d.readiness_status || '—'}</strong></div>
-        <div style="font-size:12px;color:var(--muted)">עדיפות עו"ד<br><strong style="color:var(--text)">${d.lawyer_priority || '—'}</strong></div>
+        <div style="font-size:12px;color:var(--muted)">הכרעה<br><strong style="color:var(--text)">${decisionLabel}</strong></div>
+        <div style="font-size:12px;color:var(--muted)">מסלול<br><strong style="color:var(--text)">${routeName || '—'}</strong></div>
+        <div style="font-size:12px;color:var(--muted)">הסבר קצר<br><strong style="color:var(--text)">${decisionReason}</strong></div>
       </div>
     </div>
 
@@ -654,6 +662,8 @@ async function openClient(id) {
       <div class="detail-card">
         <h3>מסלול ומסלולים אפשריים</h3>
         <div class="detail-row"><label>מסלול מוביל</label><span class="detail-val" style="color:var(--accent)">${routeName}</span></div>
+        <div class="detail-row"><label>הכרעה</label><span class="detail-val">${decisionLabel}</span></div>
+        <div class="detail-row"><label>הסבר קצר</label><span class="detail-val">${decisionReason}</span></div>
         <div style="margin-top:8px;font-size:11px;color:var(--muted);margin-bottom:4px">מסלולים מאושרים</div>
         <div>${eligRoutes || '<span style="color:var(--muted);font-size:12px">אין</span>'}</div>
         ${record.failed_gates?.length ? `<div style="margin-top:8px;font-size:11px;color:var(--red)">חסמי סף: ${record.failed_gates.join(', ')}</div>` : ''}
