@@ -89,6 +89,11 @@ tr:hover td { background: rgba(255,255,255,.02); cursor: pointer; }
 .badge.IN_PROCESS { background: rgba(16,185,129,.1); color: #6ee7b7; }
 .badge.SUBMITTED { background: rgba(99,102,241,.1); color: #818cf8; }
 
+.badge.IN_REVIEW { background: rgba(245,158,11,.15); color: #fbbf24; }
+.badge.QUALIFIED { background: rgba(16,185,129,.15); color: #34d399; }
+.badge.REJECTED { background: rgba(239,68,68,.15); color: #f87171; }
+.badge.CONVERTED { background: rgba(99,102,241,.15); color: #a5b4fc; }
+
 /* ── SCORE BADGES ── */
 .score { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; font-family: var(--mono); }
 .score.HIGH { background: rgba(16,185,129,.15); color: #34d399; }
@@ -209,7 +214,7 @@ textarea.notes:focus { outline: none; border-color: var(--accent); }
         </div>
         <div class="kpi amber">
           <div class="kpi-val" id="kpi-pending" style="color:var(--amber)">—</div>
-          <div class="kpi-label">ממתינים לשיחה</div>
+          <div class="kpi-label">בבדיקה</div>
         </div>
         <div class="kpi green">
           <div class="kpi-val" id="kpi-suitable" style="color:var(--green)">—</div>
@@ -217,7 +222,7 @@ textarea.notes:focus { outline: none; border-color: var(--accent); }
         </div>
         <div class="kpi red">
           <div class="kpi-val" id="kpi-not-suitable" style="color:var(--red)">—</div>
-          <div class="kpi-label">לא מתאימים</div>
+          <div class="kpi-label">הפכו ללקוחות</div>
         </div>
       </div>
 
@@ -226,12 +231,10 @@ textarea.notes:focus { outline: none; border-color: var(--accent); }
         <input class="search-input" type="text" id="search-input" placeholder="🔍 חפש שם, טלפון..." oninput="applyFilters()">
         <button class="filter-btn active" onclick="setFilter('ALL', this)">הכל</button>
         <button class="filter-btn" onclick="setFilter('NEW', this)">חדש</button>
-        <button class="filter-btn" onclick="setFilter('PENDING_CALL', this)">ממתין לשיחה</button>
-        <button class="filter-btn" onclick="setFilter('IN_CALL', this)">בשיחה</button>
-        <button class="filter-btn" onclick="setFilter('PENDING_DOC', this)">חסר מסמכים</button>
-        <button class="filter-btn" onclick="setFilter('SUITABLE', this)">מתאים</button>
-        <button class="filter-btn" onclick="setFilter('NOT_SUITABLE', this)">לא מתאים</button>
-        <button class="filter-btn" onclick="setFilter('SUBMITTED', this)">הוגש</button>
+        <button class="filter-btn" onclick="setFilter('IN_REVIEW', this)">בבדיקה</button>
+        <button class="filter-btn" onclick="setFilter('QUALIFIED', this)">מתאים</button>
+        <button class="filter-btn" onclick="setFilter('REJECTED', this)">נדחה</button>
+        <button class="filter-btn" onclick="setFilter('CONVERTED', this)">הפך ללקוח</button>
       </div>
 
       <!-- TABLE -->
@@ -369,14 +372,13 @@ textarea.notes:focus { outline: none; border-color: var(--accent); }
   </div>
 </div>
 
-<script src="app.config.js"></script>
 <script>
 // ══════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════
 const STATE = {
-  url: window.APP_CONFIG?.SUPABASE_URL || '',
-  key: window.APP_CONFIG?.SUPABASE_ANON_KEY || '',
+  url: 'https://lcvshepgzizrlqbzvjoe.supabase.co',
+  key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdnNoZXBneml6cmxxYnp2am9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDU5NzEsImV4cCI6MjA5MDk4MTk3MX0.ca4rw8QeRoPdQPwAsqPiLEZD6S-eOCdw6-P4a4BIFNk',
   connected: false,
   leads: [],
   filtered: [],
@@ -387,10 +389,29 @@ const STATE = {
 };
 
 const STATUS_HE = {
-  NEW:'חדש', ANALYZED:'נותח', PENDING_CALL:'ממתין לשיחה',
+  NEW:'חדש',
+  IN_REVIEW:'בבדיקה',
+  QUALIFIED:'מתאים',
+  REJECTED:'נדחה',
+  CONVERTED:'הפך ללקוח',
+  ANALYZED:'נותח', PENDING_CALL:'ממתין לשיחה',
   IN_CALL:'בשיחה', PENDING_DOC:'חסר מסמכים', SUITABLE:'מתאים',
   NOT_SUITABLE:'לא מתאים', IN_PROCESS:'בטיפול', SUBMITTED:'הוגש'
 };
+
+function normalizeStatus(status) {
+  const map = {
+    ANALYZED:'IN_REVIEW',
+    PENDING_CALL:'IN_REVIEW',
+    IN_CALL:'IN_REVIEW',
+    PENDING_DOC:'IN_REVIEW',
+    SUITABLE:'QUALIFIED',
+    NOT_SUITABLE:'REJECTED',
+    IN_PROCESS:'CONVERTED',
+    SUBMITTED:'CONVERTED'
+  };
+  return map[status] || status || 'NEW';
+}
 
 // ══════════════════════════════════════════════
 // DB
@@ -474,12 +495,12 @@ async function loadLeads() {
 // KPIs
 // ══════════════════════════════════════════════
 function updateKPIs(data) {
-  const count = s => data.filter(r => r.status === s).length;
+  const count = s => data.filter(r => normalizeStatus(r.status) === s).length;
   document.getElementById('kpi-total').textContent = data.length;
   document.getElementById('kpi-new').textContent = count('NEW');
-  document.getElementById('kpi-pending').textContent = count('PENDING_CALL') + count('IN_CALL');
-  document.getElementById('kpi-suitable').textContent = count('SUITABLE') + count('IN_PROCESS') + count('SUBMITTED');
-  document.getElementById('kpi-not-suitable').textContent = count('NOT_SUITABLE');
+  document.getElementById('kpi-pending').textContent = count('IN_REVIEW');
+  document.getElementById('kpi-suitable').textContent = count('QUALIFIED');
+  document.getElementById('kpi-not-suitable').textContent = count('CONVERTED');
 }
 
 // ══════════════════════════════════════════════
@@ -495,7 +516,7 @@ function setFilter(f, btn) {
 function applyFilters() {
   const q = document.getElementById('search-input').value.toLowerCase();
   STATE.filtered = STATE.leads.filter(r => {
-    if (STATE.filter !== 'ALL' && r.status !== STATE.filter) return false;
+    if (STATE.filter !== 'ALL' && normalizeStatus(r.status) !== STATE.filter) return false;
     if (q) {
       const name = (r.full_name || '').toLowerCase();
       const phone = (r.phone || '').toLowerCase();
@@ -557,6 +578,7 @@ function renderTable() {
     const score = r.internal_score || '—';
     const eligibility = d.eligibility_status || '—';
     const readiness = d.readiness_status || '—';
+    const normalizedStatus = normalizeStatus(r.status);
     return `<tr onclick="openClient(${r.id})">
       <td><div class="lead-name">${r.full_name || '—'}</div></td>
       <td><div class="lead-phone">${r.phone || '—'}</div></td>
@@ -564,7 +586,7 @@ function renderTable() {
       <td><span class="score ${score}">${score}</span></td>
       <td style="font-size:12px">${eligibility === 'ELIGIBLE' ? '<span style="color:var(--green)">✅ זכאי</span>' : eligibility === 'NOT_ELIGIBLE' ? '<span style="color:var(--red)">❌ לא זכאי</span>' : eligibility === 'CONDITIONAL' ? '<span style="color:var(--amber)">⚠️ מותנה</span>' : '—'}</td>
       <td style="font-size:12px">${readiness === 'READY' ? '<span style="color:var(--green)">מוכן</span>' : readiness === 'PARTIAL' ? '<span style="color:var(--amber)">חלקי</span>' : readiness === 'NOT_READY' ? '<span style="color:var(--red)">לא מוכן</span>' : '—'}</td>
-      <td><span class="badge ${r.status || 'NEW'}">${STATUS_HE[r.status] || r.status || 'חדש'}</span></td>
+      <td><span class="badge ${normalizedStatus}">${STATUS_HE[normalizedStatus] || normalizedStatus}</span></td>
       <td style="font-size:12px;color:var(--muted)">${date}</td>
     </tr>`;
   }).join('');
@@ -657,9 +679,7 @@ async function openClient(id) {
         <div>
           <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">סטטוס</label>
           <select class="status-select" id="modal-status">
-            ${Object.entries(STATUS_HE).map(([k,v]) =>
-              `<option value="${k}"${record.status === k ? ' selected' : ''}>${v}</option>`
-            ).join('')}
+            ${['NEW','IN_REVIEW','QUALIFIED','REJECTED','CONVERTED'].map(k => `<option value="${k}"${normalizeStatus(record.status) === k ? ' selected' : ''}>${STATUS_HE[k]}</option>`).join('')}
           </select>
         </div>
         <div>
@@ -668,7 +688,8 @@ async function openClient(id) {
         </div>
       </div>
       <button class="btn-save" onclick="saveClient()">💾 שמור שינויים</button>
-      <button class="adm-btn" onclick="openEngine(STATE.currentId)">⚙️ פתח במנוע ההחלטה</button>
+      <button class="adm-btn" onclick="openSubmissionInEngine()">⚙️ פתח במנוע ההחלטה</button>
+      <button class="adm-btn" onclick="markConverted()">🤝 סמן כהפך ללקוח</button>
       <button class="adm-btn" onclick="openAdmModal()">🎥 אמת חתימה — אד"מ</button>
     </div>
 
@@ -717,9 +738,25 @@ function showView(v) {
   document.querySelectorAll('.nav-icon').forEach((el,i) => el.classList.remove('active'));
 }
 
-function openEngine(submissionId = null) {
-  const target = submissionId ? `engine.html?submission_id=${submissionId}` : 'engine.html';
-  window.open(target, '_blank');
+function openEngine() {
+  window.open('engine.html', '_blank');
+}
+
+function openSubmissionInEngine() {
+  if (!STATE.currentId) return;
+  window.open(`engine.html?submission_id=${STATE.currentId}`, '_blank');
+}
+
+async function markConverted() {
+  if (!STATE.currentId) return;
+  const ok = await sbPatch(STATE.currentId, { status: 'CONVERTED', updated_at: new Date().toISOString() });
+  if (ok) {
+    const idx = STATE.leads.findIndex(r => r.id === STATE.currentId);
+    if (idx !== -1) STATE.leads[idx].status = 'CONVERTED';
+    updateKPIs(STATE.leads);
+    applyFilters();
+    closeModal('modal-client');
+  }
 }
 
 // Close modals on overlay click
@@ -749,9 +786,11 @@ async function saveAdmSession() {
   if (!allChecked) { alert('יש לסמן את כל אישורי הביצוע לפני שמירה'); return; }
   const noteText = `[אד"מ ${document.getElementById('adm-date').value} ${document.getElementById('adm-time').value}] ${document.getElementById('adm-affidavit-name').value} | ${document.getElementById('adm-notes').value}`;
   if (STATE.connected) {
-    await sbPatch(STATE.currentId, { status: 'IN_PROCESS', lawyer_notes: noteText, updated_at: new Date().toISOString() });
+    const currentStatus = normalizeStatus(STATE.leads.find(r => r.id === STATE.currentId)?.status);
+    const nextStatus = currentStatus === 'CONVERTED' ? 'CONVERTED' : 'QUALIFIED';
+    await sbPatch(STATE.currentId, { status: nextStatus, lawyer_notes: noteText, updated_at: new Date().toISOString() });
     const idx = STATE.leads.findIndex(r => r.id === STATE.currentId);
-    if (idx !== -1) { STATE.leads[idx].status = 'IN_PROCESS'; STATE.leads[idx].lawyer_notes = noteText; }
+    if (idx !== -1) { STATE.leads[idx].status = nextStatus; STATE.leads[idx].lawyer_notes = noteText; }
     updateKPIs(STATE.leads); applyFilters();
   }
   document.getElementById('adm-saved-msg').style.display = 'block';
