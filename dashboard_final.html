@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>דשבורד עו"ד — רישוי כלי ירייה</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #07090f;
+  --s1: #0c1018;
+  --s2: #111620;
+  --s3: #161c28;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.11);
+  --accent: #3b82f6;
+  --indigo: #6366f1;
+  --green: #10b981;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --muted2: #94a3b8;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: 'Heebo', sans-serif; min-height: 100vh; direction: rtl; }
+
+/* ── LAYOUT ── */
+.shell { display: grid; grid-template-columns: 64px 1fr; min-height: 100vh; }
+.nav { background: var(--s1); border-left: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 8px; position: sticky; top: 0; height: 100vh; }
+.body { display: flex; flex-direction: column; overflow: hidden; }
+.topbar { background: var(--s1); border-bottom: 1px solid var(--border); padding: 0 24px; height: 56px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: sticky; top: 0; z-index: 10; }
+.content { flex: 1; overflow-y: auto; padding: 24px; }
+
+/* ── NAV ICONS ── */
+.nav-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: background .15s; color: var(--muted); }
+.nav-icon:hover, .nav-icon.active { background: var(--s3); color: var(--text); }
+.nav-logo { font-weight: 900; font-size: 16px; color: var(--accent); margin-bottom: 12px; }
+
+/* ── TOPBAR ── */
+.topbar h1 { font-size: 16px; font-weight: 700; }
+.topbar-right { display: flex; align-items: center; gap: 12px; }
+.db-pill { display: flex; align-items: center; gap: 6px; background: var(--s3); border: 1px solid var(--border2); border-radius: 20px; padding: 5px 12px; font-size: 12px; font-family: var(--mono); cursor: pointer; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
+.dot.ok { background: var(--green); }
+.dot.err { background: var(--red); }
+
+/* ── KPI ROW ── */
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-bottom: 20px; }
+.kpi { background: var(--s2); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+.kpi-val { font-size: 32px; font-weight: 800; font-family: var(--mono); line-height: 1; }
+.kpi-label { font-size: 11px; color: var(--muted); margin-top: 6px; }
+.kpi-delta { font-size: 11px; margin-top: 4px; }
+.kpi.accent { border-color: rgba(59,130,246,.25); }
+.kpi.green { border-color: rgba(16,185,129,.25); }
+.kpi.amber { border-color: rgba(245,158,11,.25); }
+.kpi.red { border-color: rgba(239,68,68,.25); }
+
+/* ── FILTERS ── */
+.filter-bar { display: flex; gap: 8px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+.filter-btn { background: var(--s2); border: 1px solid var(--border2); border-radius: 8px; color: var(--muted2); padding: 7px 14px; font-family: 'Heebo', sans-serif; font-size: 13px; cursor: pointer; transition: all .15s; }
+.filter-btn:hover, .filter-btn.active { background: var(--s3); border-color: var(--accent); color: var(--text); }
+.search-input { background: var(--s2); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); padding: 7px 12px; font-family: 'Heebo', sans-serif; font-size: 13px; width: 220px; margin-right: auto; }
+.search-input:focus { outline: none; border-color: var(--accent); }
+.btn-new { background: linear-gradient(135deg, var(--indigo), var(--accent)); color: white; border: none; border-radius: 8px; padding: 8px 16px; font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+
+/* ── LEADS TABLE ── */
+.table-wrap { background: var(--s2); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead { background: var(--s3); }
+th { padding: 10px 16px; font-size: 11px; font-weight: 600; color: var(--muted); text-align: right; letter-spacing: .5px; white-space: nowrap; }
+td { padding: 12px 16px; font-size: 13px; border-top: 1px solid var(--border); vertical-align: middle; }
+tr:hover td { background: rgba(255,255,255,.02); cursor: pointer; }
+.lead-name { font-weight: 600; }
+.lead-phone { font-family: var(--mono); font-size: 12px; color: var(--muted2); }
+
+/* ── STATUS BADGES ── */
+.badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+.badge.NEW { background: rgba(100,116,139,.15); color: #94a3b8; }
+.badge.ANALYZED { background: rgba(59,130,246,.15); color: #60a5fa; }
+.badge.PENDING_CALL { background: rgba(245,158,11,.15); color: #fbbf24; }
+.badge.IN_CALL { background: rgba(99,102,241,.2); color: #a5b4fc; }
+.badge.PENDING_DOC { background: rgba(249,115,22,.15); color: #fb923c; }
+.badge.SUITABLE { background: rgba(16,185,129,.15); color: #34d399; }
+.badge.NOT_SUITABLE { background: rgba(239,68,68,.15); color: #f87171; }
+.badge.IN_PROCESS { background: rgba(16,185,129,.1); color: #6ee7b7; }
+.badge.SUBMITTED { background: rgba(99,102,241,.1); color: #818cf8; }
+
+/* ── SCORE BADGES ── */
+.score { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; font-family: var(--mono); }
+.score.HIGH { background: rgba(16,185,129,.15); color: #34d399; }
+.score.MEDIUM { background: rgba(245,158,11,.15); color: #fbbf24; }
+.score.LOW { background: rgba(239,68,68,.15); color: #f87171; }
+
+/* ── EMPTY STATE ── */
+.empty { text-align: center; padding: 60px 24px; color: var(--muted); }
+.empty .icon { font-size: 40px; margin-bottom: 12px; }
+
+/* ── MODAL ── */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 100; display: none; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--s1); border: 1px solid var(--border2); border-radius: 16px; width: 680px; max-height: 88vh; overflow-y: auto; padding: 28px; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+.modal-header h2 { font-size: 17px; font-weight: 700; }
+.modal-close { background: var(--s3); border: none; color: var(--muted2); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { color: var(--text); }
+
+/* ── DETAIL SECTIONS ── */
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.detail-card { background: var(--s2); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+.detail-card h3 { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 10px; font-family: var(--mono); }
+.detail-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; gap: 12px; }
+.detail-row:last-child { border-bottom: none; }
+.detail-row label { color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+.detail-val { text-align: left; word-break: break-word; }
+
+.doc-list { display: flex; flex-direction: column; gap: 4px; }
+.doc-row { background: rgba(59,130,246,.06); border-radius: 5px; padding: 5px 8px; font-size: 12px; }
+.flag-row { background: rgba(239,68,68,.08); border-radius: 5px; padding: 5px 8px; font-size: 12px; color: #fca5a5; }
+
+textarea.notes { width: 100%; background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; padding: 10px; color: var(--text); font-family: 'Heebo', sans-serif; font-size: 13px; resize: vertical; min-height: 80px; margin-top: 8px; }
+textarea.notes:focus { outline: none; border-color: var(--accent); }
+
+.status-select { background: var(--s3); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); padding: 8px 12px; font-family: 'Heebo', sans-serif; font-size: 13px; width: 100%; }
+.status-select:focus { outline: none; border-color: var(--accent); }
+
+.btn-save { background: var(--green); color: white; border: none; border-radius: 8px; padding: 10px 20px; font-family: 'Heebo', sans-serif; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+.btn-save:hover { opacity: .9; }
+
+/* ── DB CONFIG MODAL ── */
+.config-form { display: flex; flex-direction: column; gap: 10px; }
+.config-form input { background: var(--bg); border: 1px solid var(--border2); border-radius: 8px; color: var(--text); padding: 10px 12px; font-family: var(--mono); font-size: 13px; }
+.config-form input:focus { outline: none; border-color: var(--accent); }
+.btn-connect { background: linear-gradient(135deg, var(--indigo), var(--accent)); color: white; border: none; border-radius: 8px; padding: 11px; font-family: 'Heebo', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; width: 100%; }
+
+/* ── PAGINATION ── */
+.pagination { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); }
+.page-btns { display: flex; gap: 6px; }
+.page-btn { background: var(--s3); border: 1px solid var(--border); border-radius: 6px; color: var(--muted2); padding: 4px 10px; font-size: 12px; cursor: pointer; }
+.page-btn:hover { border-color: var(--accent); color: var(--text); }
+.page-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* ── LOADING ── */
+.loading-row td { color: var(--muted); font-style: italic; text-align: center; padding: 32px; }
+
+/* ── ADM MODULE ── */
+.adm-btn { background: linear-gradient(135deg, #1e3a5f, #2563eb); color: white; border: none; border-radius: 8px; padding: 9px 16px; font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 10px; }
+.adm-btn:hover { opacity: .9; }
+.adm-checklist { background: rgba(37,99,235,.06); border: 1px solid rgba(37,99,235,.2); border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; }
+.adm-checklist h3 { font-size: 12px; color: #60a5fa; font-family: var(--mono); letter-spacing: 1px; margin-bottom: 10px; }
+.adm-step { display: flex; align-items: flex-start; gap: 10px; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,.04); font-size: 13px; line-height: 1.5; }
+.adm-step:last-child { border-bottom: none; }
+.adm-step-num { background: var(--accent); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+.adm-checkbox { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; background: rgba(255,255,255,.03); margin-bottom: 6px; font-size: 13px; cursor: pointer; }
+.adm-checkbox input { width: 16px; height: 16px; cursor: pointer; }
+.adm-session-saved { background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.3); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--green); text-align: center; margin-top: 12px; display: none; }
+.adm-warning { background: rgba(245,158,11,.08); border: 1px solid rgba(245,158,11,.2); border-radius: 8px; padding: 10px 14px; font-size: 12px; color: var(--amber); margin-bottom: 14px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <div class="nav-logo">⚖</div>
+  <div class="nav-icon active" title="לידים" onclick="showView('leads')">📋</div>
+  <div class="nav-icon" title="מנוע החלטה" onclick="openEngine()">⚙️</div>
+  <div class="nav-icon" title="סטטיסטיקות" onclick="showView('stats')">📊</div>
+  <div style="flex:1"></div>
+  <div class="nav-icon" title="הגדרות DB" onclick="openDbModal()">🔗</div>
+</nav>
+
+<!-- ── BODY ── -->
+<div class="body">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div>
+      <h1>דשבורד עו"ד — רישוי כלי ירייה</h1>
+    </div>
+    <div class="topbar-right">
+      <div class="db-pill" onclick="openDbModal()">
+        <div class="dot" id="db-dot"></div>
+        <span id="db-label">לא מחובר</span>
+      </div>
+      <button class="btn-new" onclick="openEngine()">+ ליד חדש</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- VIEW: LEADS -->
+    <div id="view-leads">
+
+      <!-- KPI ROW -->
+      <div class="kpi-row">
+        <div class="kpi accent">
+          <div class="kpi-val" id="kpi-total">—</div>
+          <div class="kpi-label">סך לידים</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-val" id="kpi-new" style="color:var(--accent)">—</div>
+          <div class="kpi-label">חדשים</div>
+        </div>
+        <div class="kpi amber">
+          <div class="kpi-val" id="kpi-pending" style="color:var(--amber)">—</div>
+          <div class="kpi-label">ממתינים לשיחה</div>
+        </div>
+        <div class="kpi green">
+          <div class="kpi-val" id="kpi-suitable" style="color:var(--green)">—</div>
+          <div class="kpi-label">מתאימים</div>
+        </div>
+        <div class="kpi red">
+          <div class="kpi-val" id="kpi-not-suitable" style="color:var(--red)">—</div>
+          <div class="kpi-label">לא מתאימים</div>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="filter-bar">
+        <input class="search-input" type="text" id="search-input" placeholder="🔍 חפש שם, טלפון..." oninput="applyFilters()">
+        <button class="filter-btn active" onclick="setFilter('ALL', this)">הכל</button>
+        <button class="filter-btn" onclick="setFilter('NEW', this)">חדש</button>
+        <button class="filter-btn" onclick="setFilter('PENDING_CALL', this)">ממתין לשיחה</button>
+        <button class="filter-btn" onclick="setFilter('IN_CALL', this)">בשיחה</button>
+        <button class="filter-btn" onclick="setFilter('PENDING_DOC', this)">חסר מסמכים</button>
+        <button class="filter-btn" onclick="setFilter('SUITABLE', this)">מתאים</button>
+        <button class="filter-btn" onclick="setFilter('NOT_SUITABLE', this)">לא מתאים</button>
+        <button class="filter-btn" onclick="setFilter('SUBMITTED', this)">הוגש</button>
+      </div>
+
+      <!-- TABLE -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>שם</th>
+              <th>טלפון</th>
+              <th>מסלול</th>
+              <th>ציון</th>
+              <th>זכאות</th>
+              <th>מוכנות</th>
+              <th>סטטוס</th>
+              <th>תאריך</th>
+            </tr>
+          </thead>
+          <tbody id="leads-tbody">
+            <tr class="loading-row"><td colspan="8">מחבר לבסיס הנתונים...</td></tr>
+          </tbody>
+        </table>
+        <div class="pagination">
+          <span id="pagination-info">0 רשומות</span>
+          <div class="page-btns" id="page-btns"></div>
+        </div>
+      </div>
+
+    </div><!-- /view-leads -->
+
+    <!-- VIEW: STATS -->
+    <div id="view-stats" style="display:none">
+      <div style="color:var(--muted);text-align:center;padding:60px">
+        <div style="font-size:36px;margin-bottom:12px">📊</div>
+        <div>סטטיסטיקות — יתווסף לאחר איסוף נתונים ראשוניים</div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /body -->
+</div><!-- /shell -->
+
+<!-- ════════ MODAL: ADM ════════ -->
+<div class="modal-overlay" id="modal-adm">
+  <div class="modal" style="width:620px">
+    <div class="modal-header">
+      <h2>🎥 אימות חתימה דיגיטלי — אד"מ</h2>
+      <button class="modal-close" onclick="closeModal('modal-adm')">✕</button>
+    </div>
+
+    <div class="adm-warning">
+      ⚠️ יש לבצע שיחת וידאו פעילה עם הלקוח לפני תיעוד הסשן. האימות חייב לכלול זיהוי ת"ז בפני המצלמה והקראת האזהרה החוקית.
+    </div>
+
+    <!-- תסריט -->
+    <div class="adm-checklist">
+      <h3>תסריט חובה — לבצע בסדר זה</h3>
+      <div class="adm-step"><div class="adm-step-num">1</div><div><strong>פתח את השיחה</strong><br>הצג עצמך: "אני עו"ד [שם], מזהה אותך לצורך אימות תצהיר"</div></div>
+      <div class="adm-step"><div class="adm-step-num">2</div><div><strong>בקש הצגת ת"ז</strong><br>בקש מהלקוח להציג תעודת זהות בפני המצלמה — עמוד קדמי וספח</div></div>
+      <div class="adm-step"><div class="adm-step-num">3</div><div><strong>אמת שהייה בישראל</strong><br>שאל: "האם אתה נמצא בישראל כרגע?" — המתן לתשובה מפורשת כן/לא</div></div>
+      <div class="adm-step"><div class="adm-step-num">4</div><div><strong>הקרא את האזהרה</strong><br>"אני מזהיר אותך כי הצהרה כוזבת לפי שבועה או תצהיר עלולה לגרור עליך עונשים הקבועים בחוק"</div></div>
+      <div class="adm-step"><div class="adm-step-num">5</div><div><strong>בקש אישור מפורש</strong><br>"האם אתה מצהיר שהדברים בתצהיר שנשלח אליך הם אמת?" — המתן לתשובה כן</div></div>
+      <div class="adm-step"><div class="adm-step-num">6</div><div><strong>ציין תאריך ושעה</strong><br>אמור בקול: "אני מאמת חתימה זו ביום [תאריך] בשעה [שעה]"</div></div>
+    </div>
+
+    <!-- אישורי ביצוע -->
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;color:var(--muted);font-family:var(--mono);margin-bottom:8px">אישורי ביצוע — סמן אחרי ביצוע בפועל</div>
+      <label class="adm-checkbox"><input type="checkbox" id="adm-chk1"> הלקוח הציג תעודת זהות בפני המצלמה</label>
+      <label class="adm-checkbox"><input type="checkbox" id="adm-chk2"> האזהרה החוקית הוקראה והלקוח אישר שהבין</label>
+      <label class="adm-checkbox"><input type="checkbox" id="adm-chk3"> הלקוח אישר שהייה בישראל בעת החתימה</label>
+      <label class="adm-checkbox"><input type="checkbox" id="adm-chk4"> הלקוח הצהיר בקול שהדברים בתצהיר אמת</label>
+      <label class="adm-checkbox"><input type="checkbox" id="adm-chk5"> השיחה תועדה / הוקלטה</label>
+    </div>
+
+    <!-- פרטי סשן -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px">
+      <div>
+        <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:5px">תאריך האימות</label>
+        <input type="date" id="adm-date" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:13px;">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:5px">שעת האימות</label>
+        <input type="time" id="adm-time" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:13px;">
+      </div>
+    </div>
+
+    <div style="margin-bottom:14px">
+      <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:5px">שם התצהיר שאומת</label>
+      <input type="text" id="adm-affidavit-name" placeholder="לדוגמה: תצהיר עצמאי ביישוב זכאי" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:13px;">
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:5px">הערות (פנימי)</label>
+      <textarea id="adm-notes" placeholder="הערות לסשן..." style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Heebo',sans-serif;font-size:13px;resize:vertical;min-height:60px;"></textarea>
+    </div>
+
+    <button class="btn-save" id="adm-save-btn" onclick="saveAdmSession()" style="width:100%;background:linear-gradient(135deg,#1e3a5f,#2563eb)">
+      ✅ שמור תיעוד אימות חתימה
+    </button>
+    <div class="adm-session-saved" id="adm-saved-msg">
+      ✅ סשן אימות החתימה נשמר בהצלחה
+    </div>
+  </div>
+</div>
+
+<!-- ════════ MODAL: CLIENT DETAIL ════════ -->
+<div class="modal-overlay" id="modal-client">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-client-title">כרטיס לקוח</h2>
+      <button class="modal-close" onclick="closeModal('modal-client')">✕</button>
+    </div>
+    <div id="modal-client-body"></div>
+  </div>
+</div>
+
+<!-- ════════ MODAL: DB CONFIG ════════ -->
+<div class="modal-overlay" id="modal-db">
+  <div class="modal" style="width:440px">
+    <div class="modal-header">
+      <h2>חיבור Supabase</h2>
+      <button class="modal-close" onclick="closeModal('modal-db')">✕</button>
+    </div>
+    <div class="config-form">
+      <label style="font-size:12px;color:var(--muted)">Project URL</label>
+      <input type="text" id="cfg-url" placeholder="https://xxxxx.supabase.co">
+      <label style="font-size:12px;color:var(--muted)">Anon Key</label>
+      <input type="text" id="cfg-key" placeholder="eyJ...">
+      <button class="btn-connect" onclick="connectDB()">התחבר</button>
+      <div id="cfg-status" style="font-size:12px;color:var(--muted);text-align:center;min-height:20px"></div>
+    </div>
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">
+      מצא את ה-URL וה-Key ב: Supabase → Settings → API
+    </div>
+  </div>
+</div>
+
+<script src="app.config.js"></script>
+<script>
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+const STATE = {
+  url: window.APP_CONFIG?.SUPABASE_URL || '',
+  key: window.APP_CONFIG?.SUPABASE_ANON_KEY || '',
+  connected: false,
+  leads: [],
+  filtered: [],
+  filter: 'ALL',
+  page: 1,
+  perPage: 20,
+  currentId: null
+};
+
+const STATUS_HE = {
+  NEW:'חדש', ANALYZED:'נותח', PENDING_CALL:'ממתין לשיחה',
+  IN_CALL:'בשיחה', PENDING_DOC:'חסר מסמכים', SUITABLE:'מתאים',
+  NOT_SUITABLE:'לא מתאים', IN_PROCESS:'בטיפול', SUBMITTED:'הוגש'
+};
+
+// ══════════════════════════════════════════════
+// DB
+// ══════════════════════════════════════════════
+async function connectDB() {
+  const url = (document.getElementById('cfg-url')?.value || STATE.url).trim();
+  const key = (document.getElementById('cfg-key')?.value || STATE.key).trim();
+  if (!url || !key) { updateStatus('הכנס URL ו-Key', 'amber'); return; }
+
+  updateStatus('מחבר...', 'muted');
+  try {
+    const res = await fetch(`${url}/rest/v1/client_submissions?select=count&limit=1`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}` }
+    });
+    if (!res.ok) throw new Error('Status ' + res.status);
+
+    STATE.url = url; STATE.key = key; STATE.connected = true;
+    try { localStorage.setItem('sb_url', url); localStorage.setItem('sb_key', key); } catch(e) {}
+
+    document.getElementById('db-dot').className = 'dot ok';
+    document.getElementById('db-label').textContent = 'מחובר';
+    updateStatus('✅ מחובר בהצלחה', 'green');
+    closeModal('modal-db');
+    loadLeads();
+  } catch(e) {
+    STATE.connected = false;
+    document.getElementById('db-dot').className = 'dot err';
+    document.getElementById('db-label').textContent = 'שגיאה';
+    updateStatus('❌ שגיאת חיבור: ' + e.message, 'red');
+  }
+}
+
+function updateStatus(msg, color) {
+  const el = document.getElementById('cfg-status');
+  if (el) { el.textContent = msg; el.style.color = `var(--${color})`; }
+}
+
+async function sbFetch(path) {
+  const res = await fetch(`${STATE.url}/rest/v1/${path}`, {
+    headers: { apikey: STATE.key, Authorization: `Bearer ${STATE.key}`, 'Range-Unit': 'items', Range: '0-999' }
+  });
+  if (!res.ok) throw new Error('Fetch failed: ' + res.status);
+  return res.json();
+}
+
+async function sbPatch(id, body) {
+  const res = await fetch(`${STATE.url}/rest/v1/client_submissions?id=eq.${id}`, {
+    method: 'PATCH',
+    headers: {
+      apikey: STATE.key, Authorization: `Bearer ${STATE.key}`,
+      'Content-Type': 'application/json', Prefer: 'return=minimal'
+    },
+    body: JSON.stringify(body)
+  });
+  return res.ok;
+}
+
+// ══════════════════════════════════════════════
+// LOAD DATA
+// ══════════════════════════════════════════════
+async function loadLeads() {
+  if (!STATE.connected) {
+    document.getElementById('leads-tbody').innerHTML =
+      '<tr class="loading-row"><td colspan="8">חבר את Supabase כדי לטעון נתונים</td></tr>';
+    return;
+  }
+  document.getElementById('leads-tbody').innerHTML =
+    '<tr class="loading-row"><td colspan="8">טוען...</td></tr>';
+  try {
+    const data = await sbFetch('client_submissions?select=*&order=created_at.desc&limit=500');
+    STATE.leads = data;
+    updateKPIs(data);
+    applyFilters();
+  } catch(e) {
+    document.getElementById('leads-tbody').innerHTML =
+      `<tr class="loading-row"><td colspan="8">שגיאה בטעינה: ${e.message}</td></tr>`;
+  }
+}
+
+// ══════════════════════════════════════════════
+// KPIs
+// ══════════════════════════════════════════════
+function updateKPIs(data) {
+  const count = s => data.filter(r => r.status === s).length;
+  document.getElementById('kpi-total').textContent = data.length;
+  document.getElementById('kpi-new').textContent = count('NEW');
+  document.getElementById('kpi-pending').textContent = count('PENDING_CALL') + count('IN_CALL');
+  document.getElementById('kpi-suitable').textContent = count('SUITABLE') + count('IN_PROCESS') + count('SUBMITTED');
+  document.getElementById('kpi-not-suitable').textContent = count('NOT_SUITABLE');
+}
+
+// ══════════════════════════════════════════════
+// FILTER + RENDER TABLE
+// ══════════════════════════════════════════════
+function setFilter(f, btn) {
+  STATE.filter = f; STATE.page = 1;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function applyFilters() {
+  const q = document.getElementById('search-input').value.toLowerCase();
+  STATE.filtered = STATE.leads.filter(r => {
+    if (STATE.filter !== 'ALL' && r.status !== STATE.filter) return false;
+    if (q) {
+      const name = (r.full_name || '').toLowerCase();
+      const phone = (r.phone || '').toLowerCase();
+      if (!name.includes(q) && !phone.includes(q)) return false;
+    }
+    return true;
+  });
+  STATE.page = 1;
+  renderTable();
+}
+
+function routeLabel(route_id) {
+  const labels = {
+    RESIDENT_ELIGIBLE_LOCALITY_STANDARD:'מגורים ביישוב',
+    RESIDENT_ELIGIBLE_LOCALITY_PROPERTY_TAX_ALTERNATIVE:'מגורים — ארנונה',
+    WORK_ELIGIBLE_LOCALITY_EMPLOYEE:'שכיר ביישוב',
+    WORK_ELIGIBLE_LOCALITY_SELF_EMPLOYED_FIXED:'עצמאי — בית עסק',
+    WORK_ELIGIBLE_LOCALITY_SELF_EMPLOYED_MOBILE:'עצמאי — נייד',
+    WORK_ELIGIBLE_LOCALITY_STUDENT:'סטודנט ביישוב',
+    SECURITY_FORCES_OFFICER_NCO:'קצין/נגד',
+    SECURITY_FORCES_RIFLEMAN_07:'רובאי 07+',
+    SECURITY_FORCES_FIGHTER_CERT:'תעודת לוחם',
+    SECURITY_FORCES_PRE1999_COMBAT:'לוחם עד 1999',
+    POLICE_CAREER_ACTIVE_2Y:'שוטר קבע',
+    POLICE_CAREER_COMPLETED_2Y:'שוטר לשעבר',
+    POLICE_VOLUNTEER_ACTIVE:'מתנדב משטרה',
+    SECURITY_OFFICER_APPOINTED:'קב"ט',
+    FARMER_SELF_EMPLOYED:'חקלאי',
+    FARMER_FAMILY_MEMBER:'בן משפחה חקלאי',
+    FARMER_EMPLOYEE:'שכיר חקלאי',
+    TOUR_GUIDE_LICENSED:'מורה דרך',
+    RANGE_INSTRUCTOR_ACTIVE:'מדריך ירי',
+    SPORTS_OLYMPIC:'ספורטאי אולימפי',
+    SPORTS_PRACTICAL:'ספורטאי מעשי',
+    MEDA_WORKER_OR_VOLUNTEER:'מד"א',
+    ZAKA_WORKER_OR_VOLUNTEER:'זק"א',
+    FIREFIGHTER_ACTIVE_2Y:'כבאי',
+    AMENDMENT25_BATTLE_CASUALTY_INCOMPLETE_SERVICE:'תיקון 25',
+    AMENDMENT25_FIGHTER_MEDICAL_RELEASE:'תיקון 25 — רפואי',
+  };
+  return labels[route_id] || (route_id ? route_id.replace(/_/g,' ').substring(0,20) : '—');
+}
+
+function renderTable() {
+  const tbody = document.getElementById('leads-tbody');
+  const start = (STATE.page - 1) * STATE.perPage;
+  const page = STATE.filtered.slice(start, start + STATE.perPage);
+
+  if (!page.length) {
+    tbody.innerHTML = '<tr class="loading-row"><td colspan="8">אין רשומות</td></tr>';
+    document.getElementById('pagination-info').textContent = '0 רשומות';
+    document.getElementById('page-btns').innerHTML = '';
+    return;
+  }
+
+  tbody.innerHTML = page.map(r => {
+    const d = r.applicant_data || {};
+    const date = r.created_at ? new Date(r.created_at).toLocaleDateString('he-IL') : '—';
+    const score = r.internal_score || '—';
+    const eligibility = d.eligibility_status || '—';
+    const readiness = d.readiness_status || '—';
+    return `<tr onclick="openClient(${r.id})">
+      <td><div class="lead-name">${r.full_name || '—'}</div></td>
+      <td><div class="lead-phone">${r.phone || '—'}</div></td>
+      <td style="font-size:12px;color:var(--muted2)">${routeLabel(r.selected_route)}</td>
+      <td><span class="score ${score}">${score}</span></td>
+      <td style="font-size:12px">${eligibility === 'ELIGIBLE' ? '<span style="color:var(--green)">✅ זכאי</span>' : eligibility === 'NOT_ELIGIBLE' ? '<span style="color:var(--red)">❌ לא זכאי</span>' : eligibility === 'CONDITIONAL' ? '<span style="color:var(--amber)">⚠️ מותנה</span>' : '—'}</td>
+      <td style="font-size:12px">${readiness === 'READY' ? '<span style="color:var(--green)">מוכן</span>' : readiness === 'PARTIAL' ? '<span style="color:var(--amber)">חלקי</span>' : readiness === 'NOT_READY' ? '<span style="color:var(--red)">לא מוכן</span>' : '—'}</td>
+      <td><span class="badge ${r.status || 'NEW'}">${STATUS_HE[r.status] || r.status || 'חדש'}</span></td>
+      <td style="font-size:12px;color:var(--muted)">${date}</td>
+    </tr>`;
+  }).join('');
+
+  // Pagination
+  const total = STATE.filtered.length;
+  const pages = Math.ceil(total / STATE.perPage);
+  document.getElementById('pagination-info').textContent = `${total} רשומות`;
+  const pbEl = document.getElementById('page-btns');
+  pbEl.innerHTML = Array.from({length: Math.min(pages,8)}, (_,i) =>
+    `<button class="page-btn${i+1===STATE.page?' active':''}" onclick="goPage(${i+1})">${i+1}</button>`
+  ).join('');
+}
+
+function goPage(p) { STATE.page = p; renderTable(); }
+
+// ══════════════════════════════════════════════
+// CLIENT MODAL
+// ══════════════════════════════════════════════
+async function openClient(id) {
+  STATE.currentId = id;
+  const record = STATE.leads.find(r => r.id === id);
+  if (!record) return;
+
+  const d = record.applicant_data || {};
+  const name = record.full_name || '—';
+
+  document.getElementById('modal-client-title').textContent = `כרטיס לקוח — ${name}`;
+
+  const routeName = routeLabel(record.selected_route);
+  const flags = (record.risk_flags || []).map(f => `<div class="flag-row">🔴 ${f}</div>`).join('');
+  const docs = (record.missing_docs || []).map(f => `<div class="doc-row">📄 ${f}</div>`).join('');
+  const eligRoutes = (record.eligible_routes || []).map(r => `<span style="font-size:11px;background:rgba(59,130,246,.1);color:#60a5fa;padding:2px 6px;border-radius:4px;margin:2px;display:inline-block">${routeLabel(r)}</span>`).join('');
+
+  const score = record.internal_score || '—';
+  const scoreColor = score === 'HIGH' ? 'var(--green)' : score === 'LOW' ? 'var(--red)' : 'var(--amber)';
+
+  document.getElementById('modal-client-body').innerHTML = `
+    <!-- Score banner -->
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:16px;margin-bottom:20px;background:var(--s2);border-radius:12px;padding:16px">
+      <div style="text-align:center;min-width:80px">
+        <div style="font-size:40px;font-weight:900;font-family:var(--mono);color:${scoreColor};line-height:1">${score}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">ציון פנימי</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center">
+        <div style="font-size:12px;color:var(--muted)">זכאות<br><strong style="color:var(--text)">${d.eligibility_status || '—'}</strong></div>
+        <div style="font-size:12px;color:var(--muted)">מוכנות<br><strong style="color:var(--text)">${d.readiness_status || '—'}</strong></div>
+        <div style="font-size:12px;color:var(--muted)">עדיפות עו"ד<br><strong style="color:var(--text)">${d.lawyer_priority || '—'}</strong></div>
+      </div>
+    </div>
+
+    <div class="detail-grid" style="margin-bottom:16px">
+      <!-- Basic info -->
+      <div class="detail-card">
+        <h3>פרטי מבקש</h3>
+        <div class="detail-row"><label>שם</label><span class="detail-val">${name}</span></div>
+        <div class="detail-row"><label>טלפון</label><span class="detail-val" style="font-family:var(--mono)">${record.phone || '—'}</span></div>
+        <div class="detail-row"><label>גיל</label><span class="detail-val">${d.age || '—'}</span></div>
+        <div class="detail-row"><label>סטטוס</label><span class="detail-val">${d.status || '—'}</span></div>
+        <div class="detail-row"><label>שירות</label><span class="detail-val">${d.service_type || '—'}</span></div>
+        <div class="detail-row"><label>יישוב</label><span class="detail-val">${d.settlement_name || '—'}</span></div>
+      </div>
+
+      <!-- Routes -->
+      <div class="detail-card">
+        <h3>מסלול ומסלולים אפשריים</h3>
+        <div class="detail-row"><label>מסלול מוביל</label><span class="detail-val" style="color:var(--accent)">${routeName}</span></div>
+        <div style="margin-top:8px;font-size:11px;color:var(--muted);margin-bottom:4px">מסלולים מאושרים</div>
+        <div>${eligRoutes || '<span style="color:var(--muted);font-size:12px">אין</span>'}</div>
+        ${record.failed_gates?.length ? `<div style="margin-top:8px;font-size:11px;color:var(--red)">חסמי סף: ${record.failed_gates.join(', ')}</div>` : ''}
+      </div>
+
+      <!-- Flags -->
+      <div class="detail-card">
+        <h3>דגלי סיכון</h3>
+        ${flags || '<div style="color:var(--green);font-size:13px">✅ אין דגלים</div>'}
+      </div>
+
+      <!-- Missing docs -->
+      <div class="detail-card">
+        <h3>מסמכים חסרים</h3>
+        ${docs || '<div style="color:var(--green);font-size:13px">✅ אין חסרים ידועים</div>'}
+      </div>
+    </div>
+
+    <!-- Status + Notes -->
+    <div class="detail-card" style="margin-bottom:12px">
+      <h3>ניהול תיק</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px">
+        <div>
+          <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">סטטוס</label>
+          <select class="status-select" id="modal-status">
+            ${Object.entries(STATUS_HE).map(([k,v]) =>
+              `<option value="${k}"${record.status === k ? ' selected' : ''}>${v}</option>`
+            ).join('')}
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;color:var(--muted);display:block;margin-bottom:6px">הערות עו"ד (פנימי)</label>
+          <textarea class="notes" id="modal-notes" placeholder="הערות לשיחה, מסמכים שהתקבלו...">${record.lawyer_notes || ''}</textarea>
+        </div>
+      </div>
+      <button class="btn-save" onclick="saveClient()">💾 שמור שינויים</button>
+      <button class="adm-btn" onclick="openEngine(STATE.currentId)">⚙️ פתח במנוע ההחלטה</button>
+      <button class="adm-btn" onclick="openAdmModal()">🎥 אמת חתימה — אד"מ</button>
+    </div>
+
+    <!-- Created at -->
+    <div style="font-size:11px;color:var(--muted);text-align:left;font-family:var(--mono)">
+      נוצר: ${record.created_at ? new Date(record.created_at).toLocaleString('he-IL') : '—'}
+    </div>
+  `;
+
+  openModal('modal-client');
+}
+
+async function saveClient() {
+  const id = STATE.currentId;
+  if (!id) return;
+  const status = document.getElementById('modal-status').value;
+  const notes = document.getElementById('modal-notes').value;
+
+  const ok = await sbPatch(id, { status, lawyer_notes: notes, updated_at: new Date().toISOString() });
+  if (ok) {
+    // Update local state
+    const idx = STATE.leads.findIndex(r => r.id === id);
+    if (idx !== -1) { STATE.leads[idx].status = status; STATE.leads[idx].lawyer_notes = notes; }
+    updateKPIs(STATE.leads);
+    applyFilters();
+    closeModal('modal-client');
+  } else {
+    alert('שגיאה בשמירה — בדוק חיבור DB');
+  }
+}
+
+// ══════════════════════════════════════════════
+// UI HELPERS
+// ══════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function openDbModal() {
+  document.getElementById('cfg-url').value = STATE.url;
+  document.getElementById('cfg-key').value = STATE.key;
+  openModal('modal-db');
+}
+
+function showView(v) {
+  document.getElementById('view-leads').style.display = v === 'leads' ? 'block' : 'none';
+  document.getElementById('view-stats').style.display = v === 'stats' ? 'block' : 'none';
+  document.querySelectorAll('.nav-icon').forEach((el,i) => el.classList.remove('active'));
+}
+
+function openEngine(submissionId = null) {
+  const target = submissionId ? `engine.html?submission_id=${submissionId}` : 'engine.html';
+  window.open(target, '_blank');
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el =>
+  el.addEventListener('click', e => { if (e.target === el) el.classList.remove('open'); })
+);
+
+function openAdmModal() {
+  const now = new Date();
+  document.getElementById('adm-date').value = now.toISOString().split('T')[0];
+  document.getElementById('adm-time').value = now.toTimeString().slice(0,5);
+  ['adm-chk1','adm-chk2','adm-chk3','adm-chk4','adm-chk5'].forEach(id => {
+    document.getElementById(id).checked = false;
+  });
+  document.getElementById('adm-notes').value = '';
+  document.getElementById('adm-affidavit-name').value = '';
+  document.getElementById('adm-saved-msg').style.display = 'none';
+  document.getElementById('adm-save-btn').disabled = false;
+  document.getElementById('adm-save-btn').textContent = '✅ שמור תיעוד אימות חתימה';
+  closeModal('modal-client');
+  openModal('modal-adm');
+}
+
+async function saveAdmSession() {
+  const checks = ['adm-chk1','adm-chk2','adm-chk3','adm-chk4','adm-chk5'];
+  const allChecked = checks.every(id => document.getElementById(id).checked);
+  if (!allChecked) { alert('יש לסמן את כל אישורי הביצוע לפני שמירה'); return; }
+  const noteText = `[אד"מ ${document.getElementById('adm-date').value} ${document.getElementById('adm-time').value}] ${document.getElementById('adm-affidavit-name').value} | ${document.getElementById('adm-notes').value}`;
+  if (STATE.connected) {
+    await sbPatch(STATE.currentId, { status: 'IN_PROCESS', lawyer_notes: noteText, updated_at: new Date().toISOString() });
+    const idx = STATE.leads.findIndex(r => r.id === STATE.currentId);
+    if (idx !== -1) { STATE.leads[idx].status = 'IN_PROCESS'; STATE.leads[idx].lawyer_notes = noteText; }
+    updateKPIs(STATE.leads); applyFilters();
+  }
+  document.getElementById('adm-saved-msg').style.display = 'block';
+  document.getElementById('adm-save-btn').disabled = true;
+  document.getElementById('adm-save-btn').textContent = '✅ נשמר';
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+async function init() {
+  if (true) { // auto-connect
+    document.getElementById('cfg-url').value = STATE.url;
+    document.getElementById('cfg-key').value = STATE.key;
+    await connectDB();
+  } else {
+    openDbModal();
+    document.getElementById('leads-tbody').innerHTML =
+      '<tr class="loading-row"><td colspan="8">חבר Supabase כדי לטעון לידים</td></tr>';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
