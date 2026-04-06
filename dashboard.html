@@ -576,19 +576,29 @@ function renderTable() {
     const d = r.applicant_data || {};
     const date = r.created_at ? new Date(r.created_at).toLocaleDateString('he-IL') : '—';
     const scoreText = d.score_numeric ?? (r.internal_score || '—');
-    const routeText = d.route_label || routeLabel(r.selected_route);
-    const decisionLabel = d.decision_label || (
+    const scoreBand = d.score_band || r.internal_score || '';
+    const routeText =
+      d.route_label ||
+      routeLabel(r.selected_route) ||
+      '—';
+    const decisionLabel =
+      d.decision_label ||
+      (
       d.eligibility_status === 'NOT_ELIGIBLE' ? 'לא מתאים בשלב זה' :
       d.eligibility_status === 'ELIGIBLE' && d.readiness_status === 'READY' ? 'מתאים להגשה' :
       d.eligibility_status === 'CONDITIONAL' ? 'דורש בירור והשלמה' : '—'
     );
-    const decisionReason = d.decision_reason || d.lawyer_priority || '—';
+    const decisionReason =
+      d.decision_reason ||
+      d.lawyer_priority ||
+      d.readiness_status ||
+      '—';
     const normalizedStatus = normalizeStatus(r.status);
     return `<tr onclick="openClient(${r.id})">
       <td><div class="lead-name">${r.full_name || '—'}</div></td>
       <td><div class="lead-phone">${r.phone || '—'}</div></td>
       <td style="font-size:12px;color:var(--muted2)">${routeText}</td>
-      <td><span class="score ${r.internal_score || ''}">${scoreText}</span></td>
+      <td><span class="score ${scoreBand}">${scoreText}</span></td>
       <td style="font-size:12px;font-weight:600">${decisionLabel}</td>
       <td style="font-size:12px;color:var(--muted2);max-width:260px">${decisionReason}</td>
       <td><span class="badge ${normalizedStatus}">${STATUS_HE[normalizedStatus] || normalizedStatus}</span></td>
