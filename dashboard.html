@@ -372,13 +372,14 @@ textarea.notes:focus { outline: none; border-color: var(--accent); }
   </div>
 </div>
 
+<script src="app.config.js"></script>
 <script>
 // ══════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════
 const STATE = {
-  url: 'https://lcvshepgzizrlqbzvjoe.supabase.co',
-  key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdnNoZXBneml6cmxxYnp2am9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDU5NzEsImV4cCI6MjA5MDk4MTk3MX0.ca4rw8QeRoPdQPwAsqPiLEZD6S-eOCdw6-P4a4BIFNk',
+  url: window.APP_CONFIG?.SUPABASE_URL || '',
+  key: window.APP_CONFIG?.SUPABASE_ANON_KEY || '',
   connected: false,
   leads: [],
   filtered: [],
