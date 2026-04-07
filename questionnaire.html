@@ -3,45 +3,1383 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>שאלון זכאות — רישיון כלי ירייה</title>
+<title>שאלון זכאות ממוקד — רישיון כלי ירייה</title>
 <style>
-:root{--bg:#f8f9fb;--surface:#fff;--border:#e4e4ea;--border2:#d1d1d9;--text:#111114;--muted:#6b6b73;--muted2:#9a9aa5;--blue:#0a74da;--blue-h:#0068d1;--blue-bg:rgba(10,116,218,.07);--blue-ring:rgba(10,116,218,.20);--green:#15803d;--green-bg:rgba(21,128,61,.07);--amber:#b45309;--amber-bg:rgba(180,83,9,.07);--red:#c0392b;--wa-green:#25D366;--wa-hover:#20bd5a;--shadow:0 2px 16px rgba(0,0,0,.06),0 1px 4px rgba(0,0,0,.04)}*,*::before,*::after{box-sizing:border-box}html,body{margin:0;padding:0;min-height:100%}body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--text);font-size:16px;line-height:1.5}.shell{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:40px 20px 60px}.topbar{width:100%;max-width:600px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.topbar-left{display:flex;align-items:center;gap:12px;min-width:0}.back-link{font-size:14px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:5px;transition:color .15s;white-space:nowrap}.back-link:hover{color:var(--text)}.brand{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:-.2px;white-space:nowrap}.topbar-wa{appearance:none;border:none;background:var(--wa-green);color:#fff;border-radius:999px;padding:11px 18px;font-family:inherit;font-size:14px;font-weight:500;letter-spacing:-.1px;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(37,211,102,.14);transition:background .16s ease,transform .10s ease,box-shadow .16s ease;white-space:nowrap}.topbar-wa:hover{background:var(--wa-hover);box-shadow:0 8px 18px rgba(37,211,102,.18)}.topbar-wa:active{transform:scale(.988)}.progress-wrap{width:100%;max-width:600px;margin-bottom:28px}.progress-steps{display:flex;gap:6px;margin-bottom:10px}.progress-step{flex:1;height:3px;border-radius:99px;background:var(--border);overflow:hidden;transition:background .3s}.progress-step.done{background:var(--blue)}.progress-step.active{background:var(--blue);opacity:.45}.progress-label{font-size:13px;color:var(--muted);letter-spacing:-.1px}.card{width:100%;max-width:600px;background:var(--surface);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:36px 36px 32px}.step{display:none}.step.active{display:block}.step-tag{font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:var(--blue);margin-bottom:8px}.step-title{font-size:26px;font-weight:600;letter-spacing:-.6px;color:var(--text);margin:0 0 6px;line-height:1.25}.step-sub{font-size:15px;color:var(--muted);margin:0 0 20px;line-height:1.6}.step-wa-line{margin:0 0 24px;padding:12px 14px;border-radius:12px;background:rgba(37,211,102,.08);border:1px solid rgba(37,211,102,.14);display:flex;align-items:center;justify-content:space-between;gap:12px}.step-wa-line-text{font-size:13px;color:#19703c;line-height:1.6}.step-wa-line button{appearance:none;border:none;background:var(--wa-green);color:#fff;border-radius:999px;padding:10px 14px;font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}.step-wa-line button:hover{background:var(--wa-hover)}.field{margin-bottom:20px}.field:last-of-type{margin-bottom:0}label.field-label{display:block;font-size:14px;font-weight:500;color:var(--text);margin-bottom:7px;letter-spacing:-.1px}input[type="text"],input[type="tel"],input[type="number"],select,textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border2);border-radius:10px;font-family:inherit;font-size:15px;color:var(--text);background:var(--surface);transition:border-color .15s,box-shadow .15s;outline:none;appearance:none;-webkit-appearance:none}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-ring)}input.error,select.error{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.12)}select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b6b73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 12px center;padding-left:36px}.field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.radio-cards{display:flex;flex-direction:column;gap:10px}.radio-card{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border:1.5px solid var(--border2);border-radius:12px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none}.radio-card:hover{border-color:var(--blue);background:var(--blue-bg)}.radio-card input[type="radio"]{display:none}.radio-card.selected{border-color:var(--blue);background:var(--blue-bg)}.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--border2);flex-shrink:0;margin-top:1px;transition:border-color .15s,background .15s;display:flex;align-items:center;justify-content:center}.radio-card.selected .radio-dot{border-color:var(--blue);background:var(--blue)}.radio-card.selected .radio-dot::after{content:'';width:6px;height:6px;border-radius:50%;background:#fff}.radio-text strong{display:block;font-size:15px;font-weight:500;letter-spacing:-.1px;color:var(--text)}.radio-text span{display:block;font-size:13px;color:var(--muted);margin-top:2px;line-height:1.5}.check-card{display:flex;align-items:flex-start;gap:14px;padding:14px 16px;border:1.5px solid var(--border2);border-radius:12px;cursor:pointer;transition:border-color .15s,background .15s;user-select:none;margin-bottom:10px}.check-card:hover{border-color:var(--border);background:var(--bg)}.check-card.checked{border-color:var(--blue);background:var(--blue-bg)}.check-card input[type="checkbox"]{display:none}.check-box{width:18px;height:18px;border-radius:5px;border:2px solid var(--border2);flex-shrink:0;margin-top:1px;transition:all .15s;display:flex;align-items:center;justify-content:center}.check-card.checked .check-box{border-color:var(--blue);background:var(--blue)}.check-card.checked .check-box::after{content:'✓';color:#fff;font-size:11px;font-weight:700}.settlement-results{margin-top:7px;min-height:22px;font-size:13px}.s-match{display:inline-flex;align-items:center;gap:6px;color:var(--green);font-weight:500;padding:4px 10px;background:var(--green-bg);border-radius:7px;cursor:pointer}.s-match:hover{opacity:.8}.s-none{color:var(--amber)}.s-checking{color:var(--muted)}.notice{border-radius:10px;padding:12px 16px;font-size:14px;line-height:1.65;margin-bottom:20px}.notice.blue{background:var(--blue-bg);border:1px solid rgba(10,116,218,.15);color:#1a5fa8}.notice.amber{background:var(--amber-bg);border:1px solid rgba(180,83,9,.18);color:var(--amber)}.notice.green{background:var(--green-bg);border:1px solid rgba(21,128,61,.18);color:var(--green)}.actions{display:flex;align-items:center;gap:12px;margin-top:28px}.btn-primary{flex:1;padding:14px 20px;background:var(--blue);color:#fff;border:none;border-radius:99px;font-family:inherit;font-size:16px;font-weight:500;letter-spacing:-.15px;cursor:pointer;transition:background .15s,transform .1s;box-shadow:0 4px 14px rgba(10,116,218,.18)}.btn-primary:hover{background:var(--blue-h)}.btn-primary:active{transform:scale(.985)}.btn-primary:disabled{opacity:.5;cursor:not-allowed}.btn-back{padding:14px 20px;background:none;color:var(--muted);border:1.5px solid var(--border2);border-radius:99px;font-family:inherit;font-size:15px;cursor:pointer;transition:color .15s,border-color .15s;white-space:nowrap}.btn-back:hover{color:var(--text);border-color:var(--border)}.field-error{font-size:13px;color:var(--red);margin-top:5px;display:none}.field-error.show{display:block}#screen-thanks{display:none;width:100%;max-width:600px;text-align:center}#screen-thanks.active{display:block}.thanks-icon{width:72px;height:72px;border-radius:50%;background:var(--green-bg);border:1.5px solid rgba(21,128,61,.2);display:inline-flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:24px}.thanks-title{font-size:32px;font-weight:600;letter-spacing:-.8px;color:var(--text);margin:0 0 12px}.thanks-sub{font-size:17px;color:var(--muted);line-height:1.7;max-width:440px;margin:0 auto 20px}.thanks-ref{font-size:13px;color:var(--muted2);font-variant-numeric:tabular-nums;margin-bottom:20px}.thanks-wa{display:inline-flex;flex-direction:column;align-items:center;gap:10px}.thanks-wa button{appearance:none;border:none;background:var(--wa-green);color:#fff;border-radius:999px;padding:14px 22px;font-family:inherit;font-size:16px;font-weight:500;cursor:pointer;box-shadow:0 8px 20px rgba(37,211,102,.14)}.thanks-wa button:hover{background:var(--wa-hover)}.thanks-wa-note{font-size:13px;color:var(--muted)}@media (max-width:640px){.shell{padding:24px 14px 48px}.card{padding:24px 20px 22px;border-radius:16px}.step-title{font-size:22px}.field-row{grid-template-columns:1fr}.topbar{max-width:600px;flex-direction:column;align-items:stretch;margin-bottom:16px}.topbar-left{justify-content:space-between}.topbar-wa{width:100%}.actions{flex-direction:column}.btn-back,.btn-primary{width:100%}.step-wa-line{flex-direction:column;align-items:stretch}.step-wa-line button{width:100%}}
+:root{
+  --bg:#f8f9fb;
+  --surface:#ffffff;
+  --border:#e4e4ea;
+  --border2:#d1d1d9;
+  --text:#111114;
+  --muted:#6b6b73;
+  --muted2:#9a9aa5;
+  --blue:#0a74da;
+  --blue-h:#0068d1;
+  --blue-bg:rgba(10,116,218,0.07);
+  --blue-ring:rgba(10,116,218,0.20);
+  --green:#10b981;
+  --green-bg:rgba(16,185,129,0.08);
+  --amber:#f59e0b;
+  --amber-bg:rgba(245,158,11,0.10);
+  --red:#ef4444;
+  --red-bg:rgba(239,68,68,0.08);
+  --wa-green:#25D366;
+  --wa-hover:#20bd5a;
+  --shadow:0 2px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  background:var(--bg);
+  color:var(--text);
+  font-size:16px;
+  line-height:1.5;
+}
+
+.shell{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:28px 18px 48px;
+}
+
+.topbar{
+  width:100%;
+  max-width:760px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:16px;
+}
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.back-link{
+  font-size:14px;
+  color:var(--muted);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:5px;
+}
+.back-link:hover{color:var(--text)}
+.brand{
+  font-size:14px;
+  font-weight:600;
+  color:var(--muted);
+}
+.topbar-wa{
+  appearance:none;
+  border:none;
+  background:var(--wa-green);
+  color:#fff;
+  border-radius:999px;
+  padding:12px 18px;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:500;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 6px 16px rgba(37,211,102,0.14);
+  transition:background .16s ease, transform .10s ease, box-shadow .16s ease;
+  white-space:nowrap;
+}
+.topbar-wa:hover{
+  background:var(--wa-hover);
+  box-shadow:0 8px 18px rgba(37,211,102,0.18);
+}
+.topbar-wa:active{transform:scale(0.988)}
+
+.layout{
+  width:100%;
+  max-width:760px;
+  display:grid;
+  grid-template-columns:280px minmax(0,1fr);
+  gap:18px;
+  align-items:start;
+}
+
+.side-panel,.main-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+}
+.side-panel{
+  padding:22px 20px;
+  position:sticky;
+  top:18px;
+}
+.panel-kicker{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:8px;
+}
+.panel-title{
+  font-size:21px;
+  line-height:1.2;
+  font-weight:600;
+  margin:0 0 8px;
+  letter-spacing:-0.4px;
+}
+.panel-sub{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.6;
+  margin:0 0 18px;
+}
+.gauge-wrap{
+  position:relative;
+  width:164px;
+  height:164px;
+  margin:0 auto 14px;
+}
+.circular-chart{
+  display:block;
+  width:100%;
+  height:100%;
+  transform:rotate(-90deg);
+}
+.circle-bg{fill:none;stroke:#edf0f4;stroke-width:2.8}
+.circle{fill:none;stroke-width:2.8;stroke-linecap:round;transition:stroke-dasharray .55s ease, stroke .35s ease}
+.gauge-center{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  transform:translateY(-2px);
+}
+.gauge-score{
+  font-size:34px;
+  font-weight:700;
+  line-height:1;
+  letter-spacing:-1px;
+}
+.gauge-label{
+  margin-top:8px;
+  font-size:12px;
+  color:var(--muted);
+}
+.score-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:600;
+  margin:0 auto 12px;
+}
+.score-pill.high{background:var(--green-bg);color:#0e7a56}
+.score-pill.mid{background:var(--amber-bg);color:#a35f06}
+.score-pill.low{background:var(--red-bg);color:#b42318}
+.explanation{
+  min-height:96px;
+  font-size:14px;
+  line-height:1.65;
+  color:var(--muted);
+  text-align:center;
+}
+.explanation strong{color:var(--text);font-weight:600}
+.status-chip{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:7px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:600;
+  margin-top:10px;
+}
+.status-chip.core{background:var(--green-bg);color:#0e7a56}
+.status-chip.partial{background:var(--amber-bg);color:#a35f06}
+.status-chip.review{background:var(--red-bg);color:#b42318}
+.progress-wrap{margin-top:18px}
+.progress-steps{display:flex;gap:6px;margin-bottom:10px}
+.progress-step{
+  flex:1;height:3px;border-radius:99px;background:var(--border);transition:background .3s;
+}
+.progress-step.done{background:var(--blue)}
+.progress-step.active{background:var(--blue);opacity:.45}
+.progress-label{font-size:13px;color:var(--muted)}
+
+.main-card{padding:32px 30px 28px}
+.step{display:none}
+.step.active{display:block}
+.step-tag{
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:8px;
+}
+.step-title{
+  font-size:28px;
+  line-height:1.2;
+  font-weight:600;
+  letter-spacing:-0.7px;
+  margin:0 0 8px;
+}
+.step-sub{
+  font-size:15px;
+  color:var(--muted);
+  margin:0 0 20px;
+  line-height:1.6;
+}
+.step-wa-line{
+  margin:0 0 22px;
+  padding:12px 14px;
+  border-radius:14px;
+  background:rgba(37,211,102,0.08);
+  border:1px solid rgba(37,211,102,0.14);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.step-wa-line-text{
+  font-size:13px;
+  color:#19703c;
+  line-height:1.6;
+}
+.step-wa-line button{
+  appearance:none;
+  border:none;
+  background:var(--wa-green);
+  color:#fff;
+  border-radius:999px;
+  padding:10px 14px;
+  font-family:inherit;
+  font-size:13px;
+  font-weight:500;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.step-wa-line button:hover{background:var(--wa-hover)}
+
+.field{margin-bottom:20px}
+label.field-label{
+  display:block;
+  font-size:14px;
+  font-weight:500;
+  margin-bottom:7px;
+}
+input[type="text"],input[type="tel"],input[type="number"],select{
+  width:100%;
+  padding:12px 14px;
+  border:1.5px solid var(--border2);
+  border-radius:12px;
+  font-family:inherit;
+  font-size:15px;
+  color:var(--text);
+  background:var(--surface);
+  transition:border-color .15s, box-shadow .15s;
+  outline:none;
+  appearance:none;
+  -webkit-appearance:none;
+}
+input:focus,select:focus{
+  border-color:var(--blue);
+  box-shadow:0 0 0 3px var(--blue-ring);
+}
+input.error,select.error{
+  border-color:var(--red);
+  box-shadow:0 0 0 3px rgba(239,68,68,0.12);
+}
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b6b73' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:left 12px center;
+  padding-left:36px;
+}
+.field-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.field-error{
+  display:none;
+  font-size:13px;
+  color:#b42318;
+  margin-top:6px;
+}
+.field-error.show{display:block}
+
+.radio-cards{display:flex;flex-direction:column;gap:10px}
+.radio-card{
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  padding:14px 16px;
+  border:1.5px solid var(--border2);
+  border-radius:14px;
+  cursor:pointer;
+  transition:border-color .15s, background .15s;
+  user-select:none;
+}
+.radio-card:hover{
+  border-color:var(--blue);
+  background:var(--blue-bg);
+}
+.radio-card input[type="radio"]{display:none}
+.radio-card.selected{
+  border-color:var(--blue);
+  background:var(--blue-bg);
+}
+.radio-dot{
+  width:18px;height:18px;border-radius:50%;
+  border:2px solid var(--border2);
+  flex-shrink:0;
+  margin-top:1px;
+  transition:border-color .15s, background .15s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.radio-card.selected .radio-dot{
+  border-color:var(--blue);
+  background:var(--blue);
+}
+.radio-card.selected .radio-dot::after{
+  content:'';
+  width:6px;height:6px;border-radius:50%;
+  background:white;
+}
+.radio-text strong{
+  display:block;
+  font-size:15px;
+  font-weight:500;
+  color:var(--text);
+}
+.radio-text span{
+  display:block;
+  font-size:13px;
+  color:var(--muted);
+  margin-top:2px;
+  line-height:1.5;
+}
+
+.notice{
+  border-radius:14px;
+  padding:12px 14px;
+  font-size:14px;
+  line-height:1.65;
+  margin-bottom:18px;
+}
+.notice.blue{
+  background:var(--blue-bg);
+  border:1px solid rgba(10,116,218,.14);
+  color:#1a5fa8;
+}
+.notice.amber{
+  background:var(--amber-bg);
+  border:1px solid rgba(245,158,11,.16);
+  color:#9a6700;
+}
+
+.settlement-results{
+  margin-top:8px;
+  min-height:24px;
+  font-size:13px;
+}
+.s-match{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  color:#0e7a56;
+  font-weight:500;
+  padding:4px 10px;
+  background:var(--green-bg);
+  border-radius:7px;
+  cursor:pointer;
+}
+.s-match:hover{opacity:.85}
+.s-none{color:#9a6700}
+.s-checking{color:var(--muted)}
+
+.actions{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-top:28px;
+}
+.btn-primary{
+  flex:1;
+  padding:15px 20px;
+  background:var(--blue);
+  color:#fff;
+  border:none;
+  border-radius:999px;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:500;
+  cursor:pointer;
+  box-shadow:0 4px 14px rgba(10,116,218,.18);
+}
+.btn-primary:hover{background:var(--blue-h)}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed}
+.btn-back{
+  padding:15px 20px;
+  background:none;
+  color:var(--muted);
+  border:1.5px solid var(--border2);
+  border-radius:999px;
+  font-family:inherit;
+  font-size:15px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+.btn-back:hover{color:var(--text);border-color:var(--border)}
+
+#screen-thanks{
+  display:none;
+  width:100%;
+  max-width:760px;
+  text-align:center;
+}
+#screen-thanks.active{display:block}
+.thanks-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:24px;
+  box-shadow:var(--shadow);
+  padding:40px 26px 34px;
+}
+.thanks-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:var(--green-bg);
+  border:1.5px solid rgba(16,185,129,.16);
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  margin-bottom:24px;
+}
+.thanks-title{
+  font-size:32px;
+  font-weight:600;
+  letter-spacing:-0.8px;
+  margin:0 0 12px;
+}
+.thanks-sub{
+  font-size:17px;
+  color:var(--muted);
+  line-height:1.7;
+  max-width:460px;
+  margin:0 auto 20px;
+}
+.thanks-ref{
+  font-size:13px;
+  color:var(--muted2);
+  font-variant-numeric:tabular-nums;
+  margin-bottom:22px;
+}
+.thanks-wa{
+  display:inline-flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+}
+.thanks-wa button{
+  appearance:none;
+  border:none;
+  background:var(--wa-green);
+  color:#fff;
+  border-radius:999px;
+  padding:14px 22px;
+  font-family:inherit;
+  font-size:16px;
+  font-weight:500;
+  cursor:pointer;
+  box-shadow:0 8px 20px rgba(37,211,102,0.14);
+}
+.thanks-wa button:hover{background:var(--wa-hover)}
+.thanks-wa-note{
+  font-size:13px;
+  color:var(--muted);
+}
+
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  .side-panel{position:static}
+}
+@media (max-width:640px){
+  .shell{padding:22px 14px 40px}
+  .topbar{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .topbar-left{justify-content:space-between}
+  .topbar-wa{width:100%}
+  .main-card,.side-panel,.thanks-card{border-radius:18px}
+  .main-card{padding:24px 20px 22px}
+  .field-row{grid-template-columns:1fr}
+  .actions{flex-direction:column}
+  .btn-back,.btn-primary{width:100%}
+  .step-wa-line{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  .step-wa-line button{width:100%}
+  .step-title{font-size:24px}
+  .thanks-title{font-size:28px}
+}
 </style>
 </head>
 <body>
 <div class="shell">
   <div class="topbar">
-    <div class="topbar-left"><a href="index.html" class="back-link">← חזרה</a><span class="brand">בדיקת זכאות ראשונית</span></div>
-    <button class="topbar-wa" type="button" onclick="openWhatsApp()">שאל שאלה בוואטסאפ</button>
+    <div class="topbar-left">
+      <a href="index.html" class="back-link">← חזרה</a>
+      <span class="brand">שאלון זכאות ממוקד</span>
+    </div>
+    <button class="topbar-wa" type="button" onclick="openWhatsApp()">שאלה בוואטסאפ</button>
   </div>
-  <div class="progress-wrap" id="progress-wrap"><div class="progress-steps"><div class="progress-step" id="ps-1"></div><div class="progress-step" id="ps-2"></div><div class="progress-step" id="ps-3"></div><div class="progress-step" id="ps-4"></div></div><div class="progress-label" id="progress-label">שלב 1 מתוך 4</div></div>
-  <div class="card">
-    <div class="step active" id="step-1"><div class="step-tag">שלב 1</div><h2 class="step-title">פרטי קשר</h2><p class="step-sub">מידע בסיסי ליצירת קשר לאחר קבלת הבקשה.</p><div class="step-wa-line"><div class="step-wa-line-text">יש שאלה לפני שממשיכים? אפשר לעבור לוואטסאפ בכל שלב.</div><button type="button" onclick="openWhatsApp()">מעבר לוואטסאפ</button></div><div class="field"><label class="field-label" for="f_name">שם מלא</label><input type="text" id="f_name" placeholder="ישראל ישראלי" autocomplete="name"><div class="field-error" id="err-name">נא להזין שם מלא</div></div><div class="field"><label class="field-label" for="f_phone">מספר טלפון</label><input type="tel" id="f_phone" placeholder="05X-XXXXXXX" autocomplete="tel" dir="ltr" style="text-align:right"><div class="field-error" id="err-phone">נא להזין מספר טלפון תקין</div></div><div class="actions"><button class="btn-primary" onclick="goTo(2)">המשך</button></div></div>
-    <div class="step" id="step-2"><div class="step-tag">שלב 2</div><h2 class="step-title">רקע אישי</h2><p class="step-sub">הנתונים ישמשו לבדיקת עמידה בתנאי הסף הבסיסיים.</p><div class="step-wa-line"><div class="step-wa-line-text">לא בטוח איך לענות? אפשר לעצור כאן ולקבל הכוונה קצרה בוואטסאפ.</div><button type="button" onclick="openWhatsApp()">שאלה בוואטסאפ</button></div><div class="field"><label class="field-label">מעמד אזרחי</label><div class="radio-cards" id="rc-status"><label class="radio-card" onclick="selectRadio('status','citizen',this)"><input type="radio" name="status" value="citizen"><div class="radio-dot"></div><div class="radio-text"><strong>אזרח ישראלי</strong></div></label><label class="radio-card" onclick="selectRadio('status','permanent_resident',this)"><input type="radio" name="status" value="permanent_resident"><div class="radio-dot"></div><div class="radio-text"><strong>תושב קבע</strong><span>אינך אזרח, אך הינך תושב קבע רשום</span></div></label><label class="radio-card" onclick="selectRadio('status','new_immigrant',this)"><input type="radio" name="status" value="new_immigrant"><div class="radio-dot"></div><div class="radio-text"><strong>עולה חדש</strong><span>קיבלת תעודת עולה לפי חוק השבות</span></div></label></div><div class="field-error" id="err-status">נא לבחור מעמד אזרחי</div></div><div class="notice blue" id="notice-oleh" style="display:none">כעולה חדש, הבקשה אפשרית בתבחין <strong>מקום מגורים בלבד</strong>, בכפוף לאישור משטרת ישראל.</div><div class="field-row"><div class="field"><label class="field-label" for="f_age">גיל</label><input type="number" id="f_age" placeholder="28" min="16" max="100"><div class="field-error" id="err-age">נא להזין גיל תקין</div></div><div class="field"><label class="field-label" for="f_residency_years">שנות שהייה רציפה בישראל</label><input type="number" id="f_residency_years" placeholder="5" min="0" max="80"><div class="field-error" id="err-residency">נא להזין מספר שנים</div></div></div><div class="field"><label class="field-label">שירות</label><select id="f_service_type"><option value="">— בחר —</option><option value="regular_combat">שירות סדיר כלוחם</option><option value="regular_2y">שירות סדיר — שנתיים ומעלה</option><option value="regular_basic">שירות סדיר — פחות משנתיים</option><option value="civil_2y">שירות לאומי/אזרחי — שנתיים</option><option value="amendment25_casualty">חייל שנפצע בנסיבות מבצעיות (תיקון 25)</option><option value="amendment25_medical">לוחם שהשתחרר מסיבות רפואיות (תיקון 25)</option><option value="none">לא שירתי / פטור</option></select><div class="field-error" id="err-service">נא לבחור סטטוס שירות</div></div><div class="actions"><button class="btn-back" onclick="goTo(1)">חזרה</button><button class="btn-primary" onclick="goTo(3)">המשך</button></div></div>
-    <div class="step" id="step-3"><div class="step-tag">שלב 3</div><h2 class="step-title">בסיס הבקשה</h2><p class="step-sub">בחר את הקטגוריה המתאימה לנסיבותיך.</p><div class="step-wa-line"><div class="step-wa-line-text">אם יש התלבטות לגבי המסלול הנכון, אפשר לפתוח שיחה ולקבל הכוונה לפני ההמשך.</div><button type="button" onclick="openWhatsApp()">בירור בוואטסאפ</button></div><div class="field"><label class="field-label" for="f_criterion">קטגוריה רלוונטית</label><select id="f_criterion" onchange="onCriterionChange()"><option value="">— בחר —</option><optgroup label="מקום מגורים"><option value="RESIDENT_ELIGIBLE_LOCALITY_STANDARD">מגורים ביישוב מוכר</option></optgroup><optgroup label="מקום עבודה / לימודים"><option value="WORK_ELIGIBLE_LOCALITY_EMPLOYEE">עובד שכיר ביישוב מוכר</option><option value="WORK_ELIGIBLE_LOCALITY_SELF_EMPLOYED_FIXED">עצמאי — בית עסק ביישוב מוכר</option><option value="WORK_ELIGIBLE_LOCALITY_SELF_EMPLOYED_MOBILE">עצמאי — מגיע ליישובים מוכרים</option><option value="WORK_ELIGIBLE_LOCALITY_STUDENT">תלמיד/סטודנט ביישוב מוכר</option></optgroup><optgroup label="שירות בכוחות הביטחון"><option value="SECURITY_FORCES_OFFICER_NCO">קצין / נגד בדרגה מתאימה</option><option value="SECURITY_FORCES_RIFLEMAN_07">בעל הכשרת רובאי 07 ומעלה</option><option value="SECURITY_FORCES_FIGHTER_CERT">בעל תעודת לוחם (צה"ל)</option><option value="SECURITY_FORCES_PRE1999_COMBAT">בוגר צה"ל עד 1999 — מקצוע קרבי</option><option value="SECURITY_FORCES_INSTRUCTOR_DEFINED">מדריך בתפקיד מוגדר בצה"ל</option><option value="AMENDMENT25_BATTLE_CASUALTY_INCOMPLETE_SERVICE">חייל שנפצע בנסיבות מבצעיות (תיקון 25)</option><option value="AMENDMENT25_FIGHTER_MEDICAL_RELEASE">לוחם שהשתחרר מסיבות רפואיות (תיקון 25)</option></optgroup><optgroup label="שירות במשטרת ישראל"><option value="POLICE_CAREER_ACTIVE_2Y">שוטר קבע פעיל</option><option value="POLICE_CAREER_COMPLETED_2Y">שוטר שסיים שירות קבע</option><option value="BORDER_POLICE_COMBAT_2Y">לוחם מבצעי במשמר הגבול</option><option value="POLICE_VOLUNTEER_ACTIVE">מתנדב משטרה פעיל</option><option value="POLICE_VOLUNTEER_15Y_10Y_WINDOW">מתנדב משטרה — 15 שנה</option><option value="BORDER_POLICE_SCOUT_COURSE">בוגר קורס סייר מג"ב</option></optgroup><optgroup label="מקצועות ייחודיים"><option value="SECURITY_OFFICER_APPOINTED">ממונה ביטחון / קב"ט</option><option value="RANGE_INSTRUCTOR_ACTIVE">מדריך ירי פעיל מורשה</option><option value="TOUR_GUIDE_LICENSED">מורה דרך מוסמך</option><option value="FARMER_SELF_EMPLOYED">חקלאי עצמאי פעיל</option><option value="FARMER_FAMILY_MEMBER">בן משפחה של חקלאי</option><option value="FARMER_EMPLOYEE">שכיר אצל חקלאי</option><option value="FARMER_COOPERATIVE_MEMBER">חבר אגודה שיתופית חקלאית</option><option value="EXPLOSIVES_SELF_EMPLOYED">מוביל חומרי נפץ — עצמאי</option><option value="EXPLOSIVES_EMPLOYEE">מוביל חומרי נפץ — שכיר</option><option value="VETERINARIAN">רופא וטרינר</option><option value="VETERINARY_UNDER_SUPERVISION">עובד תחת פיקוח וטרינר</option><option value="PEST_CONTROL_LEVEL2">מדביר מוסמך</option><option value="HUNTING_LICENSED">בעל רישיון ציד</option></optgroup><optgroup label="ספורט ירי"><option value="SPORTS_OLYMPIC">ספורטאי ירי אולימפי</option><option value="SPORTS_PRACTICAL">ספורטאי ירי מעשי</option><option value="SPORTS_PARALYMPIC">ספורטאי פראולימפי</option></optgroup><optgroup label="גופי הצלה"><option value="MEDA_WORKER_OR_VOLUNTEER">עובד / מתנדב מד"א</option><option value="ZAKA_WORKER_OR_VOLUNTEER">עובד / מתנדב זק"א</option><option value="IHUD_HATZALA_WORKER_OR_VOLUNTEER">עובד / מתנדב איחוד הצלה</option><option value="FIREFIGHTER_ACTIVE_2Y">כבאי פעיל</option><option value="FIREFIGHTER_VOLUNTEER_2Y">מתנדב כבאות</option><option value="FIREFIGHTER_FORMER_30D">כבאי לשעבר</option></optgroup><optgroup label="הכשרה ייחודית"><option value="SPECIAL_TRAINING_AIRPORT">עובד / בוגר רשות שדות התעופה</option><option value="SHABAK_TRAINED">עובד / בוגר שב"כ</option><option value="MALMAB_UNIFORM_COURSE">עובד / בוגר מלמ"ב</option><option value="KNESSET_OZ_UNIT_GRADUATE">בוגר יחידת עוז — הכנסת</option><option value="GUIDED_BODY_SECURITY_ADVANCED_A_B">מאבטח — קורס מתקדם א/ב</option></optgroup></select><div class="field-error" id="err-criterion">נא לבחור קטגוריה</div></div><div id="field-settlement" style="display:none"><div class="field" style="margin-bottom:8px"><label class="field-label" for="f_settlement_name">שם היישוב</label><input type="text" id="f_settlement_name" placeholder="הקלד שם יישוב..." oninput="searchSettlement(this.value)" autocomplete="off"><div class="settlement-results" id="settlement-results"></div><input type="hidden" id="f_settlement_id"><div class="field-error" id="err-settlement">נא להזין יישוב</div></div><div class="notice amber" id="notice-locality-hint">הזן את שם היישוב כדי לבדוק אם הוא מוכר לצורך הבקשה.</div></div><div id="notice-oleh-criterion" class="notice amber" style="display:none">כעולה חדש, ניתן להגיש בתבחין <strong>מקום מגורים בלבד</strong>. הקטגוריה שנבחרה אינה זמינה עבורך.</div><div class="actions"><button class="btn-back" onclick="goTo(2)">חזרה</button><button class="btn-primary" onclick="goTo(4)">המשך</button></div></div>
-    <div class="step" id="step-4"><div class="step-tag">שלב 4</div><h2 class="step-title">מידע נוסף</h2><p class="step-sub">סמן אם אחד הפריטים הבאים רלוונטי לנסיבותיך.</p><div class="step-wa-line"><div class="step-wa-line-text">לפני שליחה אפשר לפתוח שיחה, לשאול שאלה, ואז לחזור ולהשלים את הטופס.</div><button type="button" onclick="openWhatsApp()">לפני שליחה — וואטסאפ</button></div><div class="field"><div class="check-card" id="cc-org" onclick="toggleCheck('org_auth',this)"><div class="check-box" id="cb-org"></div><div class="radio-text"><strong>תעודת הרשאה ארגונית לנשיאת נשק</strong><span>אני נושא תעודת הרשאה לנשיאת כלי ירייה שניתנה ע"י מקום עבודתי או ארגון</span></div></div><div class="check-card" id="cc-late" onclick="toggleCheck('late',this)"><div class="check-box" id="cb-late"></div><div class="radio-text"><strong>הגשה מחוץ לחלון הזמן</strong><span>פג תוקף המצב שבגינו אפשרי הרישיון, ועברו יותר מ-30 ימים מאז</span></div></div></div><div class="notice blue"><strong>הגנת פרטיות:</strong> הפרטים שמסרת ישמשו לבדיקת הזכאות הראשונית ולצורך יצירת קשר. לא יועבר מידע לגורם שלישי ללא הסכמתך.</div><div class="actions"><button class="btn-back" onclick="goTo(3)">חזרה</button><button class="btn-primary" id="btn-submit" onclick="submitForm()">שלח לבדיקה</button></div><div id="submit-error" class="notice amber" style="display:none;margin-top:16px">אירעה שגיאה בשמירת הטופס. נסה שנית.</div></div>
+
+  <div class="layout">
+    <aside class="side-panel">
+      <div class="panel-kicker">Prediction Engine</div>
+      <h2 class="panel-title">מד סבירות זכאות</h2>
+      <p class="panel-sub">אינדיקציה ראשונית בלבד. המערכת לא קובעת זכאות סופית אלא מציגה תמונת מצב מקדמית חכמה.</p>
+
+      <div class="gauge-wrap">
+        <svg viewBox="0 0 36 36" class="circular-chart">
+          <path class="circle-bg" d="M18 2.0845a 15.9155 15.9155 0 0 1 0 31.831a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+          <path id="gauge-circle" class="circle" stroke="#ef4444" stroke-dasharray="0, 100" d="M18 2.0845a 15.9155 15.9155 0 0 1 0 31.831a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+        </svg>
+        <div class="gauge-center">
+          <div class="gauge-score" id="gauge-score">0%</div>
+          <div class="gauge-label">סבירות ראשונית</div>
+        </div>
+      </div>
+
+      <div class="score-pill low" id="score-pill">נדרש מידע נוסף</div>
+      <div class="explanation" id="explanation">המערכת מחכה לנתונים בסיסיים כדי להציג תמונת מצב ראשונית והסבר קצר.</div>
+      <div id="settlement-chip-wrap" style="text-align:center"></div>
+
+      <div class="progress-wrap">
+        <div class="progress-steps">
+          <div class="progress-step" id="ps-1"></div>
+          <div class="progress-step" id="ps-2"></div>
+          <div class="progress-step" id="ps-3"></div>
+          <div class="progress-step" id="ps-4"></div>
+          <div class="progress-step" id="ps-5"></div>
+          <div class="progress-step" id="ps-6"></div>
+          <div class="progress-step" id="ps-7"></div>
+          <div class="progress-step" id="ps-8"></div>
+        </div>
+        <div class="progress-label" id="progress-label">שאלה 1 מתוך 8</div>
+      </div>
+    </aside>
+
+    <main>
+      <div class="main-card">
+        <div class="step active" id="step-1">
+          <div class="step-tag">שאלה 1</div>
+          <h1 class="step-title">מה גילך</h1>
+          <p class="step-sub">זהו חסם סף בסיסי. בלי הגיל אין משמעות אמיתית להמשך הבדיקה.</p>
+          <div class="step-wa-line">
+            <div class="step-wa-line-text">צריך עזרה לפני ההמשך? אפשר לפתוח וואטסאפ בכל שלב.</div>
+            <button type="button" onclick="openWhatsApp()">מעבר לוואטסאפ</button>
+          </div>
+          <div class="field">
+            <label class="field-label" for="f_age">גיל</label>
+            <input type="number" id="f_age" placeholder="28" min="16" max="100" oninput="updatePredictor()">
+            <div class="field-error" id="err-age">נא להזין גיל תקין</div>
+          </div>
+          <div class="actions">
+            <button class="btn-primary" onclick="goTo(2)">המשך</button>
+          </div>
+        </div>
+
+        <div class="step" id="step-2">
+          <div class="step-tag">שאלה 2</div>
+          <h1 class="step-title">מה הסטטוס שלך בישראל</h1>
+          <p class="step-sub">זהו חסם סף רגולטורי. המערכת חייבת לדעת אם מדובר באזרח, תושב קבע או אחר.</p>
+          <div class="field">
+            <label class="field-label">סטטוס</label>
+            <div class="radio-cards" id="rc-status">
+              <label class="radio-card" onclick="selectRadio('status','citizen',this)">
+                <input type="radio" name="status" value="citizen">
+                <div class="radio-dot"></div>
+                <div class="radio-text">
+                  <strong>אזרח</strong>
+                </div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('status','permanent_resident',this)">
+                <input type="radio" name="status" value="permanent_resident">
+                <div class="radio-dot"></div>
+                <div class="radio-text">
+                  <strong>תושב קבע</strong>
+                </div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('status','other',this)">
+                <input type="radio" name="status" value="other">
+                <div class="radio-dot"></div>
+                <div class="radio-text">
+                  <strong>אחר</strong>
+                </div>
+              </label>
+            </div>
+            <div class="field-error" id="err-status">נא לבחור סטטוס</div>
+          </div>
+          <div class="actions">
+            <button class="btn-back" onclick="goTo(1)">חזרה</button>
+            <button class="btn-primary" onclick="goTo(3)">המשך</button>
+          </div>
+        </div>
+
+        <div class="step" id="step-3">
+          <div class="step-tag">שאלה 3</div>
+          <h1 class="step-title">האם התגוררת בישראל ב־3 השנים האחרונות או ביצעת שירות בישראל</h1>
+          <p class="step-sub">זו דרישת סף מרכזית. בלי זה, רוב מסלולי הזכאות נחלשים משמעותית.</p>
+          <div class="field">
+            <label class="field-label">בחירה</label>
+            <div class="radio-cards" id="rc-residency">
+              <label class="radio-card" onclick="selectRadio('residency_gate','yes',this)">
+                <input type="radio" name="residency_gate" value="yes">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>כן</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('residency_gate','no',this)">
+                <input type="radio" name="residency_gate" value="no">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>לא</strong></div>
+              </label>
+            </div>
+            <div class="field-error" id="err-residency-gate">נא לבחור תשובה</div>
+          </div>
+          <div class="actions">
+            <button class="btn-back" onclick="goTo(2)">חזרה</button>
+            <button class="btn-primary" onclick="goTo(4)">המשך</button>
+          </div>
+        </div>
+
+        <div class="step" id="step-4">
+          <div class="step-tag">שאלה 4</div>
+          <h1 class="step-title">מה מתאר אותך בצורה הכי מדויקת</h1>
+          <p class="step-sub">התשובה כאן משפיעה על סף גיל, על מסלולים אפשריים ועל המשקל הראשוני של הבקשה.</p>
+          <div class="field">
+            <label class="field-label">בחירה</label>
+            <div class="radio-cards" id="rc-track">
+              <label class="radio-card" onclick="selectRadio('track','military',this); updatePredictor();">
+                <input type="radio" name="track" value="military">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>שירות צבאי</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('track','civil',this); updatePredictor();">
+                <input type="radio" name="track" value="civil">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>שירות לאומי או אזרחי</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('track','none',this); updatePredictor();">
+                <input type="radio" name="track" value="none">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>לא שירתי</strong></div>
+              </label>
+            </div>
+            <div class="field-error" id="err-track">נא לבחור תשובה</div>
+          </div>
+          <div class="actions">
+            <button class="btn-back" onclick="goTo(3)">חזרה</button>
+            <button class="btn-primary" onclick="goTo(5)">המשך</button>
+          </div>
+        </div>
+
+        <div class="step" id="step-5">
+          <div class="step-tag">שאלה 5</div>
+          <h1 class="step-title">על איזה בסיס אתה מבקש לבדוק זכאות</h1>
+          <p class="step-sub">זה לב המערכת. כאן נקבע לאיזה תבחין ראשי הבדיקה תתכוון.</p>
+          <div class="field">
+            <label class="field-label">בחירה</label>
+            <div class="radio-cards" id="rc-basis">
+              <label class="radio-card" onclick="selectRadio('basis','residence',this); onBasisChange();">
+                <input type="radio" name="basis" value="residence">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>מגורים ביישוב מזכה</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('basis','occupation_locality',this); onBasisChange();">
+                <input type="radio" name="basis" value="occupation_locality">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>עיסוק ביישוב מזכה</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('basis','security_background',this); onBasisChange();">
+                <input type="radio" name="basis" value="security_background">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>שירות או רקע ביטחוני</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('basis','profession',this); onBasisChange();">
+                <input type="radio" name="basis" value="profession">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>מקצוע או תפקיד רלוונטי</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('basis','not_sure',this); onBasisChange();">
+                <input type="radio" name="basis" value="not_sure">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>לא בטוח</strong></div>
+              </label>
+            </div>
+            <div class="field-error" id="err-basis">נא לבחור בסיס לבדיקה</div>
+          </div>
+          <div class="actions">
+            <button class="btn-back" onclick="goTo(4)">חזרה</button>
+            <button class="btn-primary" onclick="goTo(6)">המשך</button>
+          </div>
+        </div>
+
+        <div class="step" id="step-6">
+          <div class="step-tag">שאלה 6</div>
+          <h1 class="step-title" id="dynamic-title">שאלה מסתעפת</h1>
+          <p class="step-sub" id="dynamic-sub">כאן המערכת מדייקת את התבחין בפועל לפי מה שבחרת קודם.</p>
+
+          <div class="field" id="field-settlement" style="display:none">
+            <label class="field-label" for="f_settlement_name">באיזה יישוב</label>
+            <input type="text" id="f_settlement_name" placeholder="הקלד שם יישוב..." autocomplete="off" oninput="searchSettlement(this.value); updatePredictor();">
+            <div class="settlement-results" id="settlement-results"></div>
+            <input type="hidden" id="f_settlement_id">
+            <div class="field-error" id="err-settlement">נא להזין יישוב</div>
+          </div>
+
+          <div class="field" id="field-service-kind" style="display:none">
+            <label class="field-label" for="f_service_kind">איזה סוג שירות</label>
+            <select id="f_service_kind" onchange="updatePredictor()">
+              <option value="">— בחר —</option>
+              <option value="combat">לוחם</option>
+              <option value="officer">קצין / נגד</option>
+              <option value="regular_2y">שירות סדיר שנתיים ומעלה</option>
+              <option value="civil_2y">שירות לאומי / אזרחי שנתיים</option>
+              <option value="other">אחר</option>
+            </select>
+            <div class="field-error" id="err-service-kind">נא לבחור סוג שירות</div>
+          </div>
+
+          <div class="field" id="field-profession" style="display:none">
+            <label class="field-label" for="f_profession">איזה תחום</label>
+            <select id="f_profession" onchange="updatePredictor()">
+              <option value="">— בחר —</option>
+              <option value="security_officer">קב"ט / ממונה ביטחון</option>
+              <option value="range_instructor">מדריך ירי</option>
+              <option value="tour_guide">מורה דרך</option>
+              <option value="farmer">חקלאי</option>
+              <option value="veterinarian">וטרינר</option>
+              <option value="other_profession">אחר</option>
+            </select>
+            <div class="field-error" id="err-profession">נא לבחור תחום</div>
+          </div>
+
+          <div class="field" id="field-not-sure" style="display:none">
+            <div class="notice amber">אם אינך בטוח, המערכת תמשיך לתת תמונת מצב חלקית בלבד עד לבירור משפטי קצר.</div>
+          </div>
+
+          <div class="actions">
+            <button class="btn-back" onclick="goTo(5)">חזרה</button>
+            <button class="btn-primary" onclick="goTo(7)">המשך</button>
+          </div>
+        </div>
+
+        <div class="step" id="step-7">
+          <div class="step-tag">שאלה 7</div>
+          <h1 class="step-title">האם יש לך מסמך שמוכיח את הנתון המרכזי</h1>
+          <p class="step-sub">זו ההפרדה בין רעיון כללי לבין תיק אמיתי שאפשר לעבוד עליו.</p>
+          <div class="field">
+            <label class="field-label">בחירה</label>
+            <div class="radio-cards" id="rc-proof">
+              <label class="radio-card" onclick="selectRadio('proof_status','yes',this); updatePredictor();">
+                <input type="radio" name="proof_status" value="yes">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>כן</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('proof_status','no',this); updatePredictor();">
+                <input type="radio" name="proof_status" value="no">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>לא</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('proof_status','obtainable',this); updatePredictor();">
+                <input type="radio" name="proof_status" value="obtainable">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>ניתן להשיג</strong></div>
+              </label>
+            </div>
+            <div class="field-error" id="err-proof">נא לבחור תשובה</div>
+          </div>
+          <div class="actions">
+            <button class="btn-back" onclick="goTo(6)">חזרה</button>
+            <button class="btn-primary" onclick="goTo(8)">המשך</button>
+          </div>
+        </div>
+
+        <div class="step" id="step-8">
+          <div class="step-tag">שאלה 8 + פרטי קשר</div>
+          <h1 class="step-title">האם הייתה בעבר דחייה או ביטול רישיון</h1>
+          <p class="step-sub">התשובה משנה את האסטרטגיה המשפטית. בסוף השלב הזה מזינים גם שם וטלפון.</p>
+
+          <div class="field">
+            <label class="field-label">בחירה</label>
+            <div class="radio-cards" id="rc-history">
+              <label class="radio-card" onclick="selectRadio('history_issue','yes',this); updatePredictor();">
+                <input type="radio" name="history_issue" value="yes">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>כן</strong></div>
+              </label>
+              <label class="radio-card" onclick="selectRadio('history_issue','no',this); updatePredictor();">
+                <input type="radio" name="history_issue" value="no">
+                <div class="radio-dot"></div>
+                <div class="radio-text"><strong>לא</strong></div>
+              </label>
+            </div>
+            <div class="field-error" id="err-history">נא לבחור תשובה</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label class="field-label" for="f_name">שם מלא</label>
+              <input type="text" id="f_name" placeholder="ישראל ישראלי" autocomplete="name" oninput="updatePredictor()">
+              <div class="field-error" id="err-name">נא להזין שם מלא</div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="f_phone">טלפון</label>
+              <input type="tel" id="f_phone" placeholder="05X-XXXXXXX" autocomplete="tel" dir="ltr" style="text-align:right">
+              <div class="field-error" id="err-phone">נא להזין מספר תקין</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn-back" onclick="goTo(7)">חזרה</button>
+            <button class="btn-primary" id="btn-submit" onclick="submitForm()">שלח לבדיקה</button>
+          </div>
+          <div id="submit-error" class="notice amber" style="display:none;margin-top:16px">
+            אירעה שגיאה בשמירת הטופס. אפשר לנסות שוב או לעבור לוואטסאפ.
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
-  <div id="screen-thanks"><div class="thanks-icon">✓</div><h2 class="thanks-title">תודה, קיבלנו את פנייתך</h2><p class="thanks-sub">הפרטים נמסרו בהצלחה. נחזור אליך בהקדם לשיחת היכרות ובדיקה ראשונית.</p><div class="thanks-ref" id="thanks-ref"></div><div class="thanks-wa"><button type="button" onclick="openWhatsApp()">להמשך שיחה בוואטסאפ</button><div class="thanks-wa-note">אפשר לשלוח עכשיו שאלה קצרה או מסמך ראשוני לבדיקה.</div></div></div>
+
+  <div id="screen-thanks">
+    <div class="thanks-card">
+      <div class="thanks-icon">✓</div>
+      <h2 class="thanks-title">הפנייה התקבלה</h2>
+      <p class="thanks-sub">הפרטים נשמרו לבדיקה ראשונית. אפשר לפתוח עכשיו שיחה בוואטסאפ כדי לזרז את התיאום.</p>
+      <div class="thanks-ref" id="thanks-ref"></div>
+      <div class="thanks-wa">
+        <button type="button" onclick="openWhatsApp()">להמשך שיחה בוואטסאפ</button>
+        <div class="thanks-wa-note">אפשר לשלוח שאלה קצרה או לצרף מסמך ראשוני לבדיקה.</div>
+      </div>
+    </div>
+  </div>
 </div>
-<script>window.APP_CONFIG={SUPABASE_URL:'https://lcvshepgzizrlqbzvjoe.supabase.co',SUPABASE_ANON_KEY:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdnNoZXBneml6cmxxYnp2am9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDU5NzEsImV4cCI6MjA5MDk4MTk3MX0.ca4rw8QeRoPdQPwAsqPiLEZD6S-eOCdw6-P4a4BIFNk'};</script>
+
+<script src="app.config.js"></script>
 <script>
-const STATE={step:1,status:'',flags:{org_auth:false,late:false},settlement_id:'',settlement_name:''};
-const LOCALITY_CRITERIA=new Set(['RESIDENT_ELIGIBLE_LOCALITY_STANDARD','RESIDENT_ELIGIBLE_LOCALITY_PROPERTY_TAX_ALTERNATIVE','WORK_ELIGIBLE_LOCALITY_EMPLOYEE','WORK_ELIGIBLE_LOCALITY_SELF_EMPLOYED_FIXED','WORK_ELIGIBLE_LOCALITY_SELF_EMPLOYED_MOBILE','WORK_ELIGIBLE_LOCALITY_STUDENT','POLICE_VOLUNTEER_ELIGIBLE_LOCALITY_HYBRID']);
-function openWhatsApp(){const cfg=window.APP_CONFIG||{};const raw=String(cfg.WHATSAPP_NUMBER||'').replace(/[^\d]/g,'');const msg=encodeURIComponent(cfg.WHATSAPP_MESSAGE||'שלום, אני נמצא בשאלון בדיקת זכאות ראשונית לרישיון נשק ויש לי שאלה.');if(!raw){alert('יש לעדכן מספר וואטסאפ בקובץ app.config.js');return;}const normalized=raw.startsWith('0')?'972'+raw.slice(1):raw;window.open('https://wa.me/'+normalized+'?text='+msg,'_blank');}
-function updateProgress(step){for(let i=1;i<=4;i++){const el=document.getElementById('ps-'+i);el.className='progress-step'+(i<step?' done':i===step?' active':'')}document.getElementById('progress-label').textContent='שלב '+step+' מתוך 4'}
-function goTo(target){if(target>STATE.step&&!validate(STATE.step))return;document.getElementById('step-'+STATE.step).classList.remove('active');STATE.step=target;document.getElementById('step-'+target).classList.add('active');updateProgress(target);window.scrollTo({top:0,behavior:'smooth'})}
-function validate(step){let ok=true;if(step===1){const name=document.getElementById('f_name').value.trim();const phone=document.getElementById('f_phone').value.trim();const nameOk=name.length>=2;const phoneOk=/^[\d\-\+ ]{7,15}$/.test(phone);setErr('f_name','err-name',!nameOk);setErr('f_phone','err-phone',!phoneOk);ok=nameOk&&phoneOk}if(step===2){const status=STATE.status;const age=parseInt(document.getElementById('f_age').value)||0;const res=parseInt(document.getElementById('f_residency_years').value);const service=document.getElementById('f_service_type').value;const statusOk=!!status;const ageOk=age>=16&&age<=99;const resOk=!isNaN(res)&&res>=0;const serviceOk=!!service;setErrEl('err-status',!statusOk);setErr('f_age','err-age',!ageOk);setErr('f_residency_years','err-residency',!resOk);setErr('f_service_type','err-service',!serviceOk);ok=statusOk&&ageOk&&resOk&&serviceOk}if(step===3){const criterion=document.getElementById('f_criterion').value;const criterionOk=!!criterion;setErr('f_criterion','err-criterion',!criterionOk);if(criterionOk&&LOCALITY_CRITERIA.has(criterion)){const sName=document.getElementById('f_settlement_name').value.trim();const settlementOk=sName.length>=2;setErrEl('err-settlement',!settlementOk);if(!settlementOk)ok=false}ok=ok&&criterionOk}return ok}
-function setErr(inputId,errId,show){document.getElementById(inputId)?.classList.toggle('error',show);document.getElementById(errId)?.classList.toggle('show',show)}
-function setErrEl(errId,show){document.getElementById(errId)?.classList.toggle('show',show)}
-function selectRadio(name,value,cardEl){document.querySelectorAll('#rc-'+name+' .radio-card').forEach(c=>c.classList.remove('selected'));cardEl.classList.add('selected');STATE[name]=value;if(name==='status'){const isOleh=value==='new_immigrant';document.getElementById('notice-oleh').style.display=isOleh?'block':'none';setErrEl('err-status',false)}}
-function toggleCheck(key,cardEl){STATE.flags[key]=!STATE.flags[key];cardEl.classList.toggle('checked',STATE.flags[key])}
-function onCriterionChange(){const val=document.getElementById('f_criterion').value;const needsLocality=LOCALITY_CRITERIA.has(val);document.getElementById('field-settlement').style.display=needsLocality?'block':'none';document.getElementById('notice-locality-hint').style.display=needsLocality?'block':'none';const isOleh=STATE.status==='new_immigrant';const badCriterion=val&&!['RESIDENT_ELIGIBLE_LOCALITY_STANDARD','RESIDENT_ELIGIBLE_LOCALITY_PROPERTY_TAX_ALTERNATIVE',''].includes(val);document.getElementById('notice-oleh-criterion').style.display=(isOleh&&badCriterion)?'block':'none';if(!needsLocality){document.getElementById('f_settlement_name').value='';document.getElementById('f_settlement_id').value='';document.getElementById('settlement-results').innerHTML='';STATE.settlement_id='';STATE.settlement_name=''}setErr('f_criterion','err-criterion',false)}
-let _sTimeout=null;const _sb_url=window.APP_CONFIG?.SUPABASE_URL||'';const _sb_key=window.APP_CONFIG?.SUPABASE_ANON_KEY||'';
-function searchSettlement(val){clearTimeout(_sTimeout);const res=document.getElementById('settlement-results');document.getElementById('f_settlement_id').value='';STATE.settlement_id='';if(!val||val.length<2){res.innerHTML='';return}if(!_sb_url||!_sb_key){STATE.settlement_name=val;res.innerHTML='';return}res.innerHTML='<span class="s-checking">בודק...</span>';_sTimeout=setTimeout(async()=>{try{const r=await fetch(`${_sb_url}/rest/v1/eligible_localities?settlement_name_he=ilike.*${encodeURIComponent(val)}*&is_active=eq.true&select=settlement_id,settlement_name_he&limit=6`,{headers:{apikey:_sb_key,Authorization:`Bearer ${_sb_key}`}});const data=await r.json();if(!Array.isArray(data)||!data.length){res.innerHTML='<span class="s-none">לא נמצא ברשימת היישובים המוכרים</span>';return}res.innerHTML=data.map(d=>`<span class="s-match" onclick="pickSettlement('${d.settlement_id}','${d.settlement_name_he}')">✓ ${d.settlement_name_he}</span>`).join(' ')}catch(e){res.innerHTML='';STATE.settlement_name=val}},380)}
-function pickSettlement(id,name){document.getElementById('f_settlement_id').value=id;document.getElementById('f_settlement_name').value=name;document.getElementById('settlement-results').innerHTML=`<span class="s-match" style="cursor:default">✓ ${name} — יישוב מוכר</span>`;STATE.settlement_id=id;STATE.settlement_name=name;setErrEl('err-settlement',false);document.getElementById('notice-locality-hint').style.display='none'}
-async function submitForm(){if(!validate(4))return;const btn=document.getElementById('btn-submit');btn.disabled=true;btn.textContent='שולח...';document.getElementById('submit-error').style.display='none';const name=document.getElementById('f_name').value.trim();const phone=document.getElementById('f_phone').value.trim();const age=parseInt(document.getElementById('f_age').value)||0;const residency=parseInt(document.getElementById('f_residency_years').value)||0;const service=document.getElementById('f_service_type').value;const criterion=document.getElementById('f_criterion').value;const sName=document.getElementById('f_settlement_name').value.trim();const sId=document.getElementById('f_settlement_id').value;const payload={full_name:name,phone:phone,status:'NEW',applicant_data:{name,phone,age,status:STATE.status,residency_years:residency,hebrew:'yes',service_type:service,criterion,settlement_name:sName,settlement_id:sId,flags:{org_auth:STATE.flags.org_auth,criminal:false,medical:false,late:STATE.flags.late},source:'questionnaire',submitted_at:new Date().toISOString()}};try{if(!_sb_url||!_sb_key)throw new Error('no config');const r=await fetch(`${_sb_url}/rest/v1/client_submissions`,{method:'POST',headers:{apikey:_sb_key,Authorization:`Bearer ${_sb_key}`,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(payload)});if(!r.ok)throw new Error('status '+r.status);showThanks('')}catch(e){console.error('Submit error:',e);btn.disabled=false;btn.textContent='שלח לבדיקה';document.getElementById('submit-error').style.display='block'}}
-function showThanks(refId){document.querySelector('.card').style.display='none';document.getElementById('progress-wrap').style.display='none';const thanks=document.getElementById('screen-thanks');thanks.classList.add('active');if(refId&&refId!=='—'){document.getElementById('thanks-ref').textContent='מספר פנייה: '+refId}}
-updateProgress(1)
+const STATE = {
+  step: 1,
+  status: '',
+  residency_gate: '',
+  track: '',
+  basis: '',
+  proof_status: '',
+  history_issue: '',
+  score: 0,
+  explanation: '',
+  settlementClass: '',
+  settlementName: '',
+  service_kind: '',
+  profession: ''
+};
+
+const LOCALITY_DB = {
+  core: [
+    "שדרות","קריית שמונה","מטולה","שלומי","משגב עם","מנרה","מרגליות","יפתח",
+    "מלכיה","סאסא","ברעם","יראון","שתולה","כפר עזה","נחל עוז","בארי","כיסופים",
+    "נירים","עין השלושה","כרם שלום","חולית","סופה","נתיב העשרה"
+  ],
+  partial_plus: [
+    "קדומים","יצהר","קריית ארבע","איתמר","בית אל","נווה צוף","הר ברכה","עלי",
+    "עפרה","שילה","אלקנה","שערי תקווה","אורנית","מרום גולן","אל-רום","עין זיוון",
+    "אורטל","קשת","אניעם","מג'דל שמס","בוקעאתא","מסעדה","עין קנייא"
+  ],
+  review: [
+    "נתיבות","אופקים","אשקלון","אריאל","מעלה אדומים","אפרת","מודיעין עילית",
+    "ביתר עילית","עמנואל","פסגות","טלמון","דולב"
+  ]
+};
+
+const _sb_url = window.APP_CONFIG?.SUPABASE_URL || '';
+const _sb_key = window.APP_CONFIG?.SUPABASE_ANON_KEY || '';
+
+function normalizeName(v){
+  return String(v || '').trim().replace(/["׳״']/g,'').replace(/\s+/g,' ');
+}
+
+function classifySettlement(name){
+  const n = normalizeName(name);
+  if(!n) return { kind:'', points:0, text:'היישוב טרם הוזן, ולכן אין עדיין שקלול גיאוגרפי.' };
+  if(LOCALITY_DB.core.includes(n)){
+    return { kind:'core', points:45, text:'היישוב נמצא בליבת המאגר התפעולי. זו אינדיקציה חיובית יחסית למסלול מגורים או עיסוק ביישוב מזכה.' };
+  }
+  if(LOCALITY_DB.partial_plus.includes(n)){
+    return { kind:'partial', points:30, text:'היישוב מסווג כאזור רגיש או חיכוך גבוה. קיימת אינדיקציה חיובית חלקית, אך נדרש ניתוח פרטני.' };
+  }
+  if(LOCALITY_DB.review.includes(n)){
+    return { kind:'review', points:15, text:'היישוב באזור שמצריך זהירות. ייתכן שמדובר במקרה גבולי או במסלול חלופי.' };
+  }
+  return { kind:'review', points:0, text:'היישוב אינו בליבת המאגר התפעולי. זה לא שולל זכאות אוטומטית, אך מצריך בדיקה פרטנית.' };
+}
+
+function updatePredictor(){
+  const age = parseInt(document.getElementById('f_age')?.value || '0', 10) || 0;
+  const settlement = document.getElementById('f_settlement_name')?.value?.trim() || '';
+  const locality = classifySettlement(settlement);
+
+  let score = 0;
+  let reasons = [];
+
+  if(age >= 21){
+    score += 10;
+    reasons.push('הגיל עומד בבסיס הסף המקובל');
+  } else if(age >= 18){
+    score += 4;
+    reasons.push('הגיל עשוי להתאים רק לחלק מהמסלולים');
+  } else if(age > 0){
+    reasons.push('הגיל כרגע נמוך יחסית למסלולים המקובלים');
+  }
+
+  if(STATE.status === 'citizen' || STATE.status === 'permanent_resident'){
+    score += 10;
+    reasons.push('הסטטוס בישראל תומך בבדיקה רגילה');
+  } else if(STATE.status === 'other'){
+    reasons.push('הסטטוס בישראל מחייב זהירות רגולטורית');
+  }
+
+  if(STATE.residency_gate === 'yes'){
+    score += 10;
+    reasons.push('קיימת עמידה ראשונית בדרישת השהייה או השירות בישראל');
+  } else if(STATE.residency_gate === 'no'){
+    reasons.push('דרישת השהייה או השירות בישראל אינה מתקיימת כרגע');
+  }
+
+  if(STATE.track === 'military'){
+    score += 12;
+    reasons.push('מסלול שירות צבאי מחזק את התמונה');
+  } else if(STATE.track === 'civil'){
+    score += 7;
+    reasons.push('שירות לאומי או אזרחי עשוי לתמוך בחלק מהמסלולים');
+  }
+
+  if(STATE.basis === 'residence' || STATE.basis === 'occupation_locality'){
+    score += locality.points;
+  }
+
+  if(STATE.basis === 'security_background'){
+    if(STATE.service_kind === 'combat' || STATE.service_kind === 'officer'){
+      score += 35;
+      reasons.push('סוג השירות שנבחר נחשב חזק יחסית');
+    } else if(STATE.service_kind === 'regular_2y' || STATE.service_kind === 'civil_2y'){
+      score += 18;
+      reasons.push('סוג השירות מעניק חיזוק חלקי');
+    }
+  }
+
+  if(STATE.basis === 'profession'){
+    if(['security_officer','range_instructor','farmer','tour_guide','veterinarian'].includes(STATE.profession)){
+      score += 22;
+      reasons.push('התחום שנבחר עשוי להתאים למסלול מקצועי ייעודי');
+    }
+  }
+
+  if(STATE.proof_status === 'yes'){
+    score += 12;
+    reasons.push('קיים מסמך תומך — יתרון משמעותי');
+  } else if(STATE.proof_status === 'obtainable'){
+    score += 6;
+    reasons.push('המסמך ניתן להשגה — יתרון חלקי');
+  } else if(STATE.proof_status === 'no'){
+    reasons.push('חסר כרגע מסמך מרכזי שמוכיח את הנתון העיקרי');
+  }
+
+  if(STATE.history_issue === 'yes'){
+    score -= 18;
+    reasons.push('עבר של דחייה או ביטול רישיון מחייב אסטרטגיה זהירה יותר');
+  }
+
+  score = Math.max(0, Math.min(score, 100));
+
+  const gauge = document.getElementById('gauge-circle');
+  const gaugeScore = document.getElementById('gauge-score');
+  const explanation = document.getElementById('explanation');
+  const scorePill = document.getElementById('score-pill');
+  const chipWrap = document.getElementById('settlement-chip-wrap');
+
+  gauge.style.strokeDasharray = `${score}, 100`;
+  gaugeScore.textContent = `${score}%`;
+
+  let level = 'low';
+  let levelText = 'נדרש מידע נוסף';
+  let color = '#ef4444';
+
+  if(score >= 80){
+    level = 'high';
+    levelText = 'סבירות גבוהה';
+    color = '#10b981';
+  } else if(score >= 50){
+    level = 'mid';
+    levelText = 'דורש בדיקה';
+    color = '#f59e0b';
+  } else {
+    level = 'low';
+    levelText = score > 0 ? 'סבירות נמוכה כרגע' : 'נדרש מידע נוסף';
+    color = '#ef4444';
+  }
+
+  gauge.setAttribute('stroke', color);
+  scorePill.className = `score-pill ${level === 'high' ? 'high' : level === 'mid' ? 'mid' : 'low'}`;
+  scorePill.textContent = levelText;
+
+  let text = 'המערכת מחכה לנתונים בסיסיים כדי להציג תמונת מצב ראשונית והסבר קצר.';
+  if(reasons.length || settlement){
+    text = `<strong>${levelText}.</strong> `;
+    if((STATE.basis === 'residence' || STATE.basis === 'occupation_locality') && settlement){
+      text += locality.text + ' ';
+    }
+    if(reasons.length){
+      text += reasons.join(' · ') + '.';
+    }
+  }
+  explanation.innerHTML = text;
+
+  chipWrap.innerHTML = '';
+  if((STATE.basis === 'residence' || STATE.basis === 'occupation_locality') && settlement){
+    const kindClass = locality.kind === 'core' ? 'core' : locality.kind === 'partial' ? 'partial' : 'review';
+    const kindText = locality.kind === 'core'
+      ? 'יישוב ליבה'
+      : locality.kind === 'partial'
+      ? 'יישוב חיכוך גבוה'
+      : 'בדיקה פרטנית';
+    chipWrap.innerHTML = `<div class="status-chip ${kindClass}">${kindText}</div>`;
+  }
+
+  STATE.score = score;
+  STATE.explanation = explanation.textContent || '';
+  STATE.settlementClass = locality.kind;
+  STATE.settlementName = settlement;
+}
+
+function updateProgress(step){
+  for(let i=1;i<=8;i++){
+    const el = document.getElementById('ps-' + i);
+    el.className = 'progress-step' + (i < step ? ' done' : i === step ? ' active' : '');
+  }
+  document.getElementById('progress-label').textContent = 'שאלה ' + step + ' מתוך 8';
+}
+
+function selectRadio(key, value, cardEl){
+  const container = cardEl.parentElement;
+  container.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+  cardEl.classList.add('selected');
+  STATE[key] = value;
+
+  const map = {
+    status: 'err-status',
+    residency_gate: 'err-residency-gate',
+    track: 'err-track',
+    basis: 'err-basis',
+    proof_status: 'err-proof',
+    history_issue: 'err-history'
+  };
+  if(map[key]) document.getElementById(map[key]).classList.remove('show');
+
+  updatePredictor();
+}
+
+function onBasisChange(){
+  const basis = STATE.basis;
+
+  document.getElementById('field-settlement').style.display = 'none';
+  document.getElementById('field-service-kind').style.display = 'none';
+  document.getElementById('field-profession').style.display = 'none';
+  document.getElementById('field-not-sure').style.display = 'none';
+
+  document.getElementById('dynamic-title').textContent = 'שאלה מסתעפת';
+  document.getElementById('dynamic-sub').textContent = 'כאן המערכת מדייקת את התבחין בפועל לפי מה שבחרת קודם.';
+
+  if(basis === 'residence' || basis === 'occupation_locality'){
+    document.getElementById('field-settlement').style.display = 'block';
+    document.getElementById('dynamic-title').textContent = 'באיזה יישוב';
+    document.getElementById('dynamic-sub').textContent = 'בלי שם היישוב, אין תבחין בפועל במסלול מגורים או עיסוק ביישוב מזכה.';
+  } else if(basis === 'security_background'){
+    document.getElementById('field-service-kind').style.display = 'block';
+    document.getElementById('dynamic-title').textContent = 'איזה סוג שירות';
+    document.getElementById('dynamic-sub').textContent = 'בלי סוג השירות המדויק, אין אפשרות לזהות מסלול ביטחוני רלוונטי.';
+  } else if(basis === 'profession'){
+    document.getElementById('field-profession').style.display = 'block';
+    document.getElementById('dynamic-title').textContent = 'איזה תחום';
+    document.getElementById('dynamic-sub').textContent = 'התחום המקצועי נדרש כדי לבדוק אם קיימת קטגוריה ייעודית רלוונטית.';
+  } else if(basis === 'not_sure'){
+    document.getElementById('field-not-sure').style.display = 'block';
+    document.getElementById('dynamic-title').textContent = 'לא בטוח';
+    document.getElementById('dynamic-sub').textContent = 'המערכת תמשיך עם תמונת מצב חלקית בלבד עד לבירור פרטני.';
+  }
+
+  updatePredictor();
+}
+
+function setErr(inputId, errId, show){
+  const input = document.getElementById(inputId);
+  if(input) input.classList.toggle('error', show);
+  const err = document.getElementById(errId);
+  if(err) err.classList.toggle('show', show);
+}
+
+function validate(step){
+  let ok = true;
+
+  if(step === 1){
+    const age = parseInt(document.getElementById('f_age').value || '0', 10) || 0;
+    const ageOk = age >= 16 && age <= 99;
+    setErr('f_age','err-age',!ageOk);
+    ok = ageOk;
+  }
+
+  if(step === 2){
+    const statusOk = !!STATE.status;
+    document.getElementById('err-status').classList.toggle('show', !statusOk);
+    ok = statusOk;
+  }
+
+  if(step === 3){
+    const resOk = !!STATE.residency_gate;
+    document.getElementById('err-residency-gate').classList.toggle('show', !resOk);
+    ok = resOk;
+  }
+
+  if(step === 4){
+    const trackOk = !!STATE.track;
+    document.getElementById('err-track').classList.toggle('show', !trackOk);
+    ok = trackOk;
+  }
+
+  if(step === 5){
+    const basisOk = !!STATE.basis;
+    document.getElementById('err-basis').classList.toggle('show', !basisOk);
+    ok = basisOk;
+  }
+
+  if(step === 6){
+    if(STATE.basis === 'residence' || STATE.basis === 'occupation_locality'){
+      const settlementOk = document.getElementById('f_settlement_name').value.trim().length >= 2;
+      document.getElementById('err-settlement').classList.toggle('show', !settlementOk);
+      ok = settlementOk;
+    } else if(STATE.basis === 'security_background'){
+      const skOk = !!document.getElementById('f_service_kind').value;
+      document.getElementById('err-service-kind').classList.toggle('show', !skOk);
+      STATE.service_kind = document.getElementById('f_service_kind').value;
+      ok = skOk;
+    } else if(STATE.basis === 'profession'){
+      const pOk = !!document.getElementById('f_profession').value;
+      document.getElementById('err-profession').classList.toggle('show', !pOk);
+      STATE.profession = document.getElementById('f_profession').value;
+      ok = pOk;
+    } else {
+      ok = true;
+    }
+  }
+
+  if(step === 7){
+    const proofOk = !!STATE.proof_status;
+    document.getElementById('err-proof').classList.toggle('show', !proofOk);
+    ok = proofOk;
+  }
+
+  if(step === 8){
+    const historyOk = !!STATE.history_issue;
+    document.getElementById('err-history').classList.toggle('show', !historyOk);
+
+    const name = document.getElementById('f_name').value.trim();
+    const phone = document.getElementById('f_phone').value.trim();
+    const nameOk = name.length >= 2;
+    const phoneOk = /^[\d\-\+ ]{7,15}$/.test(phone);
+
+    setErr('f_name','err-name',!nameOk);
+    setErr('f_phone','err-phone',!phoneOk);
+
+    ok = historyOk && nameOk && phoneOk;
+  }
+
+  return ok;
+}
+
+function goTo(target){
+  if(target > STATE.step && !validate(STATE.step)) return;
+  document.getElementById('step-' + STATE.step).classList.remove('active');
+  STATE.step = target;
+  document.getElementById('step-' + target).classList.add('active');
+  updateProgress(target);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+let _sTimeout = null;
+function searchSettlement(val){
+  clearTimeout(_sTimeout);
+  const res = document.getElementById('settlement-results');
+  document.getElementById('f_settlement_id').value = '';
+
+  if(!val || val.length < 2){
+    res.innerHTML = '';
+    return;
+  }
+
+  if(!_sb_url || !_sb_key){
+    res.innerHTML = '';
+    return;
+  }
+
+  res.innerHTML = '<span class="s-checking">בודק...</span>';
+
+  _sTimeout = setTimeout(async () => {
+    try{
+      const q = encodeURIComponent(val);
+      const url = `${_sb_url}/rest/v1/eligible_localities?settlement_name_he=ilike.*${q}*&is_active=eq.true&select=settlement_id,settlement_name_he&limit=6`;
+      const r = await fetch(url, {
+        headers: { apikey:_sb_key, Authorization:`Bearer ${_sb_key}` }
+      });
+      const data = await r.json();
+
+      if(!Array.isArray(data) || !data.length){
+        res.innerHTML = '<span class="s-none">לא נמצאה התאמה ישירה</span>';
+        return;
+      }
+
+      res.innerHTML = data.map(d =>
+        `<span class="s-match" onclick="pickSettlement('${d.settlement_id}','${String(d.settlement_name_he).replace(/'/g, "\\'")}')">✓ ${d.settlement_name_he}</span>`
+      ).join(' ');
+    }catch(e){
+      res.innerHTML = '';
+    }
+  }, 320);
+}
+
+function pickSettlement(id, name){
+  document.getElementById('f_settlement_id').value = id;
+  document.getElementById('f_settlement_name').value = name;
+  document.getElementById('settlement-results').innerHTML = `<span class="s-match" style="cursor:default">✓ ${name}</span>`;
+  document.getElementById('err-settlement').classList.remove('show');
+  updatePredictor();
+}
+
+function openWhatsApp(){
+  const cfg = window.APP_CONFIG || {};
+  const raw = String(cfg.WHATSAPP_NUMBER || '').replace(/[^\d]/g,'');
+  if(!raw){
+    alert('יש לעדכן מספר וואטסאפ בקובץ app.config.js');
+    return;
+  }
+  const normalized = raw.startsWith('0') ? '972' + raw.slice(1) : raw;
+  const age = document.getElementById('f_age')?.value || '';
+  const settlement = document.getElementById('f_settlement_name')?.value?.trim() || '';
+  const name = document.getElementById('f_name')?.value?.trim() || '';
+  const msg = encodeURIComponent(
+    `שלום, אני נמצא בשאלון בדיקת הזכאות הראשונית.` +
+    (name ? ` השם שלי: ${name}.` : '') +
+    (age ? ` הגיל שלי: ${age}.` : '') +
+    (STATE.basis ? ` בסיס הבדיקה שבחרתי: ${basisLabel(STATE.basis)}.` : '') +
+    (settlement ? ` היישוב שהזנתי: ${settlement}.` : '') +
+    (STATE.score ? ` מד הסבירות מציג כרגע ${STATE.score}%.` : '')
+  );
+  window.open(`https://wa.me/${normalized}?text=${msg}`, '_blank');
+}
+
+function basisLabel(v){
+  const map = {
+    residence: 'מגורים ביישוב מזכה',
+    occupation_locality: 'עיסוק ביישוב מזכה',
+    security_background: 'שירות או רקע ביטחוני',
+    profession: 'מקצוע או תפקיד רלוונטי',
+    not_sure: 'לא בטוח'
+  };
+  return map[v] || v;
+}
+
+async function submitForm(){
+  if(!validate(8)) return;
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = 'שולח...';
+  document.getElementById('submit-error').style.display = 'none';
+
+  STATE.service_kind = document.getElementById('f_service_kind')?.value || '';
+  STATE.profession = document.getElementById('f_profession')?.value || '';
+
+  const payload = {
+    full_name: document.getElementById('f_name').value.trim(),
+    phone: document.getElementById('f_phone').value.trim(),
+    status: 'NEW',
+    applicant_data: {
+      age: parseInt(document.getElementById('f_age').value || '0', 10) || 0,
+      status_in_israel: STATE.status,
+      residency_or_service_3y: STATE.residency_gate,
+      track: STATE.track,
+      basis: STATE.basis,
+      dynamic_settlement_name: document.getElementById('f_settlement_name')?.value?.trim() || '',
+      dynamic_settlement_id: document.getElementById('f_settlement_id')?.value || '',
+      dynamic_service_kind: STATE.service_kind,
+      dynamic_profession: STATE.profession,
+      proof_status: STATE.proof_status,
+      history_issue: STATE.history_issue,
+      full_name: document.getElementById('f_name').value.trim(),
+      phone: document.getElementById('f_phone').value.trim(),
+      predictor_score: STATE.score,
+      predictor_explanation: STATE.explanation,
+      predictor_settlement_class: STATE.settlementClass,
+      source: 'questionnaire_minimal_v2',
+      submitted_at: new Date().toISOString()
+    }
+  };
+
+  try{
+    if(!_sb_url || !_sb_key) throw new Error('no config');
+
+    const r = await fetch(`${_sb_url}/rest/v1/client_submissions`, {
+      method:'POST',
+      headers:{
+        apikey:_sb_key,
+        Authorization:`Bearer ${_sb_key}`,
+        'Content-Type':'application/json',
+        Prefer:'return=minimal'
+      },
+      body:JSON.stringify(payload)
+    });
+
+    if(!r.ok) throw new Error('status ' + r.status);
+
+    document.querySelector('.layout').style.display = 'none';
+    document.getElementById('screen-thanks').classList.add('active');
+    document.getElementById('thanks-ref').textContent = STATE.score
+      ? `סבירות ראשונית שהוצגה במערכת: ${STATE.score}%`
+      : '';
+  }catch(e){
+    console.error(e);
+    btn.disabled = false;
+    btn.textContent = 'שלח לבדיקה';
+    document.getElementById('submit-error').style.display = 'block';
+  }
+}
+
+updateProgress(1);
+updatePredictor();
 </script>
 </body>
 </html>
