@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שאלון זכאות ממוקד — רישיון כלי ירייה</title>
+<style>
+:root {
+  --apple-bg: #f5f5f7; --apple-surface: #ffffff; --apple-blue: #0066cc;
+  --apple-text: #1d1d1f; --apple-muted: #86868b; --apple-border: rgba(0, 0, 0, 0.1);
+  --apple-green: #248a3d; --apple-red: #d93025;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", Arial, sans-serif; background: var(--apple-bg); color: var(--apple-text); -webkit-font-smoothing: antialiased; }
+.c-nav { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; background: rgba(255,255,255,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid var(--apple-border); position: sticky; top: 0; z-index: 100; }
+.c-brand { font-size: 16px; font-weight: 600; }
+.c-btn-text { background: none; border: none; font-size: 14px; font-weight: 500; color: var(--apple-text); cursor: pointer; }
+.q-shell { max-width: 640px; margin: 40px auto; padding: 0 24px 80px; }
+.apple-card { background: var(--apple-surface); border-radius: 16px; padding: 40px; box-shadow: 0 12px 32px rgba(0,0,0,0.08); border: 1px solid var(--apple-border); }
+.q-step { display: none; animation: slideIn 0.3s ease forwards; } .q-step.active { display: block; }
+@keyframes slideIn { from { opacity:0; transform:translateX(10px); } to { opacity:1; transform:translateX(0); } }
+.q-tag { font-size: 12px; font-weight: 600; color: var(--apple-blue); margin-bottom: 8px; }
+.q-title { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+.q-sub { font-size: 15px; color: var(--apple-muted); margin-bottom: 32px; line-height: 1.5; }
+.q-field { margin-bottom: 20px; }
+.q-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; }
+.q-input, .q-select, .q-textarea { width: 100%; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--apple-border); background: #fafafa; font-size: 15px; outline: none; transition: 0.2s; font-family: inherit; }
+.q-input:focus, .q-select:focus { background: #fff; border-color: var(--apple-blue); box-shadow: 0 0 0 3px rgba(0,102,204,0.1); }
+.q-choice { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 10px; border: 1px solid var(--apple-border); margin-bottom: 10px; cursor: pointer; background: #fff; }
+.q-choice.selected { border-color: var(--apple-blue); background: rgba(0,102,204,0.04); }
+.q-choice input { display: none; }
+.q-indicator { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--apple-muted); display: flex; align-items: center; justify-content: center; transition: 0.2s;}
+.q-choice.selected .q-indicator { border-color: var(--apple-blue); background: var(--apple-blue); }
+.q-choice.selected .q-indicator::after { content: ''; width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+.q-actions { display: flex; gap: 12px; margin-top: 32px; }
+.btn-primary { flex: 1; background: var(--apple-text); color: #fff; border: none; padding: 14px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;}
+.btn-primary:hover:not(:disabled) { background: #000; }
+.btn-primary:disabled { background: #e5e5ea; cursor: not-allowed; color: var(--apple-muted); }
+.btn-secondary { flex: 1; background: #fff; color: var(--apple-text); border: 1px solid var(--apple-border); padding: 14px; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer;}
+</style>
+</head>
+<body>
+
+<div class="app-screen theme-client active">
+  <nav class="c-nav">
+    <div class="c-brand">איסוף נתונים מקדים</div>
+    <button class="c-btn-text" onclick="window.location.href='index.html'">ביטול וחזרה</button>
+  </nav>
+  
+  <div class="q-shell">
+    <div class="apple-card" id="q-form">
+      <div class="q-step active" id="qs-1">
+        <div class="q-tag">שלב 1 מתוך 4</div>
+        <h1 class="q-title">פרטים בסיסיים</h1>
+        <div class="q-field"><label class="q-label">מה גילך כיום?</label><input type="number" id="f_age" class="q-input" placeholder="לדוגמה: 28"></div>
+        <div class="q-field">
+          <label class="q-label">מה הסטטוס המעמדי שלך בישראל?</label>
+          <select id="f_citizenship" class="q-select"><option value="אזרח">אזרח ישראל</option><option value="תושב קבע">תושב קבע</option><option value="עולה חדש">עולה חדש</option><option value="אחר">אחר</option></select>
+        </div>
+        <div class="q-actions"><button class="btn-primary" style="width:100%; padding:14px;" onclick="qNext(2)">המשך לשלב הבא</button></div>
+      </div>
+
+      <div class="q-step" id="qs-2">
+        <div class="q-tag">שלב 2 מתוך 4</div>
+        <h1 class="q-title">כשירות רפואית ומשטרתית</h1>
+        <div class="q-field"><label class="q-label">שליטה בסיסית בעברית?</label><select id="f_hebrew" class="q-select"><option value="כן">כן, קורא וכותב</option><option value="לא">לא</option></select></div>
+        <div class="q-field"><label class="q-label">מניעה משטרתית או רישום פלילי?</label><select id="f_police" class="q-select"><option value="לא">אין מניעה</option><option value="לא ידוע">איני בטוח / ישן</option><option value="כן">כן, יש מניעה חוקית</option></select></div>
+        <div class="q-field"><label class="q-label">מגבלה רפואית להצהרת בריאות?</label><select id="f_medical" class="q-select"><option value="לא">בריא ואין מגבלה</option><option value="כן">יש מגבלה רפואית</option></select></div>
+        <div class="q-actions"><button class="btn-secondary" onclick="qNext(1)">חזרה</button><button class="btn-primary" onclick="qNext(3)">המשך לשלב הבא</button></div>
+      </div>
+      
+      <div class="q-step" id="qs-3">
+        <div class="q-tag">שלב 3 מתוך 4</div>
+        <h1 class="q-title">שירות ועילה לבקשה</h1>
+        <div class="q-field">
+          <label class="q-label">מהי חלופת השירות שביצעת?</label>
+          <select id="f_service_route" class="q-select">
+            <option value="סיים שירות סדיר – גיל 18 ומעלה">סיימתי שירות סדיר / מילואים</option>
+            <option value="סיים שירות אזרחי של שנתיים – גיל 21 ומעלה">שירות לאומי / אזרחי</option>
+            <option value="אזרח ישראלי שלא שירת – גיל 27 ומעלה">לא שירתתי כלל (פטור)</option>
+          </select>
+        </div>
+        <label class="q-label">מהו התבחין המרכזי שברצונך לבדוק?</label>
+        <label class="q-choice" onclick="qSelCategory('residence', this)"><input type="radio"><div class="q-indicator"></div><div><strong>מגורים ביישוב זכאי</strong></div></label>
+        <label class="q-choice" onclick="qSelCategory('security', this)"><input type="radio"><div class="q-indicator"></div><div><strong>כוחות הביטחון</strong></div></label>
+        <label class="q-choice" onclick="qSelCategory('work', this)"><input type="radio"><div class="q-indicator"></div><div><strong>עבודה או לימודים ביישוב זכאי</strong></div></label>
+        <label class="q-choice" onclick="qSelCategory('rescue', this)"><input type="radio"><div class="q-indicator"></div><div><strong>כוחות הצלה (מד"א, זק"א, כבאות)</strong></div></label>
+        <label class="q-choice" onclick="qSelCategory('professions', this)"><input type="radio"><div class="q-indicator"></div><div><strong>תפקידים מיוחדים (חקלאי, מורה דרך, מדביר)</strong></div></label>
+        <label class="q-choice" onclick="qSelCategory('sports', this)"><input type="radio"><div class="q-indicator"></div><div><strong>ספורטאי ירי / צייד</strong></div></label>
+        
+        <div id="geo-container" style="display:none; margin-top:16px;">
+          <label class="q-label" style="color:var(--apple-blue);">שם היישוב (לצורך אימות גיאוגרפי):</label>
+          <input type="text" id="f_city" class="q-input" placeholder="הכנס שם יישוב (למשל: אשקלון)">
+        </div>
+
+        <div id="sub-path-container" style="display:none; margin-top:16px;">
+          <label class="q-label" style="color:var(--apple-blue)">בחר מסלול מדויק:</label>
+          <select id="f_sub_path" class="q-select"></select>
+        </div>
+
+        <div class="q-actions"><button class="btn-secondary" onclick="qNext(2)">חזרה</button><button class="btn-primary" onclick="validateStep3()">המשך לשלב האחרון</button></div>
+      </div>
+
+      <div class="q-step" id="qs-4">
+        <div class="q-tag">שלב אחרון</div>
+        <h1 class="q-title">סיום הנתונים</h1>
+        <div class="q-field"><label class="q-label">שם מלא</label><input type="text" id="f_name" class="q-input" placeholder="שם פרטי ומשפחה"></div>
+        <div class="q-field"><label class="q-label">טלפון לחזרה</label><input type="tel" id="f_phone" class="q-input" placeholder="050-0000000" dir="ltr" style="text-align:right"></div>
+        <div class="q-actions"><button class="btn-secondary" onclick="qNext(3)">חזרה</button><button class="btn-primary" id="btn-submit" onclick="submitClientData()">שלח לבדיקת משרד</button></div>
+      </div>
+    </div>
+    
+    <div class="apple-card" id="q-thanks" style="display:none; text-align:center;">
+      <div style="font-size:48px; color:var(--apple-green); margin-bottom:16px;">✓</div>
+      <h1 class="q-title">הבקשה נקלטה בהצלחה</h1>
+      <p class="q-sub">הנתונים נשמרו בצורה מאובטחת בענן ומועברים כעת למערכת המשרד הפנימית.</p>
+    </div>
+  </div>
+</div>
+
+<script src="app.config.js"></script>
+<script>
+let qState = { category: '', subPath: '' };
+
+const MASTER_CATEGORIES = {
+  residence: { paths: [{ id: "residence_main", name: "מגורים ביישוב מזכה" }] },
+  work: { paths: [{ id: "employee", name: "שכיר/לומד ביישוב זכאי" }]},
+  security: { paths: [{ id: "rifleman07", name: "רובאי 07 ומעלה" }, { id: "officer_nco", name: "קצין/נגד" }]},
+  rescue: { paths: [{ id: "mda", name: "מד\"א / איחוד הצלה / זק\"א" }, { id: "fire", name: "כבאות" }]},
+  professions: { paths: [{ id: "prof_farm", name: "חקלאי פעיל" }, { id: "prof_guide", name: "מורה דרך" }, { id: "exterminator", name: "מדביר" }]},
+  sports: { paths: [{ id: "sport_shoot", name: "ספורטאי פעיל" }, { id: "hunter", name: "צייד" }]}
+};
+
+function qNext(step) {
+  document.querySelectorAll('.q-step').forEach(el => el.classList.remove('active'));
+  document.getElementById('qs-' + step).classList.add('active');
+}
+
+function qSelCategory(catId, el) {
+  qState.category = catId;
+  el.parentElement.querySelectorAll('.q-choice').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  
+  const geoContainer = document.getElementById('geo-container');
+  geoContainer.style.display = (catId === 'residence' || catId === 'work') ? 'block' : 'none';
+
+  const subContainer = document.getElementById('sub-path-container');
+  const subSelect = document.getElementById('f_sub_path');
+  const cat = MASTER_CATEGORIES[catId];
+  
+  if (cat && cat.paths.length === 1) {
+    qState.subPath = cat.paths[0].id; 
+    subContainer.style.display = 'none';
+  } else if (cat && cat.paths.length > 1) {
+    qState.subPath = ''; 
+    subSelect.innerHTML = '<option value="">-- בחר מסלול ספציפי --</option>' + cat.paths.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+    subContainer.style.display = 'block';
+  } else {
+    subContainer.style.display = 'none';
+  }
+}
+
+function validateStep3() {
+  if (!qState.category) return alert("יש לבחור עילה מרכזית");
+  if (qState.category === 'residence' || qState.category === 'work') {
+    if(!document.getElementById('f_city').value) return alert("חובה להזין שם יישוב למסלול זה");
+  }
+  const subContainer = document.getElementById('sub-path-container');
+  if (subContainer && subContainer.style.display === 'block') {
+    const subSelect = document.getElementById('f_sub_path');
+    if (!subSelect || !subSelect.value) return alert("חובה לבחור מסלול מדויק מתוך הרשימה");
+    qState.subPath = subSelect.value;
+  }
+  qNext(4);
+}
+
+async function submitClientData() {
+  const age = document.getElementById('f_age').value;
+  const name = document.getElementById('f_name').value;
+  const phone = document.getElementById('f_phone').value;
+  
+  if(!age || !name || !phone) return alert('נא למלא את כל שדות החובה!');
+
+  const btnSubmit = document.getElementById('btn-submit');
+  btnSubmit.innerText = 'משדר לענן (Supabase)...';
+  btnSubmit.disabled = true;
+
+  const payload = {
+    full_name: name, phone: phone, status: 'NEW',
+    applicant_data: { 
+      age: parseInt(age), 
+      citizenship: document.getElementById('f_citizenship').value, 
+      residency: document.getElementById('f_residency').value, 
+      hebrew: document.getElementById('f_hebrew').value, 
+      police: document.getElementById('f_police').value, 
+      medical: document.getElementById('f_medical').value, 
+      serviceRoute: document.getElementById('f_service_route').value,
+      category: qState.category, subPath: qState.subPath, 
+      city: document.getElementById('f_city').value 
+    },
+    audit: [{time: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'}), text: 'השאלון מולא על ידי הלקוח והתיק נפתח.'}]
+  };
+  
+  try {
+    const cfg = window.APP_CONFIG || {};
+    if(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY) {
+      const res = await fetch(`${cfg.SUPABASE_URL}/rest/v1/client_submissions`, {
+        method: 'POST',
+        headers: {
+          'apikey': cfg.SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${cfg.SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error('DB Save Error');
+    }
+    document.getElementById('q-form').style.display = 'none';
+    document.getElementById('q-thanks').style.display = 'block';
+  } catch(e) {
+    alert("שגיאת תקשורת מול מסד הנתונים. ודא שהגדרות ה-Supabase תקינות בקובץ ההגדרות.");
+    btnSubmit.innerText = 'שלח שוב';
+    btnSubmit.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
