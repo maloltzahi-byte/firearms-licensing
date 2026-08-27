@@ -1,0 +1,35 @@
+name: Expand RC2
+
+on:
+  push:
+    branches:
+      - rc/production-readiness-2026-08-27
+
+permissions:
+  contents: write
+
+jobs:
+  expand:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconstruct RC2 application core
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f .rc2/app-core.b64
+          base64 -d .rc2/app-core.b64 > /tmp/app-core.tar.gz
+          tar -xzf /tmp/app-core.tar.gz -C .
+          rm -rf .rc2
+      - name: Commit expanded source
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'RC2: expand application core'
+          git push origin HEAD:rc/production-readiness-2026-08-27
