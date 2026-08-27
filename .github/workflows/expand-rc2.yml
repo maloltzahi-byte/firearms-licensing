@@ -20,10 +20,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -f .rc2/app-core.b64
-          echo "encoded-bytes=$(wc -c < .rc2/app-core.b64)"
-          base64 --decode --ignore-garbage .rc2/app-core.b64 > /tmp/app-core.tar.gz
-          echo "archive-bytes=$(wc -c < /tmp/app-core.tar.gz)"
+          test -d .rc2/chunks
+          cat .rc2/chunks/chunk-* > /tmp/app-core.b64
+          test "$(wc -c < /tmp/app-core.b64)" -eq 134956
+          base64 --decode /tmp/app-core.b64 > /tmp/app-core.tar.gz
+          echo "2f88a372444ed959b20e147a72f1919464d58e5c362740522412b64112d21e3c  /tmp/app-core.tar.gz" | sha256sum -c -
           gzip -t /tmp/app-core.tar.gz
           tar -xzf /tmp/app-core.tar.gz -C .
           rm -rf .rc2
