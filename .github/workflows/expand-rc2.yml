@@ -21,7 +21,10 @@ jobs:
         run: |
           set -euo pipefail
           test -f .rc2/app-core.b64
-          base64 -d .rc2/app-core.b64 > /tmp/app-core.tar.gz
+          echo "encoded-bytes=$(wc -c < .rc2/app-core.b64)"
+          base64 --decode --ignore-garbage .rc2/app-core.b64 > /tmp/app-core.tar.gz
+          echo "archive-bytes=$(wc -c < /tmp/app-core.tar.gz)"
+          gzip -t /tmp/app-core.tar.gz
           tar -xzf /tmp/app-core.tar.gz -C .
           rm -rf .rc2
       - name: Commit expanded source
