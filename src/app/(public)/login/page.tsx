@@ -35,7 +35,7 @@ export default async function LoginPage({ searchParams }: Props) {
         <section className="flex items-center bg-white p-6 text-[#111827] sm:p-10 lg:p-14">
           <div className="mx-auto w-full max-w-md">
             <Link href="/" className="text-sm font-bold text-[#173b6d]">← {HE.common.back}</Link>
-            <p className="mt-10 text-xs font-black uppercase tracking-[0.2em] text-[#d66f12]">{HE.auth.eyebrow}</p>
+            <p className="mt-10 text-xs font-black uppercase tracking-[0.2em] text-[#b45309]">{HE.auth.eyebrow}</p>
             <h2 className="mt-3 font-display text-4xl font-black">{next?.startsWith('/cockpit') ? HE.auth.officeTitle : HE.auth.title}</h2>
 
             {message ? (
