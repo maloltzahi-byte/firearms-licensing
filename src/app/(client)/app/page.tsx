@@ -3,6 +3,8 @@ import { HE } from '@/lib/i18n/he'
 import { requireProfile } from '@/lib/auth/guards'
 import { createCase } from './actions'
 
+type CaseStatusKey = keyof typeof HE.caseStatuses
+
 export default async function ClientDashboardPage() {
   const { supabase, profile } = await requireProfile()
   const [{ data: cases }, { data: tasks }] = await Promise.all([
@@ -32,20 +34,23 @@ export default async function ClientDashboardPage() {
             <span className="rounded-full bg-white px-3 py-1 text-sm font-bold text-slate-500 shadow-sm">{cases?.length ?? 0}</span>
           </div>
           <div className="space-y-4">
-            {cases?.length ? cases.map((item) => (
-              <Link key={item.id} href={`/app/cases/${item.id}`} className="group block rounded-[24px] border border-[#dce4ee] bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#173b6d]/30 hover:shadow-lg">
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs font-black tracking-wider text-[#d66f12]">{HE.client.caseNumber}</p>
-                    <p className="mt-1 font-display text-2xl font-black text-[#173b6d]">{item.case_number}</p>
+            {cases?.length ? cases.map((item) => {
+              const caseStatus = HE.caseStatuses[item.status as CaseStatusKey] ?? item.status
+              return (
+                <Link key={item.id} href={`/app/cases/${item.id}`} className="group block rounded-[24px] border border-[#dce4ee] bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:border-[#173b6d]/30 hover:shadow-lg">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-black tracking-wider text-[#d66f12]">{HE.client.caseNumber}</p>
+                      <p className="mt-1 font-display text-2xl font-black text-[#173b6d]">{item.case_number}</p>
+                    </div>
+                    <span className="rounded-full bg-[#eef3f9] px-3 py-1.5 text-xs font-bold text-[#173b6d]">{caseStatus}</span>
                   </div>
-                  <span className="rounded-full bg-[#eef3f9] px-3 py-1.5 text-xs font-bold text-[#173b6d]">{HE.caseStatuses[item.status]}</span>
-                </div>
-                <div className="mt-5 border-t border-slate-100 pt-4 text-sm text-slate-600">
-                  <strong>{HE.client.nextAction}:</strong> {item.next_action ?? HE.common.none}
-                </div>
-              </Link>
-            )) : (
+                  <div className="mt-5 border-t border-slate-100 pt-4 text-sm text-slate-600">
+                    <strong>{HE.client.nextAction}:</strong> {item.next_action ?? HE.common.none}
+                  </div>
+                </Link>
+              )
+            }) : (
               <div className="rounded-[24px] border border-dashed border-[#c9d4e2] bg-white p-10 text-center text-slate-500">{HE.client.noCases}</div>
             )}
           </div>
