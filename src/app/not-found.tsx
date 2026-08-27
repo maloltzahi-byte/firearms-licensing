@@ -1,0 +1,2 @@
+import Link from 'next/link'
+export default function NotFound(){return <main className="grid min-h-screen place-items-center bg-[#07111f] p-6 text-white"><div className="max-w-xl text-center"><p className="text-sm font-black text-[#ef8c2f]">404</p><h1 className="mt-3 font-display text-5xl font-black">העמוד לא נמצא</h1><p className="mt-4 text-slate-400">הקישור אינו חלק מהמסלולים הפעילים במערכת.</p><Link href="/" className="mt-7 inline-block rounded-xl bg-[#ef8c2f] px-5 py-3 font-black text-[#111827]">חזרה לדף הבית</Link></div></main>}

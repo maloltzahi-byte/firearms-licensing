@@ -1,0 +1,59 @@
+'use server'
+
+import { redirect } from 'next/navigation'
+import { z } from 'zod'
+import { createSupabaseServerClient } from '@/lib/supabase/server'
+
+const credentials = z.object({
+  email: z.string().email(),
+  password: z.string().min(8).max(128),
+})
+
+function safeNext(value: FormDataEntryValue | null) {
+  if (typeof value !== 'string' || !value.startsWith('/') || value.startsWith('//')) return '/app'
+  return value
+}
+
+export async function login(formData: FormData) {
+  const parsed = credentials.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
+  const next = safeNext(formData.get('next'))
+  if (!parsed.success) redirect(`/login?error=required&next=${encodeURIComponent(next)}`)
+
+  const supabase = await createSupabaseServerClient()
+  const { error } = await supabase.auth.signInWithPassword(parsed.data)
+  if (error) redirect(`/login?error=invalid&next=${encodeURIComponent(next)}`)
+  redirect(next)
+}
+
+export async function signup(formData: FormData) {
+  const parsed = credentials.safeParse({
+    email: formData.get('email'),
+    password: formData.get('password'),
+  })
+  if (!parsed.success) redirect('/login?error=required')
+
+  const supabase = await createSupabaseServerClient()
+  const origin = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const { data, error } = await supabase.auth.signUp({
+    ...parsed.data,
+    options: { emailRedirectTo: `${origin}/auth/callback?next=/app` },
+  })
+  if (error) redirect('/login?error=invalid')
+  if (!data.session) redirect('/login?notice=verify')
+  redirect('/app')
+}
+
+export async function requestPasswordReset(formData: FormData) {
+  const email = z.string().email().safeParse(formData.get('email'))
+  if (email.success) {
+    const supabase = await createSupabaseServerClient()
+    const origin = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+    await supabase.auth.resetPasswordForEmail(email.data, {
+      redirectTo: `${origin}/auth/callback?next=/auth/update-password`,
+    })
+  }
+  redirect('/login?notice=reset')
+}

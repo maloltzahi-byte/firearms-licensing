@@ -1,0 +1,19 @@
+{
+  "source": "docs/04-question-matrix.md",
+  "questions": [
+    { "id": "q-full-name", "he": "שם מלא", "type": "text", "required": true, "sensitivity": "normal" },
+    { "id": "q-id-number", "he": "תעודת זהות", "type": "text", "required": true, "sensitivity": "sensitive" },
+    { "id": "q-date-of-birth", "he": "תאריך לידה", "type": "date", "required": true, "sensitivity": "sensitive" },
+    { "id": "q-citizenship", "he": "סוג אזרחות / תושבות", "type": "text", "required": true, "sensitivity": "normal" },
+    { "id": "q-residence-years", "he": "שנות מגורים רצופות בישראל", "type": "number", "required": true, "sensitivity": "normal" },
+    { "id": "q-hebrew-level", "he": "רמת עברית", "type": "text", "required": true, "sensitivity": "normal" },
+    { "id": "q-service-status", "he": "סטטוס שירות (צה״ל / לאומי / אזרחי / פטור / פציעה מבצעית)", "type": "text", "required": true, "sensitivity": "normal" },
+    { "id": "q-service-role", "he": "תפקיד בשירות", "type": "text", "required": true, "sensitivity": "normal" },
+    { "id": "q-service-end-year", "he": "שנת סיום שירות", "type": "number", "required": true, "sensitivity": "normal" },
+    { "id": "q-city", "he": "עיר / יישוב מגורים", "type": "text", "required": true, "sensitivity": "normal" },
+    { "id": "q-police-record", "he": "האם קיים רישום פלילי?", "type": "boolean", "required": true, "sensitivity": "sensitive" },
+    { "id": "q-active-restraining-order", "he": "האם קיים צו הרחקה או צו הגנה בתוקף?", "type": "boolean", "required": true, "sensitivity": "sensitive" },
+    { "id": "q-mental-health-restriction", "he": "האם קיים איסור מטעמי בריאות הנפש?", "type": "boolean", "required": true, "sensitivity": "medical" },
+    { "id": "q-existing-license", "he": "האם ברשותך רישיון כלי ירייה כלשהו (פרטי, מיוחד, ארגוני)?", "type": "boolean", "required": true, "sensitivity": "normal" }
+  ]
+}

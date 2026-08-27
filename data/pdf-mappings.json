@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "count": 28,
+    "reference": "docs/07-pdf-engine.md (to be authored in M7)",
+    "note": "Each mapping links a route to its official affidavit PDF and the fields to auto-fill from case data. Filled at M7."
+  },
+  "mappings": [
+    { "id": "aff-security-forces", "route_id": "idf-officer", "he": "הצהרה תבחין שירות בכוחות הביטחון", "source_file": "הצהרה_תבחין_שירות_בכוחות_הביטחון.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-shooting-instructor", "route_id": "shooting-instructor", "he": "הצהרת מדריך ירי ומנהל מטווח", "source_file": "הצהרת_מדריך_ירי_ומנהל_מטווח_עבור_רישיון_בתבחין_מדריך_ירי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-student", "route_id": "work-student", "he": "תצהיר ואישור המבקש הלומד במקום זכאי", "source_file": "תצהיר_ואישור_המבקש_הלומד_במקום_זכאי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-advanced-guard", "route_id": "training-advanced-guard", "he": "תצהיר מאבטח קורס מתקדם א/ב", "source_file": "תצהיר_מאבטח_קורס_מתקדם_א_ב.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-zaka-moment", "route_id": "rescue-zaka-moment", "he": "תצהיר רגע של אמת זק״א", "source_file": "תצהיר_רגע_של_אמת_זקא.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-vet", "route_id": "veterinarian", "he": "תצהיר רופא וטרינר", "source_file": "תצהיר_רופא_וטרינר.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-sports-olympic", "route_id": "sports-olympic", "he": "תצהיר ואישור ספורטאי פעיל — ירי אולימפי", "source_file": "תצהיר_ואישור_ספורטאי_פעיל__ירי_אולימפי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-united-hatzalah", "route_id": "rescue-united-hatzalah", "he": "תצהיר איחוד הצלה", "source_file": "תצהיר_באיחוד_הצלה.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-work-self", "route_id": "work-self-employed", "he": "תצהיר עצמאי — עיסוק במקום זכאי", "source_file": "תצהיר_עצמאי_עיסוק_במקום_זכאי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-work-employee", "route_id": "work-employee", "he": "תצהיר עיסוק במקום זכאי — שכיר", "source_file": "תצהיר_עיסוק_במקום_זכאי_שכיר.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-farmer-family", "route_id": "farmer-family", "he": "תצהיר בן משפחה מקרבה ראשונה של חקלאי", "source_file": "תצהיר_בן_משפחה_מקרבה_ראשונה_של_חקלאי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-mda", "route_id": "rescue-mda", "he": "תצהיר מגן דוד אדום", "source_file": "תצהיר_מגן_דוד_אדום.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-zaka", "route_id": "rescue-zaka", "he": "תצהיר זק״א איתור חילוץ והצלה", "source_file": "תצהיר_זקא_איתור_חילוץ_והצלהה.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-firefighter", "route_id": "firefighter-active", "he": "תצהיר תבחין כבאי", "source_file": "תצהיר_תבחין_כבאי.pdf", "field_map_status": "pending_m7", "also_serves_routes": ["firefighter-volunteer", "firefighter-retired"] },
+    { "id": "aff-vet-employee", "route_id": "veterinarian-employee", "he": "תצהיר ואישור אדם העובד תחת פיקוח וטרינר", "source_file": "תצהיר_ואישור_אדם_העובד_תחת_פיקוחו_של_רופא_וטרינר.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-sports-practical", "route_id": "sports-practical", "he": "תצהיר ואישור ספורטאי יורה פעיל — ירי מעשי", "source_file": "תצהיר_ואישור_ספורטאי_יורה_פעיל__ירי_מעשי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-exterminator", "route_id": "exterminator", "he": "תצהיר מדביר", "source_file": "תצהיר_מדביר.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-tour-guide", "route_id": "tour-guide", "he": "תצהיר מורה דרך מוסמך", "source_file": "תצהיר_מורה_דרך_מוסמך.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-explosives-employer", "route_id": "explosives-employee", "he": "תצהיר על העסקת מוביל חומרי נפץ שכיר", "source_file": "תצהיר_על_העסקת_מוביל_חומרי_נפץ_שכיר.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-farmer-cooperative", "route_id": "farmer-cooperative", "he": "תצהיר חבר באגודה שיתופית חקלאית", "source_file": "תצהיר_חבר_באגודה_שיתופית_חקלאית.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-farmer-self", "route_id": "farmer-self", "he": "תצהיר חקלאי עצמאי", "source_file": "תצהיר_חקלאי_עצמאי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-explosives-self", "route_id": "explosives-self", "he": "תצהיר מוביל חומרי נפץ עצמאי", "source_file": "תצהיר_מוביל_חומרי_נפץ.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-farmer-employee", "route_id": "farmer-employee", "he": "תצהיר של מועסק אצל חקלאי", "source_file": "תצהיר_של_מועסק_אצל_חקלאי.pdf", "field_map_status": "pending_m7" },
+    { "id": "aff-idf-special-unit", "route_id": "idf-special-unit-fighter", "he": "אישור שירות כלוחם ביחידה מיוחדת", "source_file": "TBD_idf_special_unit_template.pdf", "field_map_status": "template_pending" },
+    { "id": "aff-security-officer", "route_id": "security-officer", "he": "אישור ראש חטיבת האבטחה", "source_file": "TBD_security_officer_police_approval.pdf", "field_map_status": "template_pending" },
+    { "id": "aff-hunter", "route_id": "hunter", "he": "המלצת רשות הטבע והגנים לצייד", "source_file": "TBD_hunter_authority_recommendation.pdf", "field_map_status": "template_pending" },
+    { "id": "aff-sports-paralympic", "route_id": "sports-paralympic", "he": "תצהיר ואישור ספורטאי פראולימפי", "source_file": "TBD_sports_paralympic_template.pdf", "field_map_status": "template_pending" },
+    { "id": "aff-training-airports", "route_id": "training-airports", "he": "אישור העסקה ברשות שדות התעופה", "source_file": "TBD_training_airports_employment.pdf", "field_map_status": "template_pending" }
+  ]
+}

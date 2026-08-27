@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   Design tokens — mirrored from public/mockups/ v3.2.
+   Public site and cockpit share tokens; the cockpit swaps them via .cockpit.
+   ============================================================================ */
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 220 24% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 24% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 24% 12%;
+
+    --primary: 220 76% 32%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 24% 12%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 12% 40%;
+
+    --accent: 34 88% 46%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 12% 88%;
+    --input: 220 12% 88%;
+    --ring: 220 76% 32%;
+
+    --radius: 0.625rem;
+
+    /* Cockpit-specific — desaturated risk tones */
+    --risk-low: 142 60% 38%;
+    --risk-medium: 38 92% 50%;
+    --risk-high: 0 84% 60%;
+  }
+
+  .dark,
+  .cockpit {
+    --background: 220 24% 4%;
+    --foreground: 0 0% 96%;
+
+    --card: 220 20% 7%;
+    --card-foreground: 0 0% 96%;
+
+    --popover: 220 20% 7%;
+    --popover-foreground: 0 0% 96%;
+
+    --primary: 34 88% 55%;
+    --primary-foreground: 220 24% 12%;
+
+    --secondary: 220 18% 12%;
+    --secondary-foreground: 0 0% 96%;
+
+    --muted: 220 18% 12%;
+    --muted-foreground: 220 12% 65%;
+
+    --accent: 34 88% 55%;
+    --accent-foreground: 220 24% 12%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 96%;
+
+    --border: 220 16% 18%;
+    --input: 220 16% 18%;
+    --ring: 34 88% 55%;
+
+    --elevated: 220 20% 10%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    @apply antialiased;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: 'kern', 'liga';
+  }
+
+  /* RTL-first: enforce directionality per html attribute */
+  html[dir='rtl'] {
+    text-align: right;
+  }
+}

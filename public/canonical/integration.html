@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>RFL — Final Staging</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;500;600&display=swap');
+:root{--n:#0b223d;--o:#ff6a1a;--b:#0b6f9c;--s:#ddf3fc;--bg:#f7f9fb;--ink:#07182b;--t:#526171;--m:#8d9aa6;--bd:#dce3e9;--info:#f0fafe;--ok:#2c7a57;--warn:#a8660a;--err:#a93434}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'IBM Plex Sans Hebrew',Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(11,111,156,.35);outline-offset:2px}
+header{height:72px;background:var(--n);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:5}.brand{font-size:17px;font-weight:500}.mode{font-size:12px;color:var(--s);letter-spacing:.4px}.shell{max-width:1120px;margin:auto;padding:34px 22px 60px}.hero{display:grid;grid-template-columns:1.3fr .7fr;gap:22px;align-items:stretch}.hero h1{font-size:46px;line-height:1.07;margin:8px 0 16px}.k{font-size:12px;color:var(--b);letter-spacing:.4px;direction:ltr;text-align:right}.body{font-size:16px;line-height:1.65;color:var(--t)}.card{background:white;border:1px solid var(--bd);border-radius:16px;padding:22px;box-shadow:0 2px 8px #07182b0f}.dark{background:var(--n);color:white}.dark .body{color:var(--s)}.accent{height:4px;width:150px;background:var(--o);border-radius:2px;margin-top:24px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.field{display:grid;gap:7px;margin:13px 0}.field label{font-size:12px;color:var(--t)}.field input,.field select,.field textarea{width:100%;min-height:46px;border:1px solid var(--bd);border-radius:9px;padding:10px 12px;background:#fff;color:var(--ink)}.field textarea{height:90px;resize:vertical}.btn{border:0;border-radius:9px;min-height:46px;padding:0 18px;font-weight:500}.primary{background:var(--o);color:var(--ink)}.secondary{background:#fff;border:1px solid var(--bd);color:var(--ink)}.danger{background:#f9e2e2;color:var(--err)}.actions{display:flex;gap:10px;flex-wrap:wrap}.status{display:inline-flex;align-items:center;gap:8px;border-radius:18px;background:var(--info);color:var(--b);padding:6px 12px;font-size:12px}.dot{width:8px;height:8px;border-radius:50%;background:var(--warn)}.dot.ok{background:var(--ok)}.dot.err{background:var(--err)}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 16px}.tabs button{height:40px;border:1px solid var(--bd);background:#fff;border-radius:20px;padding:0 15px}.tabs button.active{background:var(--n);color:#fff;border-color:var(--n)}.row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-bottom:1px solid var(--bd);padding:14px 0}.row:last-child{border-bottom:0}.muted{color:var(--m);font-size:12px}.pill{display:inline-flex;min-width:90px;justify-content:center;border-radius:16px;padding:5px 9px;background:var(--info);color:var(--b);font-size:12px}.pill.warn{background:#fff1d6;color:var(--warn)}.pill.ok{background:#e8f4ee;color:var(--ok)}.pill.err{background:#f9e2e2;color:var(--err)}.notice{border-right:5px solid var(--o);background:#fff;padding:14px 16px;border-radius:10px;color:var(--t);line-height:1.55}.hidden{display:none!important}.loader{padding:40px;text-align:center;color:var(--t)}.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}.stat{border:1px solid var(--bd);border-radius:14px;padding:15px}.stat small{color:var(--m)}.stat b{display:block;font-size:24px;margin-top:8px}.uploadBox{border:1px dashed var(--b);background:var(--info);border-radius:12px;padding:18px}.authNote{font-size:12px;color:var(--m);margin-top:12px}.mono{direction:ltr;text-align:left;font-family:ui-monospace,monospace;font-size:12px;overflow-wrap:anywhere}.errorBox{background:#fdeaea;color:var(--err);padding:12px;border-radius:9px;margin:10px 0}.successBox{background:#e8f4ee;color:var(--ok);padding:12px;border-radius:9px;margin:10px 0}
+@media(max-width:800px){.hero,.grid2{grid-template-columns:1fr}.hero h1{font-size:35px}.case-grid{grid-template-columns:1fr}header{padding:0 16px}.shell{padding:24px 16px 50px}}
+
+.stagingFlag{position:fixed;left:16px;bottom:16px;z-index:20;background:#07182b;color:#fff;border:1px solid #526171;border-radius:20px;padding:7px 12px;font-size:12px;direction:ltr}</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SB_URL='https://lcvshepgzizrlqbzvjoe.supabase.co';
+const SB_KEY='sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT';
+const sb=supabase.createClient(SB_URL,SB_KEY);
+let state={session:null,profile:null,cases:[],activeCase:null,answers:{},tab:'auth',backend:false,msg:'',aal:null,mfaEnroll:null};
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+async function backendCheck(){
+  try{
+    const r=await fetch(SB_URL+'/functions/v1/rfl-readiness',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+    const j=await r.json();
+    state.backend=!!j.ok;
+  }catch(e){state.backend=false}
+}
+async function init(){
+  await backendCheck();
+  const {data}=await sb.auth.getSession(); state.session=data.session;
+  if(state.session) await hydrate();
+  render();
+  sb.auth.onAuthStateChange(async(_e,s)=>{state.session=s;if(s)await hydrate();else{state.profile=null;state.cases=[];state.activeCase=null;state.tab='auth'}render()});
+}
+async function hydrate(){
+  await loadProfile(); await loadAAL(); await loadCases();
+  state.tab='dashboard';
+}
+async function loadProfile(){
+  const {data,error}=await sb.from('profiles').select('id,display_name,role,is_active').single();
+  if(error){state.profile=null;return}
+  state.profile=data;
+}
+async function loadCases(){
+  const {data,error}=await sb.from('cases').select('id,case_number,title,status,request_type,next_action,authority_status,updated_at').order('updated_at',{ascending:false});
+  if(error){state.msg=error.message;return}
+  state.cases=data||[];
+  if(state.activeCase){
+    const x=state.cases.find(c=>c.id===state.activeCase.id); if(x)state.activeCase=x;
+  }
+}
+
+async function loadAAL(){
+  const {data,error}=await sb.auth.mfa.getAuthenticatorAssuranceLevel();
+  state.aal=error?null:data;
+}
+async function startMFAEnroll(){
+  state.msg='';
+  const {data,error}=await sb.auth.mfa.enroll({factorType:'totp',friendlyName:'RFL Lawyer MFA'});
+  if(error){state.msg=error.message;render();return}
+  state.mfaEnroll=data; state.tab='mfa'; render();
+}
+async function verifyMFAEnroll(){
+  const code=$('#mfaCode').value.trim(); if(!state.mfaEnroll)return;
+  const ch=await sb.auth.mfa.challenge({factorId:state.mfaEnroll.id});
+  if(ch.error){state.msg=ch.error.message;render();return}
+  const vr=await sb.auth.mfa.verify({factorId:state.mfaEnroll.id,challengeId:ch.data.id,code});
+  if(vr.error){state.msg=vr.error.message;render();return}
+  state.msg='MFA הופעל בהצלחה. החיבור שודרג ל‑AAL2.'; state.mfaEnroll=null; await loadAAL(); render();
+}
+async function challengeExistingMFA(){
+  state.msg='';
+  const f=await sb.auth.mfa.listFactors();
+  if(f.error){state.msg=f.error.message;render();return}
+  const factor=(f.data.totp||[])[0];
+  if(!factor){state.msg='לא נמצא TOTP פעיל. יש להפעיל MFA תחילה.';render();return}
+  const code=$('#mfaExistingCode').value.trim();
+  const ch=await sb.auth.mfa.challenge({factorId:factor.id});
+  if(ch.error){state.msg=ch.error.message;render();return}
+  const vr=await sb.auth.mfa.verify({factorId:factor.id,challengeId:ch.data.id,code});
+  if(vr.error){state.msg=vr.error.message;render();return}
+  state.msg='אימות MFA הצליח. החיבור כעת AAL2.'; await loadAAL(); render();
+}
+function mfaView(){
+  const current=state.aal?.currentLevel||'aal1', next=state.aal?.nextLevel||'aal1';
+  if(state.mfaEnroll){
+    const qr=state.mfaEnroll.totp?.qr_code||''; const secret=state.mfaEnroll.totp?.secret||'';
+    return `<div class="grid2"><section><div class="k">MFA / ENROLL</div><h1 style="font-size:38px;margin:10px 0">הפעלת TOTP לעבודה משפטית.</h1><p class="body">סרוק את ה‑QR באפליקציית Authenticator והזן קוד בן 6 ספרות.</p><div class="accent"></div></section><section class="card">${messageBox()}${qr?`<img src="${qr}" alt="MFA QR" style="max-width:240px;width:100%;display:block;margin:0 auto 16px">`:''}<div class="field"><label>Secret ידני</label><input readonly value="${esc(secret)}"></div><div class="field"><label>קוד אימות</label><input id="mfaCode" inputmode="numeric" autocomplete="one-time-code"></div><button class="btn primary" onclick="verifyMFAEnroll()">אימות והפעלת MFA</button></section></div>`
+  }
+  const needs=next==='aal2'&&current!=='aal2';
+  return `<div class="grid2"><section><div class="k">MFA / AAL</div><h1 style="font-size:38px;margin:10px 0">פעולות עו״ד דורשות AAL2.</h1><p class="body">Current: <b>${esc(current)}</b> · Next: <b>${esc(next)}</b></p><div class="accent"></div></section><section class="card">${messageBox()}${needs?`<div class="notice">קיים MFA בחשבון אבל החיבור הנוכחי עדיין AAL1.</div><div class="field"><label>קוד מה‑Authenticator</label><input id="mfaExistingCode" inputmode="numeric" autocomplete="one-time-code"></div><button class="btn primary" onclick="challengeExistingMFA()">אימות ושדרוג ל‑AAL2</button>`:`<div class="notice">${current==='aal2'?'החיבור מאומת ב‑AAL2 ומוכן לפעולות משפטיות רגישות.':'עדיין לא הוגדר TOTP לחשבון.'}</div>${current!=='aal2'?'<button class="btn primary" style="margin-top:16px" onclick="startMFAEnroll()">הפעלת MFA / TOTP</button>':''}`}</section></div>`
+}
+
+async function signUp(){
+  const email=$('#email').value.trim(), password=$('#password').value, name=$('#name').value.trim();
+  state.msg='';
+  const {data,error}=await sb.auth.signUp({email,password,options:{data:{display_name:name}}});
+  if(error){state.msg=error.message;render();return}
+  state.msg=data.session?'נרשמת והתחברת בהצלחה.':'ההרשמה התקבלה. אם אימות דוא״ל מופעל בפרויקט, יש לאשר את ההודעה שנשלחה אליך.';
+  render();
+}
+async function signIn(){
+  const email=$('#email').value.trim(), password=$('#password').value;
+  state.msg='';
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  if(error){state.msg=error.message;render()}
+}
+async function signOut(){await sb.auth.signOut()}
+async function createCase(){
+  const title=$('#caseTitle').value.trim()||'תיק רישיון כלי ירייה';
+  const rt=$('#requestType').value;
+  const uid=state.session.user.id;
+  const caseId=crypto.randomUUID();
+  const {error}=await sb.from('cases').insert({id:caseId,title,request_type:rt,client_user_id:uid,created_by:uid});
+  if(error){state.msg=error.message;render();return}
+  const {data,error:readError}=await sb.from('cases').select('id,case_number,title,status,request_type,next_action,authority_status,updated_at').eq('id',caseId).single();
+  if(readError){state.msg='התיק נוצר אך קריאת התיק נכשלה: '+readError.message;await loadCases();render();return}
+  state.activeCase=data; state.msg='התיק נוצר ב‑Supabase וקיבל Decision Gate = REVIEW אוטומטית.';
+  await loadCases(); await loadAnswers(); state.tab='questionnaire'; render();
+}
+async function openCase(id){
+  state.activeCase=state.cases.find(c=>c.id===id)||null;
+  await loadAnswers(); state.tab='questionnaire'; render();
+}
+async function loadAnswers(){
+  if(!state.activeCase)return;
+  const {data,error}=await sb.from('questionnaire_answers').select('field_key,value,updated_at').eq('case_id',state.activeCase.id);
+  if(!error){state.answers={};(data||[]).forEach(x=>state.answers[x.field_key]=x.value)}
+}
+async function saveAnswer(key,value,sensitivity='normal'){
+  if(!state.activeCase)return;
+  const uid=state.session.user.id;
+  const payload={case_id:state.activeCase.id,field_key:key,value,source:'user',sensitivity,created_by:uid,updated_at:new Date().toISOString()};
+  const {error}=await sb.from('questionnaire_answers').upsert(payload,{onConflict:'case_id,field_key'});
+  state.msg=error?error.message:'נשמר ב‑Supabase · autosave';
+  if(!error)state.answers[key]=value;
+  render();
+}
+async function uploadFile(){
+  const input=$('#file'); if(!input.files.length)return;
+  const file=input.files[0]; if(!state.activeCase)return;
+  const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+  const path=`${state.activeCase.id}/${crypto.randomUUID()}-${safe}`;
+  const {error:upErr}=await sb.storage.from('rfl-case-documents').upload(path,file,{contentType:file.type,upsert:false});
+  if(upErr){state.msg=upErr.message;render();return}
+  const {error:dbErr}=await sb.from('documents').insert({case_id:state.activeCase.id,storage_path:path,file_name:file.name,mime_type:file.type||'application/octet-stream',size_bytes:file.size,uploaded_by:state.session.user.id,sensitivity:$('#sensitivity').value});
+  state.msg=dbErr?dbErr.message:'המסמך נשמר ב‑Private Storage ונרשם בתיק.';
+  render();
+}
+async function loadCaseDetails(){
+  if(!state.activeCase)return {docs:[],tasks:[],messages:[],gate:null};
+  const id=state.activeCase.id;
+  const [d,t,m,g]=await Promise.all([
+    sb.from('documents').select('id,file_name,review_status,sensitivity,created_at').eq('case_id',id).order('created_at',{ascending:false}),
+    sb.from('tasks').select('id,title,status,due_at').eq('case_id',id).order('created_at',{ascending:false}),
+    sb.from('messages').select('id,body,is_internal,created_at').eq('case_id',id).order('created_at',{ascending:false}),
+    sb.from('decision_gates').select('state,rationale,decided_at,version').eq('case_id',id).maybeSingle()
+  ]);
+  return {docs:d.data||[],tasks:t.data||[],messages:m.data||[],gate:g.data||null};
+}
+async function showClient(){
+  if(!state.activeCase && state.cases[0])state.activeCase=state.cases[0];
+  state.tab='client'; render();
+  const x=await loadCaseDetails(); renderClientDetails(x);
+}
+function renderClientDetails(x){
+  const el=$('#clientDetails');if(!el)return;
+  el.innerHTML=`<div class="case-grid"><div class="stat"><small>מסמכים</small><b>${x.docs.length}</b></div><div class="stat"><small>משימות פתוחות</small><b>${x.tasks.filter(t=>t.status!=='done').length}</b></div><div class="stat"><small>Decision Gate</small><b>${esc(x.gate?.state||'REVIEW')}</b></div></div>
+  <div class="grid2"><div class="card"><div class="k">DOCUMENTS</div>${x.docs.length?x.docs.map(d=>`<div class="row"><div><b>${esc(d.file_name)}</b><div class="muted">${esc(d.sensitivity)}</div></div><span class="pill">${esc(d.review_status)}</span></div>`).join(''):'<p class="body">אין מסמכים עדיין.</p>'}</div>
+  <div class="card"><div class="k">TASKS</div>${x.tasks.length?x.tasks.map(t=>`<div class="row"><div><b>${esc(t.title)}</b></div><span class="pill">${esc(t.status)}</span></div>`).join(''):'<p class="body">אין משימות פתוחות.</p>'}</div></div>`;
+}
+async function showCockpit(){state.tab='cockpit';render();if(!['lawyer','admin','reviewer','support'].includes(state.profile?.role||''))return;await renderCockpit()}
+async function renderCockpit(){
+  const {data,error}=await sb.from('cases').select('id,case_number,title,status,updated_at').order('updated_at',{ascending:false}).limit(20);
+  const el=$('#cockpitRows');if(!el)return;
+  el.innerHTML=error?`<div class="errorBox">${esc(error.message)}</div>`:(data||[]).map(c=>`<div class="row"><div><b>${esc(c.case_number)}</b><div class="muted">${esc(c.title)} · ${esc(c.status)}</div></div><button class="btn secondary" onclick="cockpitCase('${c.id}')">פתיחה</button></div>`).join('');
+}
+async function cockpitCase(id){
+  const {data:c}=await sb.from('cases').select('*').eq('id',id).single();
+  const {data:g}=await sb.from('decision_gates').select('*').eq('case_id',id).single();
+  state.activeCase=c;
+  const el=$('#gatePanel');
+  el.innerHTML=`<div class="card dark"><div class="k" style="color:var(--s)">ATTORNEY DECISION GATE</div><h2>${esc(g?.state||'REVIEW')}</h2><p class="body">שינוי Gate מחייב Lawyer/Admin + AAL2 + נימוק + Audit.</p><div class="field"><label>נימוק</label><textarea id="gateReason"></textarea></div><div class="actions">${['REVIEW','NEEDS_INFO','BLOCK','APPROVED'].map(x=>`<button class="btn ${x==='APPROVED'?'primary':'secondary'}" onclick="setGate('${x}')">${x}</button>`).join('')}</div></div>`;
+}
+async function setGate(v){
+  const reason=$('#gateReason').value.trim();
+  const {data,error}=await sb.rpc('set_case_decision_gate',{p_case_id:state.activeCase.id,p_state:v,p_rationale:reason});
+  state.msg=error?error.message:`Gate עודכן ל‑${data.state}; נרשם Audit.`;
+  render(); await showCockpit();
+}
+function tabButtons(){
+  if(!state.session)return '';
+  return `<div class="tabs"><button class="${state.tab==='dashboard'?'active':''}" onclick="state.tab='dashboard';render()">Dashboard</button><button class="${state.tab==='questionnaire'?'active':''}" onclick="state.tab='questionnaire';render()">Guided / Autosave</button><button class="${state.tab==='upload'?'active':''}" onclick="state.tab='upload';render()">Documents</button><button class="${state.tab==='client'?'active':''}" onclick="showClient()">Client Area</button><button class="${state.tab==='mfa'?'active':''}" onclick="state.tab='mfa';render()">MFA</button><button class="${state.tab==='cockpit'?'active':''}" onclick="showCockpit()">Lawyer Cockpit</button></div>`;
+}
+function messageBox(){if(!state.msg)return '';const bad=/error|invalid|denied|permission|row-level|failed/i.test(state.msg);return `<div class="${bad?'errorBox':'successBox'}">${esc(state.msg)}</div>`}
+function authView(){
+ return `<div class="hero"><section><div class="k">RFL / LIVE INTEGRATION</div><h1>Frontend מחובר ל‑Backend האמיתי.</h1><p class="body">התחברות והרשמה משתמשות ב‑Supabase Auth. לאחר הכניסה כל הנתונים עוברים דרך RLS — אין service key ואין bypass בדפדפן.</p><div class="accent"></div><div class="notice">לבדיקה אפשר להירשם עם כתובת דוא״ל שלך. אם Email Confirmation מופעל ב‑Supabase, יש לאשר את ההודעה לפני כניסה.</div></section><section class="card"><div class="k">AUTH</div>${messageBox()}<div class="field"><label>שם מלא</label><input id="name"></div><div class="field"><label>דוא״ל</label><input id="email" type="email"></div><div class="field"><label>סיסמה</label><input id="password" type="password" minlength="8"></div><div class="actions"><button class="btn primary" onclick="signUp()">הרשמה</button><button class="btn secondary" onclick="signIn()">כניסה</button></div><div class="authNote">הסיסמה אינה נשמרת ב‑Preview. האימות מתבצע ישירות מול Supabase Auth.</div></section></div>`;
+}
+function dashboard(){
+ return `<div class="grid2"><section><div class="k">CLIENT / CASES</div><h1 style="font-size:38px;margin:10px 0">מה צריך לעשות עכשיו?</h1><p class="body">כל תיק כאן מגיע מה‑Database האמיתי ולא מ‑localStorage.</p><div class="accent"></div></section><section class="card"><div class="k">NEW CASE</div>${messageBox()}<div class="field"><label>שם תיק</label><input id="caseTitle" value="תיק רישיון כלי ירייה"></div><div class="field"><label>סוג הליך</label><select id="requestType"><option value="new">בקשה חדשה</option><option value="existing">בקשה קיימת</option><option value="appeal">ערר</option></select></div><button class="btn primary" onclick="createCase()">יצירת תיק</button></section></div><h2>התיקים שלי</h2><div class="card">${state.cases.length?state.cases.map(c=>`<div class="row"><div><b>${esc(c.case_number)}</b><div class="muted">${esc(c.title)} · ${esc(c.status)} · ${esc(c.request_type)}</div></div><button class="btn secondary" onclick="openCase('${c.id}')">פתיחה</button></div>`).join(''):'<p class="body">אין עדיין תיקים.</p>'}</div>`;
+}
+function questionnaire(){
+ if(!state.activeCase)return `<div class="notice">בחר או צור תיק קודם.</div>`;
+ return `<div class="grid2"><section><div class="k">GUIDED JOURNEY / AUTOSAVE</div><h1 style="font-size:38px;margin:10px 0">אוספים עובדות. לא verdict.</h1><p class="body">${esc(state.activeCase.case_number)} · כל שדה נשמר ב‑questionnaire_answers.</p><div class="accent"></div></section><section class="card">${messageBox()}<div class="field"><label>טלפון</label><input value="${esc(state.answers.phone||'')}" onblur="saveAnswer('phone',this.value)"></div><div class="field"><label>עיר מגורים</label><input value="${esc(state.answers.residence||'')}" onblur="saveAnswer('residence',this.value)"></div><div class="field"><label>תיאור שירות / פעילות</label><textarea onblur="saveAnswer('service_activity',this.value)">${esc(state.answers.service_activity||'')}</textarea></div><div class="field"><label>מידע רפואי רגיש</label><textarea onblur="saveAnswer('medical_note',this.value,'medical')">${esc(state.answers.medical_note||'')}</textarea></div><div class="muted">Autosave מתבצע ב‑onBlur. מידע רפואי מסומן sensitivity=medical.</div></section></div>`;
+}
+function uploadView(){
+ if(!state.activeCase)return `<div class="notice">בחר תיק קודם.</div>`;
+ return `<div class="grid2"><section><div class="k">PRIVATE STORAGE</div><h1 style="font-size:38px;margin:10px 0">מסמך נשמר עם תפקיד ברור.</h1><p class="body">הקובץ נשמר ב‑bucket פרטי וה‑metadata נרשם בטבלת documents.</p><div class="accent"></div></section><section class="card">${messageBox()}<div class="uploadBox"><div class="field"><label>קובץ</label><input id="file" type="file" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"></div><div class="field"><label>Sensitivity</label><select id="sensitivity"><option value="normal">normal</option><option value="sensitive">sensitive</option><option value="medical">medical</option></select></div><button class="btn primary" onclick="uploadFile()">העלאה פרטית</button></div></section></div>`;
+}
+function clientView(){
+ return `<div><div class="k">CLIENT AREA / LIVE DATA</div><h1 style="font-size:38px;margin:10px 0">מה קורה עכשיו בתיק?</h1><p class="body">${state.activeCase?esc(state.activeCase.case_number):'אין תיק פעיל'} · הנתונים נטענים מה‑Backend.</p><div class="accent"></div><div id="clientDetails" class="loader">טוען תיק…</div></div>`;
+}
+function cockpitView(){
+ const ok=['lawyer','admin','reviewer','support'].includes(state.profile?.role||'');
+ if(!ok)return `<div class="card dark"><div class="k" style="color:var(--s)">PRIVATE / COUNSEL</div><h1>גישה חסומה.</h1><p class="body">החשבון הנוכחי הוא ${esc(state.profile?.role||'client')}. ה‑Cockpit אינו נחשף ללקוח דרך RLS.</p></div>`;
+ if(state.aal?.currentLevel!=='aal2')return `<div class="card dark"><div class="k" style="color:var(--s)">MFA REQUIRED</div><h1>נדרש AAL2 לפני פתיחת ה‑Cockpit.</h1><p class="body">ה‑Role מורשה, אבל ה‑session נמצא ב‑${esc(state.aal?.currentLevel||'aal1')}.</p><button class="btn primary" onclick="state.tab='mfa';render()">מעבר לאימות MFA</button></div>`;
+ return `<div class="grid2"><section><div class="k">LAWYER COCKPIT / RLS + AAL2</div><h1 style="font-size:38px;margin:10px 0">מה דורש הכרעה עכשיו?</h1><p class="body">חשבון: ${esc(state.profile.role)} · AAL2 פעיל.</p><div class="accent"></div><div id="gatePanel"></div></section><section class="card"><div class="k">CASES</div><div id="cockpitRows" class="loader">טוען תיקים…</div></section></div>`;
+}
+function render(){
+ const user=state.session?.user;
+ document.getElementById('app').innerHTML=`<header><div class="brand">עו״ד צחי מלול / RFL</div><div class="mode"><span class="status"><span class="dot ${state.backend?'ok':'err'}"></span>BACKEND ${state.backend?'ONLINE':'CHECK'}</span></div><div>${user?`<button class="btn secondary" onclick="signOut()">יציאה</button>`:'FINAL STAGING'}</div></header><main class="shell">${user?`<div class="notice">מחובר: <b>${esc(user.email)}</b> · Role: <b>${esc(state.profile?.role||'loading')}</b></div>${tabButtons()}`:''}${!user?authView():state.tab==='dashboard'?dashboard():state.tab==='questionnaire'?questionnaire():state.tab==='upload'?uploadView():state.tab==='client'?clientView():state.tab==='mfa'?mfaView():cockpitView()}</main>`;
+}
+init();
+</script><div class="stagingFlag">STAGING / NO PRODUCTION</div>
+</body></html>

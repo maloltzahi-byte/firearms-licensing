@@ -1,0 +1,85 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "count_immediate": 9,
+    "count_deferred": 1,
+    "reference": "docs/03-brain-spec.md §3 — Hard-gate layer",
+    "note": "The hard-gate runs BEFORE route selection. Any immediate failure blocks the case at HARD_GATE_FAILED."
+  },
+  "immediate": [
+    {
+      "id": "CITIZENSHIP_OR_RESIDENCY",
+      "he": "אזרחות ישראלית או תושבות קבע + 3 שנים רצופות בישראל",
+      "regulatory_ref": "תקנה 1(א) לתקנות הסף 2023",
+      "failure_flag": "RESIDENCY_INSUFFICIENT",
+      "exception": "עולה חדש לפי חוק השבות — בתבחין מקום מגורים בלבד, בכפוף לאישור משטרה."
+    },
+    {
+      "id": "AGE_MIN",
+      "he": "עמידה בסף הגיל בהתאם לסוג השירות",
+      "regulatory_ref": "תקנה 2 לתקנות הסף 2023 + תיקון 25 תשפ״ה-2025",
+      "failure_flag": "AGE_UNDER_THRESHOLD",
+      "matrix": {
+        "combat_soldier_1yr": 21,
+        "regular_service_2yr": 21,
+        "female_regular_1yr_or_civil_1yr": 21,
+        "citizen_no_service": 27,
+        "permanent_resident_no_service": 45,
+        "wounded_combatant_operational": 18,
+        "combat_medical_discharge": 18
+      }
+    },
+    {
+      "id": "HEBREW_BASIC",
+      "he": "שליטה בסיסית בעברית — קריאה, הבנה, ניהול רישום",
+      "regulatory_ref": "תקנה 1(ב) לתקנות הסף 2023",
+      "failure_flag": "HEBREW_PROFICIENCY_INSUFFICIENT"
+    },
+    {
+      "id": "HEALTH_DECLARATION_SIGNED",
+      "he": "הצהרת בריאות חתומה על ידי המבקש ורופא",
+      "regulatory_ref": "תקנה 1(ג) לתקנות הסף 2023",
+      "failure_flag": "HEALTH_DECLARATION_MISSING"
+    },
+    {
+      "id": "NO_ACTIVE_POLICE_OBJECTION",
+      "he": "אין קביעת קצין משטרה על מניעה מטעמי שלום הציבור וביטחונו",
+      "regulatory_ref": "סעיף 11(2) לחוק כלי הירייה תש\"ט-1949",
+      "failure_flag": "POLICE_OBJECTION_POTENTIAL"
+    },
+    {
+      "id": "NO_ACTIVE_RESTRAINING_ORDER",
+      "he": "אין צו הרחקה או צו הגנה בתוקף כנגד המבקש",
+      "regulatory_ref": "חוק למניעת אלימות במשפחה",
+      "failure_flag": "POLICE_OBJECTION_POTENTIAL"
+    },
+    {
+      "id": "NO_MENTAL_HEALTH_RESTRICTION",
+      "he": "אין רישום או איסור מטעמי בריאות הנפש המונע רישוי",
+      "regulatory_ref": "חוק הטיפול בחולי נפש",
+      "failure_flag": "HEALTH_DECLARATION_MISSING"
+    },
+    {
+      "id": "NO_DISQUALIFYING_CRIMINAL_RECORD",
+      "he": "אין עבר פלילי מהותי המונע רישוי",
+      "regulatory_ref": "חוק כלי הירייה תש\"ט-1949",
+      "failure_flag": "POLICE_OBJECTION_POTENTIAL"
+    },
+    {
+      "id": "DUAL_LICENSE_CHECK",
+      "he": "בעל תעודת הרשאה בלתי מוגבלת לפי סעיפים 9-10ב לחוק — נדרש לבחור",
+      "regulatory_ref": "תקנה 4 לתקנות הסף 2023",
+      "failure_flag": "DUAL_LICENSE_CONFLICT",
+      "note": "לא חסם קשיח בפועל; מזכה בדגל אזהרה שדורש בחירה בין ארגון לרישיון פרטי."
+    }
+  ],
+  "deferred": [
+    {
+      "id": "TRAINING_TO_BE_COMPLETED",
+      "he": "הכשרה במטווח מורשה — לאחר קבלת אישור מותנה",
+      "regulatory_ref": "תקנות כלי הירייה (הכשרה)",
+      "failure_flag": "TRAINING_MISSING",
+      "timing": "מתבצע לאחר תשלום אגרה וקבלת אישור מותנה, לפני הנפקת הרישיון."
+    }
+  ]
+}

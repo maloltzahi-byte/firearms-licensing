@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "count": 5,
+    "reference": "docs/03-brain-spec.md §4 — Family-check layer",
+    "note": "Yes on any question raises a risk flag; does not automatically block. Lawyer reviews context."
+  },
+  "questions": [
+    {
+      "id": "household-existing-firearm",
+      "he": "האם יש אדם נוסף המתגורר במשק הבית שברשותו רישיון פרטי לכלי ירייה?",
+      "on_yes_flag": "DUAL_LICENSE_CONFLICT",
+      "on_yes_severity": "info"
+    },
+    {
+      "id": "household-violence-history",
+      "he": "האם קיים בעבר במשק הבית תיעוד של אלימות במשפחה, צו הרחקה או צו הגנה?",
+      "on_yes_flag": "POLICE_OBJECTION_POTENTIAL",
+      "on_yes_severity": "block"
+    },
+    {
+      "id": "household-mental-health",
+      "he": "האם אדם ממשק הבית עבר אשפוז פסיכיאטרי או מטופל תרופתית בבריאות הנפש?",
+      "on_yes_flag": "POLICE_OBJECTION_POTENTIAL",
+      "on_yes_severity": "warn"
+    },
+    {
+      "id": "household-minors",
+      "he": "האם מתגוררים במשק הבית קטינים? (נדרש להתקין כספת ביתית תקנית)",
+      "on_yes_flag": "REGULATORY_BASELINE_CHANGED",
+      "on_yes_severity": "info"
+    },
+    {
+      "id": "household-substance-abuse",
+      "he": "האם אדם ממשק הבית סובל מהתמכרות פעילה לסמים או אלכוהול?",
+      "on_yes_flag": "POLICE_OBJECTION_POTENTIAL",
+      "on_yes_severity": "warn"
+    }
+  ]
+}

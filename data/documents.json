@@ -1,0 +1,836 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "count": 100,
+    "count_universal": 28,
+    "count_route_specific": 72,
+    "reference": "docs/02-data-model.md — Document entity"
+  },
+  "documents": [
+    {
+      "id": "universal-id-copy",
+      "he": "צילום תעודת זהות + ספח",
+      "scope": "universal",
+      "kind": "government_id"
+    },
+    {
+      "id": "universal-health-declaration",
+      "he": "הצהרת בריאות חתומה על ידי המבקש ורופא",
+      "scope": "universal",
+      "kind": "medical"
+    },
+    {
+      "id": "universal-service-status",
+      "he": "אישור שירות (סדיר / לאומי / אזרחי / פטור)",
+      "scope": "universal",
+      "kind": "military_status"
+    },
+    {
+      "id": "universal-training-cert",
+      "he": "אישור הכשרה במטווח מורשה",
+      "scope": "universal",
+      "kind": "training",
+      "note": "מונפק לאחר קבלת אישור מותנה."
+    },
+    {
+      "id": "universal-police-clearance",
+      "he": "אישור העדר מניעה מטעם משטרת ישראל",
+      "scope": "universal",
+      "kind": "police"
+    },
+    {
+      "id": "universal-fee-payment",
+      "he": "אישור תשלום אגרת רישיון",
+      "scope": "universal",
+      "kind": "fee"
+    },
+    {
+      "id": "universal-birth-cert",
+      "he": "תעודת לידה (במקרה חריג של אזרחות)",
+      "scope": "universal",
+      "kind": "government_id"
+    },
+    {
+      "id": "universal-immigrant-cert",
+      "he": "תעודת עולה (לפי חוק השבות)",
+      "scope": "universal",
+      "kind": "government_id"
+    },
+    {
+      "id": "universal-safe-purchase-cert",
+      "he": "אישור רכישת כספת ביתית",
+      "scope": "universal",
+      "kind": "safety"
+    },
+    {
+      "id": "universal-firearm-transfer-deed",
+      "he": "שטר מכר להעברת בעלות (מאדם פרטי)",
+      "scope": "universal",
+      "kind": "transfer"
+    },
+    {
+      "id": "universal-dealer-invoice",
+      "he": "חשבונית סוחר לרכישת כלי ירייה",
+      "scope": "universal",
+      "kind": "transfer"
+    },
+    {
+      "id": "universal-reservist-benefit",
+      "he": "אישור זכאות להנחת מילואים באגרה",
+      "scope": "universal",
+      "kind": "fee"
+    },
+    {
+      "id": "universal-appeal-letter",
+      "he": "מכתב השגה (לאחר החלטת דחייה)",
+      "scope": "universal",
+      "kind": "appeal"
+    },
+    {
+      "id": "universal-tribunal-petition",
+      "he": "כתב ערר לוועדת ערר",
+      "scope": "universal",
+      "kind": "appeal"
+    },
+    {
+      "id": "universal-interview-summary",
+      "he": "סיכום ראיון פקיד רישוי",
+      "scope": "universal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-conditional-approval-letter",
+      "he": "מכתב אישור מותנה",
+      "scope": "universal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-license-copy-current",
+      "he": "צילום רישיון פרטי קיים (לחידוש)",
+      "scope": "universal",
+      "kind": "prior_license"
+    },
+    {
+      "id": "universal-license-copy-prior",
+      "he": "צילום רישיון פרטי שפג תוקפו",
+      "scope": "universal",
+      "kind": "prior_license"
+    },
+    {
+      "id": "universal-power-of-attorney",
+      "he": "ייפוי כוח לעורך דין",
+      "scope": "universal",
+      "kind": "legal"
+    },
+    {
+      "id": "universal-mandate-letter",
+      "he": "מכתב ייצוג משפטי לאגף",
+      "scope": "universal",
+      "kind": "legal"
+    },
+    {
+      "id": "universal-followup-log",
+      "he": "יומן מעקב לוחות זמנים ו-SLA",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-audit-note",
+      "he": "רשומת יומן ביקורת פנימי (Cockpit)",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-whatsapp-log",
+      "he": "יומן WhatsApp — הודעות ללקוח",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-checklist-summary",
+      "he": "סיכום צ׳קליסט תיק לפני הגשה",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-brain-audit",
+      "he": "פלט audit של מנוע ההחלטה (Brain)",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-hard-gate-report",
+      "he": "דו״ח סיכום חסמים קשיחים",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-family-check-report",
+      "he": "דו״ח שאלון בדיקה משפחתית",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "universal-risk-flag-report",
+      "he": "דו״ח דגלי סיכון",
+      "scope": "internal",
+      "kind": "process"
+    },
+    {
+      "id": "route-residence-municipal-cert",
+      "he": "אישור תושבות מהרשות המקומית / ארנונה שנתית",
+      "scope": "route_specific",
+      "kind": "residence",
+      "used_by_routes": [
+        "residence",
+        "police-volunteer-residence"
+      ]
+    },
+    {
+      "id": "route-work-self-affidavit",
+      "he": "תצהיר עצמאי — עיסוק במקום זכאי",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "work-self-employed"
+      ]
+    },
+    {
+      "id": "route-work-vat-cert",
+      "he": "אישור עוסק מורשה / נסח חברה עדכני (עד 3 חודשים)",
+      "scope": "route_specific",
+      "kind": "business",
+      "used_by_routes": [
+        "work-self-employed"
+      ]
+    },
+    {
+      "id": "route-work-invoices-3mo",
+      "he": "חשבוניות מס משלושת החודשים האחרונים",
+      "scope": "route_specific",
+      "kind": "business",
+      "used_by_routes": [
+        "work-self-employed"
+      ]
+    },
+    {
+      "id": "route-work-business-license",
+      "he": "רישיון עסק תקף לפי חוק רישוי עסקים",
+      "scope": "route_specific",
+      "kind": "business",
+      "used_by_routes": [
+        "work-self-employed"
+      ]
+    },
+    {
+      "id": "route-work-employee-affidavit",
+      "he": "תצהיר שכיר — עיסוק במקום זכאי (משותף עם המעסיק)",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "work-employee"
+      ]
+    },
+    {
+      "id": "route-work-employee-payslips-3mo",
+      "he": "שלושה תלושי שכר אחרונים",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "work-employee"
+      ]
+    },
+    {
+      "id": "route-work-employer-letter",
+      "he": "אישור מעסיק — פרטי העסקה ומנהל ישיר",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "work-employee"
+      ]
+    },
+    {
+      "id": "route-student-affidavit",
+      "he": "תצהיר תלמיד/סטודנט — לימודים במקום זכאי",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "work-student"
+      ]
+    },
+    {
+      "id": "route-student-enrollment",
+      "he": "אישור לימודים ממזכירות המוסד",
+      "scope": "route_specific",
+      "kind": "education",
+      "used_by_routes": [
+        "work-student"
+      ]
+    },
+    {
+      "id": "route-student-timetable",
+      "he": "מערכת שעות עדכנית + ימי לימוד",
+      "scope": "route_specific",
+      "kind": "education",
+      "used_by_routes": [
+        "work-student"
+      ]
+    },
+    {
+      "id": "route-tour-guide-license",
+      "he": "רישיון מורה דרך ארצי בתוקף — משרד התיירות",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "tour-guide"
+      ]
+    },
+    {
+      "id": "route-tour-guide-affidavit",
+      "he": "תצהיר מורה דרך",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "tour-guide"
+      ]
+    },
+    {
+      "id": "route-firefighter-employment-cert",
+      "he": "אישור העסקה ברשות הארצית לכבאות והצלה",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "firefighter-active"
+      ]
+    },
+    {
+      "id": "route-firefighter-volunteer-cert",
+      "he": "אישור התנדבות ברשות הארצית לכבאות והצלה",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "firefighter-volunteer"
+      ]
+    },
+    {
+      "id": "route-firefighter-retirement-cert",
+      "he": "אישור פרישה ברשות הארצית לכבאות והצלה",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "firefighter-retired"
+      ]
+    },
+    {
+      "id": "route-firefighter-prior-license",
+      "he": "אישור החזקת רישיון פרטי לפי התבחין במהלך השירות",
+      "scope": "route_specific",
+      "kind": "prior_license",
+      "used_by_routes": [
+        "firefighter-retired"
+      ]
+    },
+    {
+      "id": "route-rescue-mda-affidavit",
+      "he": "תצהיר ואישור העסקה/התנדבות במד״א",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "rescue-mda"
+      ]
+    },
+    {
+      "id": "route-rescue-zaka-affidavit",
+      "he": "תצהיר ואישור העסקה/התנדבות בזק״א",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "rescue-zaka"
+      ]
+    },
+    {
+      "id": "route-rescue-zaka-moment-affidavit",
+      "he": "המלצה למתן רישיון — רגע של אמת זק״א",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "rescue-zaka-moment"
+      ]
+    },
+    {
+      "id": "route-rescue-united-hatzalah-affidavit",
+      "he": "תצהיר ואישור העסקה/התנדבות באיחוד הצלה",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "rescue-united-hatzalah"
+      ]
+    },
+    {
+      "id": "route-farmer-form-1220",
+      "he": "טופס 1220 עם חותמת \"נתקבל\" מרשות המסים",
+      "scope": "route_specific",
+      "kind": "tax",
+      "used_by_routes": [
+        "farmer-self",
+        "farmer-family",
+        "farmer-employee"
+      ]
+    },
+    {
+      "id": "route-farmer-self-affidavit",
+      "he": "תצהיר חקלאי עצמאי פעיל",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "farmer-self"
+      ]
+    },
+    {
+      "id": "route-farmer-family-affidavit",
+      "he": "תצהיר בן משפחה מקרבה ראשונה של חקלאי",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "farmer-family"
+      ]
+    },
+    {
+      "id": "route-farmer-id-spouse",
+      "he": "צילום ת״ז + ספח (הוכחת קרבה משפחתית)",
+      "scope": "route_specific",
+      "kind": "government_id",
+      "used_by_routes": [
+        "farmer-family"
+      ]
+    },
+    {
+      "id": "route-farmer-employee-affidavit",
+      "he": "תצהיר מועסק אצל חקלאי / אגודה",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "farmer-employee"
+      ]
+    },
+    {
+      "id": "route-farmer-employee-payslips-3mo",
+      "he": "שלושה תלושי שכר אחרונים מהמעסיק החקלאי",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "farmer-employee"
+      ]
+    },
+    {
+      "id": "route-farmer-cooperative-cert",
+      "he": "אישור חברות באגודה שיתופית חקלאית",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "farmer-cooperative"
+      ]
+    },
+    {
+      "id": "route-farmer-cooperative-registrar",
+      "he": "אישור רשם האגודות השיתופיות החקלאיות",
+      "scope": "route_specific",
+      "kind": "government",
+      "used_by_routes": [
+        "farmer-cooperative"
+      ]
+    },
+    {
+      "id": "route-farmer-cooperative-affidavit",
+      "he": "תצהיר משותף — מורשה חתימה באגודה + מבקש",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "farmer-cooperative"
+      ]
+    },
+    {
+      "id": "route-explosives-permit",
+      "he": "היתר תקף להובלת חומרי נפץ ממשרד העבודה",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "explosives-self",
+        "explosives-employee"
+      ]
+    },
+    {
+      "id": "route-explosives-vehicle-license",
+      "he": "רישיון רכב + רישיון נהיגה עם אישור הובלת חומרי נפץ",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "explosives-self",
+        "explosives-employee"
+      ]
+    },
+    {
+      "id": "route-explosives-tax-cert",
+      "he": "אישור מס הכנסה על הכנסה מעיסוק זה",
+      "scope": "route_specific",
+      "kind": "tax",
+      "used_by_routes": [
+        "explosives-self"
+      ]
+    },
+    {
+      "id": "route-explosives-self-affidavit",
+      "he": "תצהיר מוביל חומרי נפץ עצמאי",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "explosives-self"
+      ]
+    },
+    {
+      "id": "route-explosives-employer-affidavit",
+      "he": "תצהיר על העסקת מוביל חומרי נפץ שכיר",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "explosives-employee"
+      ]
+    },
+    {
+      "id": "route-explosives-employee-payslips-3mo",
+      "he": "שלושה תלושי שכר אחרונים",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "explosives-employee"
+      ]
+    },
+    {
+      "id": "route-security-officer-cert",
+      "he": "תעודת ממונה ביטחון / מנהל אבטחה בתוקף",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "security-officer"
+      ]
+    },
+    {
+      "id": "route-security-officer-police-approval",
+      "he": "אישור ראש חטיבת האבטחה במשטרת ישראל",
+      "scope": "route_specific",
+      "kind": "police",
+      "used_by_routes": [
+        "security-officer"
+      ]
+    },
+    {
+      "id": "route-instructor-license",
+      "he": "רישיון מדריך ירי בתוקף",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "shooting-instructor"
+      ]
+    },
+    {
+      "id": "route-instructor-training-log",
+      "he": "יומן הדרכות — 60 מתאמנים לפחות בשנה שקדמה",
+      "scope": "route_specific",
+      "kind": "training",
+      "used_by_routes": [
+        "shooting-instructor"
+      ]
+    },
+    {
+      "id": "route-instructor-affidavit",
+      "he": "הצהרת מדריך ירי — הדרכות מאושרות",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "shooting-instructor"
+      ]
+    },
+    {
+      "id": "route-idf-rank-cert",
+      "he": "אישור דרגה מאגף משאבי אנוש",
+      "scope": "route_specific",
+      "kind": "military_status",
+      "used_by_routes": [
+        "idf-officer"
+      ]
+    },
+    {
+      "id": "route-idf-special-unit-cert",
+      "he": "אישור שירות כלוחם ביחידה מיוחדת",
+      "scope": "route_specific",
+      "kind": "military_status",
+      "used_by_routes": [
+        "idf-special-unit-fighter"
+      ]
+    },
+    {
+      "id": "route-idf-rifleman-cert",
+      "he": "אישור הכשרת רובאי 07 ומעלה",
+      "scope": "route_specific",
+      "kind": "military_status",
+      "used_by_routes": [
+        "idf-rifleman-07"
+      ]
+    },
+    {
+      "id": "route-idf-fighter-cert-copy",
+      "he": "תעודת לוחם — צה״ל",
+      "scope": "route_specific",
+      "kind": "military_status",
+      "used_by_routes": [
+        "idf-fighter-cert"
+      ]
+    },
+    {
+      "id": "route-idf-pre1999-service-cert",
+      "he": "אישור שירות משטרת ישראל / צה״ל עם רובאות מקצוע לוחם",
+      "scope": "route_specific",
+      "kind": "military_status",
+      "used_by_routes": [
+        "idf-pre-1999"
+      ]
+    },
+    {
+      "id": "route-idf-instructor-service-cert",
+      "he": "אישור בוגר תפקיד הדרכתי או פיקודי",
+      "scope": "route_specific",
+      "kind": "military_status",
+      "used_by_routes": [
+        "idf-instructor-roles"
+      ]
+    },
+    {
+      "id": "route-police-active-cert",
+      "he": "אישור העסקה עדכני חתום ע\"י קצין אמ״ש מחוזי",
+      "scope": "route_specific",
+      "kind": "police",
+      "used_by_routes": [
+        "police-active"
+      ]
+    },
+    {
+      "id": "route-police-veteran-cert",
+      "he": "אישור מפקד מרכז פרישה / קצין אמ״ש עם תקופת שירות",
+      "scope": "route_specific",
+      "kind": "police",
+      "used_by_routes": [
+        "police-veteran"
+      ]
+    },
+    {
+      "id": "route-police-border-fighter-cert",
+      "he": "אישור מקצין אמ״ש מג״ב על שירות לוחם מבצעי",
+      "scope": "route_specific",
+      "kind": "police",
+      "used_by_routes": [
+        "police-border-fighter"
+      ]
+    },
+    {
+      "id": "route-police-volunteer-cert",
+      "he": "אישור ראש מחלקת מתנדבים במשטרה",
+      "scope": "route_specific",
+      "kind": "police",
+      "used_by_routes": [
+        "police-volunteer-active",
+        "police-volunteer-residence"
+      ]
+    },
+    {
+      "id": "route-police-volunteer-15years-cert",
+      "he": "אישור ותק 15 שנה — ראש מחלקת מתנדבים",
+      "scope": "route_specific",
+      "kind": "police",
+      "used_by_routes": [
+        "police-volunteer-15years"
+      ]
+    },
+    {
+      "id": "route-police-border-sayar-cert",
+      "he": "אישור בוגר קורס סייר במג״ב + הכשרת רובאות 03",
+      "scope": "route_specific",
+      "kind": "police",
+      "used_by_routes": [
+        "police-border-sayar"
+      ]
+    },
+    {
+      "id": "route-training-airports-cert",
+      "he": "תעודת בוגר קורס מאבטחים ברשות שדות התעופה (אחיד/יל״ה)",
+      "scope": "route_specific",
+      "kind": "training",
+      "used_by_routes": [
+        "training-airports"
+      ]
+    },
+    {
+      "id": "route-training-employer-cert",
+      "he": "אישור מהגוף הרלוונטי על העסקה בהווה או בעבר",
+      "scope": "route_specific",
+      "kind": "employment",
+      "used_by_routes": [
+        "training-airports",
+        "training-shabak",
+        "training-defense"
+      ]
+    },
+    {
+      "id": "route-training-shabak-cert",
+      "he": "תעודה על מעבר קורס מאבטחים בשב״כ (אחיד/ארזים)",
+      "scope": "route_specific",
+      "kind": "training",
+      "used_by_routes": [
+        "training-shabak"
+      ]
+    },
+    {
+      "id": "route-training-defense-cert",
+      "he": "תעודה על מעבר קורס מאבטחים אחיד — מלמ״ב",
+      "scope": "route_specific",
+      "kind": "training",
+      "used_by_routes": [
+        "training-defense"
+      ]
+    },
+    {
+      "id": "route-training-knesset-cert",
+      "he": "תעודה על מעבר קורס יחידת עוז בכנסת",
+      "scope": "route_specific",
+      "kind": "training",
+      "used_by_routes": [
+        "training-knesset"
+      ]
+    },
+    {
+      "id": "route-training-advanced-guard-cert",
+      "he": "תעודה על מעבר קורס מתקדם א/ב במוסד מאושר",
+      "scope": "route_specific",
+      "kind": "training",
+      "used_by_routes": [
+        "training-advanced-guard"
+      ]
+    },
+    {
+      "id": "route-training-advanced-guard-affidavit",
+      "he": "תצהיר משותף — מבקש + בעל רישיון מיוחד בחברת השמירה",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "training-advanced-guard"
+      ]
+    },
+    {
+      "id": "route-sports-olympic-affidavit",
+      "he": "תצהיר ואישור — מנהל התאחדות הקליעה האולימפית",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "sports-olympic"
+      ]
+    },
+    {
+      "id": "route-sports-practical-affidavit",
+      "he": "תצהיר ואישור — מנהל התאחדות הירי המעשי",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "sports-practical"
+      ]
+    },
+    {
+      "id": "route-sports-paralympic-affidavit",
+      "he": "תצהיר ואישור — מטווח בית הלוחם / ארגון נכי צה״ל",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "sports-paralympic"
+      ]
+    },
+    {
+      "id": "route-sports-paralympic-disability-cert",
+      "he": "תעודת נכות לפי חוק הנכים (תגמולים ושיקום)",
+      "scope": "route_specific",
+      "kind": "medical",
+      "used_by_routes": [
+        "sports-paralympic"
+      ]
+    },
+    {
+      "id": "route-hunter-license",
+      "he": "רישיון ציד / היתר צידה תקף — רשות הטבע והגנים",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "hunter"
+      ]
+    },
+    {
+      "id": "route-hunter-authority-recommendation",
+      "he": "המלצת מנהל האגף להגנה על החי והצומח",
+      "scope": "route_specific",
+      "kind": "government",
+      "used_by_routes": [
+        "hunter"
+      ]
+    },
+    {
+      "id": "route-vet-license",
+      "he": "רישיון רופא וטרינר בתוקף",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "veterinarian"
+      ]
+    },
+    {
+      "id": "route-vet-affidavit",
+      "he": "תצהיר רופא וטרינר",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "veterinarian"
+      ]
+    },
+    {
+      "id": "route-vet-employee-affidavit",
+      "he": "תצהיר ואישור אדם העובד תחת פיקוח וטרינר",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "veterinarian-employee"
+      ]
+    },
+    {
+      "id": "route-vet-services-recommendation",
+      "he": "המלצת מנהל השירותים הווטרינריים",
+      "scope": "route_specific",
+      "kind": "government",
+      "used_by_routes": [
+        "veterinarian-employee"
+      ]
+    },
+    {
+      "id": "route-exterminator-license",
+      "he": "רישיון מדביר תקף לפי חוק ההדברה התברואית",
+      "scope": "route_specific",
+      "kind": "professional_license",
+      "used_by_routes": [
+        "exterminator"
+      ]
+    },
+    {
+      "id": "route-exterminator-declaration",
+      "he": "הצהרה והתחייבות מדביר — לרובה אוויר",
+      "scope": "route_specific",
+      "kind": "affidavit",
+      "used_by_routes": [
+        "exterminator"
+      ]
+    }
+  ]
+}

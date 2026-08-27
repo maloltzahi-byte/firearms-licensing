@@ -1,0 +1,28 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "count": 18,
+    "reference": "docs/03-brain-spec.md §5",
+    "severity_levels": ["info", "warn", "block"]
+  },
+  "flags": [
+    { "id": "AGE_UNDER_THRESHOLD", "he": "גיל מתחת לסף הנדרש", "severity": "block", "layer": "hard_gate" },
+    { "id": "RESIDENCY_INSUFFICIENT", "he": "תושבות פחות מ־3 שנים רצופות", "severity": "block", "layer": "hard_gate" },
+    { "id": "HEBREW_PROFICIENCY_INSUFFICIENT", "he": "שליטה בעברית נמוכה מהנדרש", "severity": "warn", "layer": "hard_gate" },
+    { "id": "HEALTH_DECLARATION_MISSING", "he": "הצהרת בריאות חסרה או לא חתומה", "severity": "block", "layer": "documents" },
+    { "id": "TRAINING_MISSING", "he": "לא בוצעה הכשרה במטווח מורשה", "severity": "warn", "layer": "documents" },
+    { "id": "POLICE_OBJECTION_POTENTIAL", "he": "אינדיקציה להתנגדות משטרתית פוטנציאלית", "severity": "warn", "layer": "risk_review" },
+    { "id": "WINDOW_30D_MISSED", "he": "חלון 30 יום מסיום העבודה — פסק", "severity": "warn", "layer": "route_specific" },
+    { "id": "WINDOW_6MO_LICENSE_EXPIRY", "he": "חלון 6 חודשים לפני פקיעת רישיון קודם", "severity": "warn", "layer": "route_specific" },
+    { "id": "TENURE_INSUFFICIENT", "he": "ותק לא מספיק לתבחין הנבחר", "severity": "block", "layer": "route_specific" },
+    { "id": "TAX_STAMP_MISSING", "he": "חותמת \"נתקבל\" מרשות המסים חסרה בטופס 1220", "severity": "warn", "layer": "documents" },
+    { "id": "AFFIDAVIT_UNSIGNED", "he": "תצהיר לא חתום או לא מאומת ע\"י עו\"ד", "severity": "block", "layer": "documents" },
+    { "id": "LOCALITY_UNVERIFIED", "he": "יישוב לא אומת מול המחשבון הרשמי", "severity": "warn", "layer": "route_specific" },
+    { "id": "EMPLOYER_LETTER_MISSING", "he": "אישור מעסיק חסר או לא רשמי", "severity": "warn", "layer": "documents" },
+    { "id": "PRIOR_LICENSE_VALIDITY_UNPROVEN", "he": "תוקף רישיון קודם לא הוכח", "severity": "warn", "layer": "documents" },
+    { "id": "IDF_VERIFICATION_PENDING", "he": "ממתין לאימות מול הגורמים המקצועיים בצה\"ל", "severity": "info", "layer": "route_specific" },
+    { "id": "COURSE_CERTIFICATE_MISSING", "he": "תעודת קורס הכשרה חסרה", "severity": "block", "layer": "documents" },
+    { "id": "DUAL_LICENSE_CONFLICT", "he": "סתירה עם רישיון מיוחד — נדרשת בחירה (סעיף 4 לתקנות)", "severity": "warn", "layer": "risk_review" },
+    { "id": "REGULATORY_BASELINE_CHANGED", "he": "התקנות עודכנו מאז פתיחת התיק — נדרשת בדיקה מחודשת", "severity": "info", "layer": "risk_review" }
+  ]
+}

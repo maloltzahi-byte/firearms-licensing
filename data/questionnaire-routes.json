@@ -1,0 +1,594 @@
+{
+  "_meta": {
+    "source": "data/routes.json",
+    "policy": "Questions are generated only from canonical route descriptions; no new regulatory condition is introduced.",
+    "count": 45
+  },
+  "routes": [
+    {
+      "route_id": "residence",
+      "questions": [
+        {
+          "id": "route-residence-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מרכז חיים ביישוב שלגביו המליצה משטרת ישראל שמגורים בו מצדיקים רישיון פרטי.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 2 — מקום מגורים"
+        }
+      ]
+    },
+    {
+      "route_id": "work-self-employed",
+      "questions": [
+        {
+          "id": "route-work-self-employed-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עצמאי שבית העסק שלו ממוקם ביישוב זכאי, או שהוא מגיע במסגרת עבודתו ליישובים זכאים במרבית שבוע העבודה.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 3 — עצמאי"
+        }
+      ]
+    },
+    {
+      "route_id": "work-employee",
+      "questions": [
+        {
+          "id": "route-work-employee-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: שכיר שעבודתו במרבית שבוע העבודה מתבצעת ביישוב זכאי, או שהוא מגיע ליישובים זכאים בתדירות הנדרשת.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 3 — שכיר"
+        }
+      ]
+    },
+    {
+      "route_id": "work-student",
+      "questions": [
+        {
+          "id": "route-work-student-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: תלמיד או סטודנט שלימודיו מתבצעים ביישוב זכאי במשך שני ימים בשבוע לפחות בהגעה פיזית.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 3 — לימודים"
+        }
+      ]
+    },
+    {
+      "route_id": "tour-guide",
+      "questions": [
+        {
+          "id": "route-tour-guide-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בעל רישיון מורה דרך ארצי בתוקף ממשרד התיירות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 4 — מורה דרך"
+        }
+      ]
+    },
+    {
+      "route_id": "firefighter-active",
+      "questions": [
+        {
+          "id": "route-firefighter-active-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: כבאי פעיל ברשות הארצית לכבאות והצלה, בעל ותק של שנתיים לפחות בתפקידו.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 5 — כבאי פעיל"
+        }
+      ]
+    },
+    {
+      "route_id": "firefighter-volunteer",
+      "questions": [
+        {
+          "id": "route-firefighter-volunteer-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מתנדב לתפקיד כבאי ברשות הארצית לכבאות והצלה, בעל ותק של שנתיים לפחות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 5 — מתנדב כבאי"
+        }
+      ]
+    },
+    {
+      "route_id": "firefighter-retired",
+      "questions": [
+        {
+          "id": "route-firefighter-retired-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מי ששימש ככבאי ברשות הארצית לכבאות והצלה במשך שנתיים לפחות, שבמהלכן החזיק ברישיון פרטי לפי תבחין זה, ובלבד שהבקשה הראשונה הוגשה בתוך 30 ימים מיום סיום עבודתו או לפני סיום תוקף רישיונו.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 5 — כבאי פרש"
+        }
+      ]
+    },
+    {
+      "route_id": "rescue-mda",
+      "questions": [
+        {
+          "id": "route-rescue-mda-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עובד או מתנדב פעיל במד״א במשך שנה לפחות, העוסק בפועל בפעולות הצלה.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 6 — מד״א"
+        }
+      ]
+    },
+    {
+      "route_id": "rescue-zaka",
+      "questions": [
+        {
+          "id": "route-rescue-zaka-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עובד או מתנדב פעיל בזק״א במשך שנה לפחות, העוסק בפועל בפעולות הצלה.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 6 — זק״א"
+        }
+      ]
+    },
+    {
+      "route_id": "rescue-zaka-moment",
+      "questions": [
+        {
+          "id": "route-rescue-zaka-moment-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עובד או מתנדב פעיל בארגון \"רגע של אמת זק״א\" — זיהוי קרבנות אסון, במשך שנה לפחות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 6 — רגע של אמת זק״א"
+        }
+      ]
+    },
+    {
+      "route_id": "rescue-united-hatzalah",
+      "questions": [
+        {
+          "id": "route-rescue-united-hatzalah-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עובד או מתנדב פעיל באיחוד הצלה במשך שנה לפחות, העוסק בפועל בפעולות הצלה.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 6 — איחוד הצלה"
+        }
+      ]
+    },
+    {
+      "route_id": "farmer-self",
+      "questions": [
+        {
+          "id": "route-farmer-self-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: חקלאי עצמאי פעיל שעיקר עיסוקו בחקלאות, בכפוף להמלצת קצין ביטחון של המועצה האזורית / התאחדות האיכרים / תנועת המושבים.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 7 — חקלאי עצמאי"
+        }
+      ]
+    },
+    {
+      "route_id": "farmer-family",
+      "questions": [
+        {
+          "id": "route-farmer-family-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בן/בת, אח/אחות או בן/בת זוג של חקלאי עצמאי פעיל.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 7 — בן משפחה"
+        }
+      ]
+    },
+    {
+      "route_id": "farmer-employee",
+      "questions": [
+        {
+          "id": "route-farmer-employee-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מועסק על ידי חקלאי עצמאי, בן משפחתו מקרבה ראשונה, או אגודה שיתופית חקלאית.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 7 — מועסק אצל חקלאי"
+        }
+      ]
+    },
+    {
+      "route_id": "farmer-cooperative",
+      "questions": [
+        {
+          "id": "route-farmer-cooperative-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: חבר באגודה שיתופית חקלאית פעילה, בכפוף לאישור רשם האגודות השיתופיות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 7 — חבר באגודה שיתופית"
+        }
+      ]
+    },
+    {
+      "route_id": "explosives-self",
+      "questions": [
+        {
+          "id": "route-explosives-self-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בעל היתר תקף להובלת חומרי נפץ לפי חוק חומרי נפץ, התשי״ד-1954 והתקנות מכוחו, המבצע את העיסוק כעצמאי.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 8 — מוביל חומר נפץ עצמאי"
+        }
+      ]
+    },
+    {
+      "route_id": "explosives-employee",
+      "questions": [
+        {
+          "id": "route-explosives-employee-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מועסק כמוביל חומר נפץ אצל בעל היתר, בכפוף לאישורים המפורטים בתקנות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 8 — מוביל חומר נפץ שכיר"
+        }
+      ]
+    },
+    {
+      "route_id": "security-officer",
+      "questions": [
+        {
+          "id": "route-security-officer-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: ממונה ביטחון כהגדרתו בחוק הסדרת הביטחון בגופים ציבוריים, התשנ״ח-1998, או מנהל אבטחה שמונה לפי דרישות משטרת ישראל, שכשירותו אושרה על ידי המשטרה.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 9 — ממונה ביטחון"
+        }
+      ]
+    },
+    {
+      "route_id": "shooting-instructor",
+      "questions": [
+        {
+          "id": "route-shooting-instructor-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מדריך ירי מורשה פעיל בעל ותק של שנה לפחות, שהדריך 60 מתאמנים לפחות בשנה שקדמה להגשת הבקשה.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 10 — מדריך ירי"
+        }
+      ]
+    },
+    {
+      "route_id": "idf-officer",
+      "questions": [
+        {
+          "id": "route-idf-officer-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: קצין בצה״ל בדרגת סגן ומעלה, או נגד בדרגת רב סמל ראשון ומעלה, ומקביליהם בגופי הביטחון האחרים (למעט קצין מקצועי או ייצוגי).",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 11 — קצין/נגד"
+        }
+      ]
+    },
+    {
+      "route_id": "idf-special-unit-fighter",
+      "questions": [
+        {
+          "id": "route-idf-special-unit-fighter-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: משרת או ששירת כלוחם ביחידה מיוחדת בגוף בטחוני, בהתאם לאישור קצין משאבי אנוש בגוף הרלוונטי.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 11 — לוחם יחידה מיוחדת"
+        }
+      ]
+    },
+    {
+      "route_id": "idf-rifleman-07",
+      "questions": [
+        {
+          "id": "route-idf-rifleman-07-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: משרתי כוחות הביטחון ובוגריהם בעלי הכשרה של רובאי 07 ומעלה.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 11 — רובאי 07+"
+        }
+      ]
+    },
+    {
+      "route_id": "idf-fighter-cert",
+      "questions": [
+        {
+          "id": "route-idf-fighter-cert-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בוגר צה״ל המחזיק בתעודת לוחם כקבוע בהוראות צבא הגנה לישראל.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 11 — תעודת לוחם"
+        }
+      ]
+    },
+    {
+      "route_id": "idf-pre-1999",
+      "questions": [
+        {
+          "id": "route-idf-pre-1999-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בוגר צה״ל אשר השתחרר משירות עד שנת 1999 והוא בעל הכשרה ברמת רובאות ומקצוע כלוחם.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 11 — משוחררי טרום-1999"
+        }
+      ]
+    },
+    {
+      "route_id": "idf-instructor-roles",
+      "questions": [
+        {
+          "id": "route-idf-instructor-roles-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בוגר צה״ל אשר שירת כמדריך תותחנים, שריון, הנדסה קרבית, איסוף קרבי, חי״ר, הגנה אווירית, חילוץ והצלה, קליעה, מפקד כיתה, או תצפיתן.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 11 — תפקידי הדרכה ופיקוד"
+        }
+      ]
+    },
+    {
+      "route_id": "police-active",
+      "questions": [
+        {
+          "id": "route-police-active-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: שוטר המשרת במשטרת ישראל במשך שנתיים לפחות, או ששירת שירות קבע במשטרת ישראל במשך שנתיים לפחות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 12 — שוטר משרת"
+        }
+      ]
+    },
+    {
+      "route_id": "police-veteran",
+      "questions": [
+        {
+          "id": "route-police-veteran-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: שוטר ששירת במשטרת ישראל במשך שנתיים לפחות בקבע וסיים את העסקתו.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 12 — שוטר פרש"
+        }
+      ]
+    },
+    {
+      "route_id": "police-border-fighter",
+      "questions": [
+        {
+          "id": "route-police-border-fighter-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: שוטר ששירת שנתיים לפחות כלוחם מבצעי במשמר הגבול.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 12 — לוחם מג״ב"
+        }
+      ]
+    },
+    {
+      "route_id": "police-volunteer-active",
+      "questions": [
+        {
+          "id": "route-police-volunteer-active-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מתנדב פעיל במשטרת ישראל, בכפוף לאישור ראש מחלקת מתנדבים.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 12 — מתנדב פעיל"
+        }
+      ]
+    },
+    {
+      "route_id": "police-volunteer-15years",
+      "questions": [
+        {
+          "id": "route-police-volunteer-15years-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מי שהתנדב במשטרת ישראל במשך 15 שנה, ובלבד שהבקשה הראשונה הוגשה בתוך 10 שנים לכל היותר מסיום ההתנדבות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 12 — מתנדב ותיק"
+        }
+      ]
+    },
+    {
+      "route_id": "police-volunteer-residence",
+      "questions": [
+        {
+          "id": "route-police-volunteer-residence-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מתנדב פעיל במשטרת ישראל שגר במקום מגורים זכאי ואשר השלים שנתיים שירות סדיר לפחות, או שנת שירות סדיר כלוחם.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 12 — מתנדב + יישוב"
+        }
+      ]
+    },
+    {
+      "route_id": "police-border-sayar",
+      "questions": [
+        {
+          "id": "route-police-border-sayar-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בוגר קורס סייר במשמר הגבול שהוכשר לרמת רובאות 03, ושירת במקצוע סייר למשך שנה אחת ברצף לפחות.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 12 — סייר מג״ב"
+        }
+      ]
+    },
+    {
+      "route_id": "training-airports",
+      "questions": [
+        {
+          "id": "route-training-airports-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עובד או מי שעבד ברשות שדות התעופה שהוא בוגר קורס מאבטחים אחיד או קורס מאבטחי מיתקן יחידה לאבטחה היקפית (יל״ה).",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 13 — רש״ת"
+        }
+      ]
+    },
+    {
+      "route_id": "training-shabak",
+      "questions": [
+        {
+          "id": "route-training-shabak-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עובד או מי שעבד בשירות הביטחון הכללי שהוא בוגר קורס מאבטחים בשב״כ ברמת הכשרה שאישר האגף.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 13 — שב״כ"
+        }
+      ]
+    },
+    {
+      "route_id": "training-defense",
+      "questions": [
+        {
+          "id": "route-training-defense-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: עובד או מי שעבד במערכת הביטחון שהוא בוגר קורס מאבטחים אחיד של הממונה על הביטחון במערכת הביטחון (מלמ״ב).",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 13 — מלמ״ב"
+        }
+      ]
+    },
+    {
+      "route_id": "training-knesset",
+      "questions": [
+        {
+          "id": "route-training-knesset-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בוגר קורס יחידת עוז בכנסת ישראל.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 13 — יחידת עוז"
+        }
+      ]
+    },
+    {
+      "route_id": "training-advanced-guard",
+      "questions": [
+        {
+          "id": "route-training-advanced-guard-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: מאבטח בגוף מונחה שעבר בהצלחה קורס מתקדם א או ב במוסד להכשרת מאבטחים שאישרה משטרת ישראל.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 13 — קורס מתקדם א/ב"
+        }
+      ]
+    },
+    {
+      "route_id": "sports-olympic",
+      "questions": [
+        {
+          "id": "route-sports-olympic-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: רשום במשך שנתיים לפחות כחבר באיגוד הספורט המוכר בתחום הירי האולימפי, ובמשך תקופה זו סיים בהצלחה ארבע תחרויות לפחות בכל עונת ספורט.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 14 — ספורטאי אולימפי"
+        }
+      ]
+    },
+    {
+      "route_id": "sports-practical",
+      "questions": [
+        {
+          "id": "route-sports-practical-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: רשום במשך שלוש שנים לפחות כחבר באיגוד הספורט המוכר בתחום הירי המעשי, ובמשך תקופה זו סיים בהצלחה ארבע תחרויות לפחות בכל עונת ספורט.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 14 — ספורטאי מעשי"
+        }
+      ]
+    },
+    {
+      "route_id": "sports-paralympic",
+      "questions": [
+        {
+          "id": "route-sports-paralympic-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: נכה כהגדרתו בחוק הנכים (תגמולים ושיקום), הרשום במשך שנתיים לפחות כחבר בעמותת ארגון נכי צה״ל, ובמשך תקופה זו סיים בהצלחה ארבע תחרויות לפחות בכל עונת ספורט.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 14 — פראולימפי"
+        }
+      ]
+    },
+    {
+      "route_id": "hunter",
+      "questions": [
+        {
+          "id": "route-hunter-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בעל רישיון ציד או היתר צידה תקף לפי תקנות להגנת חיות הבר, התשל״ו-1976, בכפוף להמלצת מנהל האגף להגנה על החי והצומח ברשות הטבע והגנים.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 15 — צייד"
+        }
+      ]
+    },
+    {
+      "route_id": "veterinarian",
+      "questions": [
+        {
+          "id": "route-veterinarian-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: רופא וטרינר בעל רישיון תקף לפי חוק הרופאים הווטרינריים, התשנ״א-1991, בכפוף להמלצת מנהל השירותים הווטרינריים.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 16 — רופא וטרינר"
+        }
+      ]
+    },
+    {
+      "route_id": "veterinarian-employee",
+      "questions": [
+        {
+          "id": "route-veterinarian-employee-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: אדם העובד באופן קבוע תחת פיקוחו של רופא וטרינר בעל רישיון, בכפוף להמלצת מנהל השירותים הווטרינריים.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 16 — עובד תחת וטרינר"
+        }
+      ]
+    },
+    {
+      "route_id": "exterminator",
+      "questions": [
+        {
+          "id": "route-exterminator-self-report",
+          "he": "האם הפרטים שמסרת תואמים לתיאור התבחין: בעל רישיון מדביר תקף לפי חוק הסדרת העיסוק בהדברה תברואית, התשע״ו-2016 והתקנות מכוחו. הרישיון מוגבל לרובה אוויר.",
+          "type": "yes/no",
+          "required": true,
+          "source": "data/routes.json",
+          "regulatory_ref": "תקנה 17 — מדביר"
+        }
+      ]
+    }
+  ]
+}
