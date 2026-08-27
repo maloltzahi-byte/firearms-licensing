@@ -39,7 +39,7 @@ export async function requireLegalStaff() {
 
 export async function requireAal2() {
   const context = await requireLegalStaff()
-  const { data } = await context.supabase.auth.mfa.getAuthenticatorAssuranceLevel()
-  if (data.currentLevel !== 'aal2') redirect('/cockpit/mfa')
+  const { data, error } = await context.supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+  if (error || data?.currentLevel !== 'aal2') redirect('/cockpit/mfa')
   return context
 }
