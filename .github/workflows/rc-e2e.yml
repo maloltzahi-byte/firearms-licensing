@@ -39,7 +39,7 @@ jobs:
           exit 1
       - name: Canonical browser UAT
         run: |
-          cat > /tmp/rfl-e2e.cjs <<'EOF'
+          cat > .rfl-e2e.cjs <<'EOF'
           const { chromium } = require('@playwright/test')
           const AxeBuilder = require('@axe-core/playwright').default
           const assert = require('node:assert/strict')
@@ -81,4 +81,4 @@ jobs:
             process.exit(1)
           })
           EOF
-          node /tmp/rfl-e2e.cjs
+          node .rfl-e2e.cjs
