@@ -1,0 +1,84 @@
+name: RC E2E
+
+on:
+  push:
+    branches:
+      - rc/production-readiness-2026-08-27
+
+permissions:
+  contents: read
+
+jobs:
+  e2e:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
+      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Build application
+        run: npm run build
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run app
+        run: |
+          npm start > /tmp/rfl-next.log 2>&1 &
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:3000/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/rfl-next.log
+          exit 1
+      - name: Canonical browser UAT
+        run: |
+          cat > /tmp/rfl-e2e.cjs <<'EOF'
+          const { chromium } = require('@playwright/test')
+          const AxeBuilder = require('@axe-core/playwright').default
+          const assert = require('node:assert/strict')
+
+          ;(async () => {
+            const browser = await chromium.launch({ headless: true })
+            const page = await browser.newPage({ baseURL: 'http://127.0.0.1:3000' })
+
+            await page.goto('http://127.0.0.1:3000/')
+            assert.equal(await page.locator('iframe[title="RFL — מסך הבית"]').count(), 1, 'home canonical iframe missing')
+
+            for (const path of ['/privacy', '/terms', '/accessibility']) {
+              await page.goto(`http://127.0.0.1:3000${path}`)
+              assert.ok(await page.locator('h1').isVisible(), `${path}: h1 missing`)
+              assert.equal(await page.getByText('התוכן הסופי יוזן רק').count(), 0, `${path}: placeholder content found`)
+            }
+
+            for (const path of ['/app', '/cockpit']) {
+              await page.goto(`http://127.0.0.1:3000${path}`)
+              await page.waitForLoadState('networkidle')
+              assert.match(page.url(), /\/login/, `${path}: unauthenticated route did not redirect to login`)
+            }
+
+            await page.setViewportSize({ width: 390, height: 844 })
+            await page.goto('http://127.0.0.1:3000/preview/mobile/75')
+            assert.ok(await page.locator('iframe').isVisible(), 'mobile canonical iframe missing')
+
+            for (const path of ['/login', '/privacy', '/terms', '/accessibility']) {
+              await page.goto(`http://127.0.0.1:3000${path}`)
+              const results = await new AxeBuilder({ page }).analyze()
+              const serious = results.violations.filter(v => ['critical', 'serious'].includes(v.impact || ''))
+              assert.deepEqual(serious.map(v => v.id), [], `${path}: serious axe violations: ${serious.map(v => v.id).join(', ')}`)
+            }
+
+            console.log('RC E2E PASS: public/legal/auth-boundary/mobile/axe')
+            await browser.close()
+          })().catch((error) => {
+            console.error(error)
+            process.exit(1)
+          })
+          EOF
+          node /tmp/rfl-e2e.cjs
