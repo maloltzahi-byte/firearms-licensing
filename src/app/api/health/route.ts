@@ -52,14 +52,20 @@ export async function GET() {
     )
   }
 
-  const headers = {
-    apikey: key,
-    Authorization: `Bearer ${key}`,
-  }
+  // New Supabase publishable keys are API keys, not JWTs. They belong only in
+  // the apikey header unless a real signed-in user JWT is separately present.
+  const apiKeyHeaders = { apikey: key }
 
   const [auth, databaseApi] = await Promise.all([
-    probe(`${url}/auth/v1/health`, { headers }),
-    probe(`${url}/rest/v1/`, { headers }),
+    probe(`${url}/auth/v1/settings`, { headers: apiKeyHeaders }),
+    probe(`${url}/rest/v1/rpc/health_ping`, {
+      method: 'POST',
+      headers: {
+        ...apiKeyHeaders,
+        'Content-Type': 'application/json',
+      },
+      body: '{}',
+    }),
   ])
 
   const healthy = auth.healthy && databaseApi.healthy
