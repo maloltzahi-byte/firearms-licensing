@@ -12,27 +12,48 @@ jobs:
   auth-uat:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 4
     env:
-      SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
-      PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
-      LEGACY_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdnNoZXBneml6cmxxYnp2am9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDU5NzEsImV4cCI6MjA5MDk4MTk3MX0.ca4rw8QeRoPdQPwAsqPiLEZD6S-eOCdw6-P4a4BIFNk
+      NEXT_PUBLIC_SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
+      UAT_EMAIL: maloltzahi+rfl-uat-20260828@gmail.com
+      UAT_PASSWORD: Rfl-Uat-2026-Strong-47!
     steps:
-      - name: Compare public API key modes
-        shell: bash
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install locked dependencies
         run: |
-          set -u
-          probe() {
-            label="$1"; shift
-            set +e
-            out=$(curl -4 -sS --connect-timeout 5 --max-time 8 -o /tmp/probe-body -w 'http=%{http_code} connect=%{time_connect} tls=%{time_appconnect} total=%{time_total}' "$@" 2>/tmp/probe-err)
-            rc=$?
-            set -e
-            echo "$label rc=$rc $out"
-            if [ -s /tmp/probe-err ]; then sed -n '1,2p' /tmp/probe-err; fi
-          }
-          probe PUB_REST "$SUPABASE_URL/rest/v1/" -H "apikey: $PUBLISHABLE_KEY"
-          probe PUB_SETTINGS "$SUPABASE_URL/auth/v1/settings" -H "apikey: $PUBLISHABLE_KEY"
-          probe LEGACY_REST "$SUPABASE_URL/rest/v1/" -H "apikey: $LEGACY_ANON_KEY" -H "Authorization: Bearer $LEGACY_ANON_KEY"
-          probe LEGACY_SETTINGS "$SUPABASE_URL/auth/v1/settings" -H "apikey: $LEGACY_ANON_KEY" -H "Authorization: Bearer $LEGACY_ANON_KEY"
-          echo 'KEY_MODE_PROBE_COMPLETE'
+          corepack enable
+          corepack prepare pnpm@9.15.9 --activate
+          pnpm install --frozen-lockfile --ignore-scripts
+      - name: Live Supabase signup UAT
+        run: |
+          node - <<'NODE'
+          const { createClient } = require('@supabase/supabase-js')
+          const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
+            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+          })
+          ;(async () => {
+            const { data, error } = await client.auth.signUp({
+              email: process.env.UAT_EMAIL,
+              password: process.env.UAT_PASSWORD,
+              options: { emailRedirectTo: 'https://firearms-licensing.vercel.app/auth/callback?next=/app' }
+            })
+            console.log(JSON.stringify({
+              ok: !error,
+              code: error?.code ?? null,
+              message: error?.message ?? null,
+              status: error?.status ?? null,
+              user: Boolean(data?.user),
+              session: Boolean(data?.session),
+              emailConfirmed: Boolean(data?.user?.email_confirmed_at)
+            }))
+            if (error) process.exit(1)
+            process.exit(0)
+          })().catch((error) => {
+            console.log(JSON.stringify({ ok: false, code: 'unexpected', message: error?.message ?? String(error) }))
+            process.exit(1)
+          })
+          NODE
