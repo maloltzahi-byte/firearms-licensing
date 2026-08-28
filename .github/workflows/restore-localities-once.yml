@@ -1,0 +1,47 @@
+name: Restore canonical localities once
+
+on:
+  push:
+    branches:
+      - rc/production-readiness-2026-08-27
+
+permissions:
+  contents: write
+
+jobs:
+  restore:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild and verify exact canonical locality dictionary
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat release/localities-payload/chunk-{00..05}.txt > /tmp/localities.b64
+          python3 - <<'PY'
+          import base64, gzip, hashlib, json, pathlib
+          raw = gzip.decompress(base64.b64decode(pathlib.Path('/tmp/localities.b64').read_bytes()))
+          expected = '7a66a50a22d1dd138e81f59ae29449fec2ea5eac3b30676bbf2e43ad10f042ea'
+          actual = hashlib.sha256(raw).hexdigest()
+          if actual != expected:
+              raise SystemExit(f'SHA mismatch: {actual}')
+          data = json.loads(raw)
+          localities = data.get('localities', [])
+          if len(localities) != 1298:
+              raise SystemExit(f'count mismatch: {len(localities)}')
+          if any(item.get('eligibility_status') != 'UNVERIFIED' for item in localities):
+              raise SystemExit('eligibility_status invariant failed')
+          pathlib.Path('data/localities.json').write_bytes(raw)
+          print(f'CANONICAL LOCALITIES PASS: sha={actual} count={len(localities)} status=UNVERIFIED')
+          PY
+      - name: Commit exact canonical artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/localities.json
+          git rm -r release/localities-payload
+          git commit -m 'Restore exact canonical locality dictionary'
+          git push origin HEAD:rc/production-readiness-2026-08-27
