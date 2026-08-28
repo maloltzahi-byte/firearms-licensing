@@ -16,8 +16,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Restore canonical locality dictionary
         run: |
-          test -f source-archives/firearms-licensing-project.zip
-          unzip -p source-archives/firearms-licensing-project.zip firearms-licensing/data/localities.json > data/localities.json
+          set -euo pipefail
+          archive=source-archives/firearms-licensing-project.zip
+          test -f "$archive"
+          entry="$(unzip -Z1 "$archive" | grep -E '(^|/)data/localities\.json$' | head -n 1)"
+          test -n "$entry"
+          unzip -p "$archive" "$entry" > data/localities.json
           test "$(python3 -c "import json; print(len(json.load(open('data/localities.json'))['localities']))")" = "1298"
           echo "7a66a50a22d1dd138e81f59ae29449fec2ea5eac3b30676bbf2e43ad10f042ea  data/localities.json" | sha256sum -c -
       - name: Commit restored canonical file
