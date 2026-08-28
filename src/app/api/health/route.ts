@@ -18,7 +18,7 @@ async function probe(url: string, init?: RequestInit) {
     const response = await fetch(url, {
       ...init,
       cache: 'no-store',
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(7000),
     })
     return {
       healthy: response.ok,
@@ -52,12 +52,11 @@ export async function GET() {
     )
   }
 
-  // New Supabase publishable keys are API keys, not JWTs. They belong only in
-  // the apikey header unless a real signed-in user JWT is separately present.
   const apiKeyHeaders = { apikey: key }
 
   const [auth, databaseApi] = await Promise.all([
-    probe(`${url}/auth/v1/settings`, { headers: apiKeyHeaders }),
+    // Supabase documents /auth/v1/health as the dedicated GoTrue health check.
+    probe(`${url}/auth/v1/health`, { headers: apiKeyHeaders }),
     probe(`${url}/rest/v1/rpc/health_ping`, {
       method: 'POST',
       headers: {
