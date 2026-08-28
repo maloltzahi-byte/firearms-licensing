@@ -1,7 +1,9 @@
+import nextVitals from 'eslint-config-next/core-web-vitals'
 import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
 
 export default [
+  ...nextVitals,
   {
     ignores: [
       '.next/**',
