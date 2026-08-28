@@ -24,7 +24,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "prepare": "husky install || true",
     "release:verify": "node scripts/verify-release.mjs",
-    "ci": "pnpm release:verify && pnpm typecheck && pnpm lint && pnpm test && pnpm build",
+    "providers:verify": "node scripts/verify-provider-readiness.mjs",
+    "ci": "pnpm release:verify && pnpm providers:verify && pnpm typecheck && pnpm lint && pnpm test && pnpm build",
     "production:verify": "node scripts/verify-production-readiness.mjs"
   },
   "dependencies": {
