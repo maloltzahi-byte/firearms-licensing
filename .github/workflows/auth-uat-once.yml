@@ -15,23 +15,24 @@ jobs:
     timeout-minutes: 3
     env:
       SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
-      SUPABASE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
+      PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
+      LEGACY_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxjdnNoZXBneml6cmxxYnp2am9lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0MDU5NzEsImV4cCI6MjA5MDk4MTk3MX0.ca4rw8QeRoPdQPwAsqPiLEZD6S-eOCdw6-P4a4BIFNk
     steps:
-      - name: Probe Supabase edge connectivity
+      - name: Compare public API key modes
         shell: bash
         run: |
           set -u
           probe() {
             label="$1"; shift
             set +e
-            out=$(curl -4 -sS --connect-timeout 5 --max-time 10 -o /tmp/probe-body -w 'http=%{http_code} remote=%{remote_ip} connect=%{time_connect} tls=%{time_appconnect} total=%{time_total}' "$@" 2>/tmp/probe-err)
+            out=$(curl -4 -sS --connect-timeout 5 --max-time 8 -o /tmp/probe-body -w 'http=%{http_code} connect=%{time_connect} tls=%{time_appconnect} total=%{time_total}' "$@" 2>/tmp/probe-err)
             rc=$?
             set -e
             echo "$label rc=$rc $out"
-            if [ -s /tmp/probe-err ]; then sed -n '1,3p' /tmp/probe-err; fi
+            if [ -s /tmp/probe-err ]; then sed -n '1,2p' /tmp/probe-err; fi
           }
-          probe ROOT "$SUPABASE_URL/"
-          probe AUTH_HEALTH "$SUPABASE_URL/auth/v1/health"
-          probe REST "$SUPABASE_URL/rest/v1/" -H "apikey: $SUPABASE_KEY" -H "Authorization: Bearer $SUPABASE_KEY"
-          probe AUTH_SETTINGS "$SUPABASE_URL/auth/v1/settings" -H "apikey: $SUPABASE_KEY" -H "Authorization: Bearer $SUPABASE_KEY"
-          echo 'CONNECTIVITY_PROBE_COMPLETE'
+          probe PUB_REST "$SUPABASE_URL/rest/v1/" -H "apikey: $PUBLISHABLE_KEY"
+          probe PUB_SETTINGS "$SUPABASE_URL/auth/v1/settings" -H "apikey: $PUBLISHABLE_KEY"
+          probe LEGACY_REST "$SUPABASE_URL/rest/v1/" -H "apikey: $LEGACY_ANON_KEY" -H "Authorization: Bearer $LEGACY_ANON_KEY"
+          probe LEGACY_SETTINGS "$SUPABASE_URL/auth/v1/settings" -H "apikey: $LEGACY_ANON_KEY" -H "Authorization: Bearer $LEGACY_ANON_KEY"
+          echo 'KEY_MODE_PROBE_COMPLETE'
