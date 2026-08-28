@@ -12,47 +12,48 @@ jobs:
   auth-uat:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 3
     env:
-      NEXT_PUBLIC_SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
+      SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
+      SUPABASE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
       UAT_EMAIL: rfl-uat-auth-20260828@example.com
       UAT_PASSWORD: Rfl-Uat-2026-Strong-47!
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-      - name: Install locked dependencies
+      - name: Direct Auth REST boundary with hard timeout
+        shell: bash
         run: |
-          corepack enable
-          corepack prepare pnpm@9.15.9 --activate
-          pnpm install --frozen-lockfile --ignore-scripts
-      - name: Direct live Supabase signup diagnostic
-        run: |
-          node - <<'NODE'
-          const { createClient } = require('@supabase/supabase-js')
-          const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
-            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
-          })
-          ;(async () => {
-            const { data, error } = await client.auth.signUp({
-              email: process.env.UAT_EMAIL,
-              password: process.env.UAT_PASSWORD,
-              options: { emailRedirectTo: 'http://127.0.0.1:3000/auth/callback?next=/app' }
-            })
-            console.log(JSON.stringify({
-              ok: !error,
-              code: error?.code ?? null,
-              message: error?.message ?? null,
-              status: error?.status ?? null,
-              user: Boolean(data?.user),
-              session: Boolean(data?.session),
-              emailConfirmed: Boolean(data?.user?.email_confirmed_at)
-            }))
-            if (error) process.exit(1)
-          })().catch((error) => {
-            console.log(JSON.stringify({ ok: false, code: 'unexpected', message: error?.message ?? String(error) }))
-            process.exit(1)
-          })
-          NODE
+          set -euo pipefail
+          payload=$(python3 - <<'PY'
+          import json, os
+          print(json.dumps({"email": os.environ["UAT_EMAIL"], "password": os.environ["UAT_PASSWORD"]}))
+          PY
+          )
+          set +e
+          http=$(curl -sS --connect-timeout 5 --max-time 15 \
+            -o /tmp/auth.json -w '%{http_code}' \
+            "$SUPABASE_URL/auth/v1/signup" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY" \
+            -H 'Content-Type: application/json' \
+            --data "$payload")
+          rc=$?
+          set -e
+          echo "AUTH_HTTP_STATUS=$http CURL_EXIT=$rc"
+          python3 - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('/tmp/auth.json')
+          if not p.exists():
+              print('{"body":"none"}')
+              raise SystemExit
+          try:
+              d=json.loads(p.read_text())
+          except Exception:
+              print('{"body":"non-json"}')
+              raise SystemExit
+          safe={k:d.get(k) for k in ('code','message','msg','error_code','error_description') if k in d}
+          safe['has_user']=bool(d.get('id') or d.get('user'))
+          safe['has_access_token']=bool(d.get('access_token'))
+          print(json.dumps(safe, ensure_ascii=False))
+          PY
+          if [ "$rc" -ne 0 ]; then exit "$rc"; fi
+          if [ "$http" -ge 400 ]; then exit 1; fi
