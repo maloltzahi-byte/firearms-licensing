@@ -12,11 +12,10 @@ jobs:
   auth-uat:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     env:
       NEXT_PUBLIC_SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
-      NEXT_PUBLIC_APP_URL: http://127.0.0.1:3000
       UAT_EMAIL: rfl-uat-auth-20260828@example.com
       UAT_PASSWORD: Rfl-Uat-2026-Strong-47!
     steps:
@@ -24,50 +23,36 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: |
+      - name: Install locked dependencies
+        run: |
           corepack enable
           corepack prepare pnpm@9.15.9 --activate
           pnpm install --frozen-lockfile --ignore-scripts
-          pnpm build
-          pnpm exec playwright install --with-deps chromium
-      - name: Run app
+      - name: Direct live Supabase signup diagnostic
         run: |
-          pnpm start > /tmp/rfl-auth-uat.log 2>&1 &
-          for i in {1..60}; do
-            if curl -fsS http://127.0.0.1:3000/login >/dev/null; then exit 0; fi
-            sleep 1
-          done
-          cat /tmp/rfl-auth-uat.log
-          exit 1
-      - name: Real Supabase signup boundary
-        run: |
-          cat > .auth-uat.cjs <<'EOF'
-          const { chromium } = require('@playwright/test')
-          const assert = require('node:assert/strict')
+          node - <<'NODE'
+          const { createClient } = require('@supabase/supabase-js')
+          const client = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, {
+            auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+          })
           ;(async () => {
-            const browser = await chromium.launch({ headless: true })
-            const page = await browser.newPage()
-            await page.goto('http://127.0.0.1:3000/login')
-            await page.getByLabel('דוא״ל').fill(process.env.UAT_EMAIL)
-            await page.getByLabel('סיסמה').fill(process.env.UAT_PASSWORD)
-            await page.getByRole('button', { name: /^יצירת חשבון$/ }).click()
-            await page.waitForLoadState('domcontentloaded')
-            const url = page.url()
-            console.log(`AUTH_UAT_RESULT_URL=${url}`)
-            if (url.includes('/app')) {
-              console.log('AUTH_UAT_SESSION_PASS')
-              assert.match(url, /\/app/)
-              await browser.close()
-              return
-            }
-            if (url.includes('notice=verify')) {
-              console.log('AUTH_UAT_EMAIL_VERIFICATION_REQUIRED')
-              await browser.close()
-              process.exit(2)
-            }
-            console.log(await page.locator('body').innerText())
-            await browser.close()
-            throw new Error(`Unexpected auth result: ${url}`)
-          })().catch((e) => { console.error(e); process.exit(1) })
-          EOF
-          node .auth-uat.cjs
+            const { data, error } = await client.auth.signUp({
+              email: process.env.UAT_EMAIL,
+              password: process.env.UAT_PASSWORD,
+              options: { emailRedirectTo: 'http://127.0.0.1:3000/auth/callback?next=/app' }
+            })
+            console.log(JSON.stringify({
+              ok: !error,
+              code: error?.code ?? null,
+              message: error?.message ?? null,
+              status: error?.status ?? null,
+              user: Boolean(data?.user),
+              session: Boolean(data?.session),
+              emailConfirmed: Boolean(data?.user?.email_confirmed_at)
+            }))
+            if (error) process.exit(1)
+          })().catch((error) => {
+            console.log(JSON.stringify({ ok: false, code: 'unexpected', message: error?.message ?? String(error) }))
+            process.exit(1)
+          })
+          NODE
