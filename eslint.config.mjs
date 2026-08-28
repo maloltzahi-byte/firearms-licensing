@@ -1,9 +1,13 @@
-import nextVitals from 'eslint-config-next/core-web-vitals.js'
+import nextPlugin from '@next/eslint-plugin-next'
 import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
 
+const nextRules = {
+  ...nextPlugin.configs.recommended.rules,
+  ...nextPlugin.configs['core-web-vitals'].rules,
+}
+
 export default [
-  ...nextVitals,
   {
     ignores: [
       '.next/**',
@@ -19,6 +23,13 @@ export default [
       '*.config.mjs',
       '*.config.ts',
     ],
+  },
+  {
+    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      '@next/next': nextPlugin,
+    },
+    rules: nextRules,
   },
   {
     files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}', 'scripts/**/*.{ts,tsx}'],
