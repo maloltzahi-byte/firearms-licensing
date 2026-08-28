@@ -12,7 +12,7 @@ jobs:
   e2e:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       NEXT_PUBLIC_SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
@@ -37,45 +37,139 @@ jobs:
           done
           cat /tmp/rfl-next.log
           exit 1
-      - name: Canonical browser UAT
+      - name: Advanced interactive QA
         run: |
           cat > .rfl-e2e.cjs <<'EOF'
           const { chromium } = require('@playwright/test')
           const AxeBuilder = require('@axe-core/playwright').default
           const assert = require('node:assert/strict')
 
+          const BASE = 'http://127.0.0.1:3000'
+          const publicRoutes = ['/how-it-works','/routes','/faq','/appeal','/pricing','/about','/contact']
+          const legalRoutes = ['/privacy','/terms','/accessibility']
+
+          async function assertNoSeriousAxe(page, path) {
+            const results = await new AxeBuilder({ page }).analyze()
+            const serious = results.violations.filter(v => ['critical','serious'].includes(v.impact || ''))
+            assert.deepEqual(serious.map(v => v.id), [], `${path}: serious axe violations: ${serious.map(v => v.id).join(', ')}`)
+          }
+
+          async function assertCanonicalPage(page, path) {
+            await page.goto(`${BASE}${path}`)
+            await page.waitForLoadState('domcontentloaded')
+            const iframe = page.locator('iframe')
+            assert.equal(await iframe.count(), 1, `${path}: canonical iframe missing`)
+            await iframe.waitFor({ state: 'visible' })
+          }
+
           ;(async () => {
             const browser = await chromium.launch({ headless: true })
             const context = await browser.newContext()
             const page = await context.newPage()
+            const consoleErrors = []
+            const pageErrors = []
+            page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()) })
+            page.on('pageerror', err => pageErrors.push(err.message))
 
-            await page.goto('http://127.0.0.1:3000/')
-            assert.equal(await page.locator('iframe[title="RFL — מסך הבית"]').count(), 1, 'home canonical iframe missing')
+            // Home + real click navigation out of sandboxed canonical iframe.
+            await page.goto(`${BASE}/`)
+            await page.waitForLoadState('domcontentloaded')
+            const homeFrame = page.frameLocator('iframe[title="RFL — מסך הבית"]')
+            await homeFrame.getByRole('link', { name: 'בדקו אם נכון להגיש עכשיו' }).first().click()
+            await page.waitForURL('**/start/request-type')
+            assert.equal(new URL(page.url()).pathname, '/start/request-type', 'home CTA did not navigate to guided intake')
 
-            for (const path of ['/privacy', '/terms', '/accessibility']) {
-              await page.goto(`http://127.0.0.1:3000${path}`)
+            // Back to home and test primary nav links from inside iframe.
+            await page.goto(`${BASE}/`)
+            for (const [name, expected] of [['איך זה עובד','/how-it-works'],['מסלולים','/routes'],['שאלות','/faq']]) {
+              const frame = page.frameLocator('iframe[title="RFL — מסך הבית"]')
+              await frame.getByRole('link', { name }).click()
+              await page.waitForURL(`**${expected}`)
+              assert.equal(new URL(page.url()).pathname, expected, `${name}: wrong destination`)
+              await page.goto(`${BASE}/`)
+            }
+
+            // Every public canonical route renders and has a working home/start navigation surface.
+            for (const path of publicRoutes) {
+              await assertCanonicalPage(page, path)
+              const frame = page.frameLocator('iframe')
+              const homeLink = frame.getByRole('link', { name: /עו״ד צחי מלול/ })
+              assert.ok(await homeLink.count(), `${path}: brand/home link missing`)
+            }
+
+            // Legal routes are real Next pages and contain finalized content.
+            for (const path of legalRoutes) {
+              await page.goto(`${BASE}${path}`)
               assert.ok(await page.locator('h1').isVisible(), `${path}: h1 missing`)
               assert.equal(await page.getByText('התוכן הסופי יוזן רק').count(), 0, `${path}: placeholder content found`)
             }
 
-            for (const path of ['/app', '/cockpit']) {
-              await page.goto(`http://127.0.0.1:3000${path}`)
+            // Guided journey: click through all 20 approved screens, verify forward/back/state and final handoff.
+            await page.goto(`${BASE}/start/request-type`)
+            let guided = page.frameLocator('iframe')
+            assert.ok(await guided.locator('.footer-next').isVisible(), 'guided next button missing')
+            await guided.locator('[data-choice]').first().click()
+            await guided.locator('.footer-next').click()
+            await guided.locator('.footer-back').click()
+            assert.match(await guided.locator('.main-code').innerText(), /^15 \/ REQUEST TYPE/, 'guided back did not return to screen 15')
+            await guided.locator('.footer-next').click()
+
+            for (let i = 1; i < 19; i++) {
+              guided = page.frameLocator('iframe')
+              const next = guided.locator('.footer-next')
+              assert.ok(await next.isVisible(), `guided screen ${i}: next missing`)
+              const choices = guided.locator('[data-choice]')
+              if (await choices.count()) await choices.first().click()
+              const inputs = guided.locator('input[name], textarea[name]')
+              for (let j = 0; j < await inputs.count(); j++) {
+                const el = inputs.nth(j)
+                if (await el.getAttribute('type') === 'checkbox') continue
+                const name = await el.getAttribute('name')
+                if (name) await el.fill(name === 'email' ? 'qa@example.com' : 'QA')
+              }
+              await next.click()
+            }
+
+            guided = page.frameLocator('iframe')
+            const finalNext = guided.locator('.footer-next')
+            assert.equal(await finalNext.isDisabled(), true, 'payment/consent gate should block before consent')
+            const consent = guided.locator('#paymentConsent')
+            assert.ok(await consent.count(), 'payment consent control missing')
+            await consent.check()
+            assert.equal(await finalNext.isDisabled(), false, 'payment/consent gate did not unlock after consent')
+            await finalNext.click()
+            await page.waitForURL('**/login?next=/app')
+            assert.equal(new URL(page.url()).pathname, '/login', 'guided final handoff did not reach login')
+
+            // Auth boundaries.
+            for (const path of ['/app','/cockpit']) {
+              await page.goto(`${BASE}${path}`)
               await page.waitForLoadState('networkidle')
               assert.match(page.url(), /\/login/, `${path}: unauthenticated route did not redirect to login`)
             }
 
+            // Login actions exist and are enabled; do not create real users in CI.
+            await page.goto(`${BASE}/login`)
+            assert.ok(await page.getByRole('button', { name: /כניסה/ }).isEnabled(), 'login button disabled')
+            assert.ok(await page.getByRole('button', { name: /הרשמה/ }).isEnabled(), 'signup button disabled')
+            assert.ok(await page.getByRole('button', { name: /שכח/ }).isEnabled(), 'password reset button disabled')
+
+            // Mobile canonical surface.
             await page.setViewportSize({ width: 390, height: 844 })
-            await page.goto('http://127.0.0.1:3000/preview/mobile/75')
+            await page.goto(`${BASE}/preview/mobile/75`)
             assert.ok(await page.locator('iframe').isVisible(), 'mobile canonical iframe missing')
 
-            for (const path of ['/login', '/privacy', '/terms', '/accessibility']) {
-              await page.goto(`http://127.0.0.1:3000${path}`)
-              const results = await new AxeBuilder({ page }).analyze()
-              const serious = results.violations.filter(v => ['critical', 'serious'].includes(v.impact || ''))
-              assert.deepEqual(serious.map(v => v.id), [], `${path}: serious axe violations: ${serious.map(v => v.id).join(', ')}`)
+            // Accessibility gate on user-facing Next pages.
+            for (const path of ['/login', ...legalRoutes]) {
+              await page.goto(`${BASE}${path}`)
+              await assertNoSeriousAxe(page, path)
             }
 
-            console.log('RC E2E PASS: public/legal/auth-boundary/mobile/axe')
+            const ignorableConsole = consoleErrors.filter(x => !/favicon|Failed to load resource.*404/i.test(x))
+            assert.deepEqual(pageErrors, [], `page errors: ${pageErrors.join(' | ')}`)
+            assert.deepEqual(ignorableConsole, [], `console errors: ${ignorableConsole.join(' | ')}`)
+
+            console.log('RC ADVANCED E2E PASS: click-navigation/public/guided-20/auth-boundary/mobile/axe/runtime-errors')
             await context.close()
             await browser.close()
           })().catch((error) => {
