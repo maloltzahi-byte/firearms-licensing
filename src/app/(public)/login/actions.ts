@@ -57,13 +57,15 @@ export async function signup(formData: FormData) {
 }
 
 export async function requestPasswordReset(formData: FormData) {
-  const email = z.string().email().safeParse(formData.get('email'))
-  if (email.success) {
-    const supabase = await createSupabaseServerClient()
-    const origin = authEmailOrigin()
-    await supabase.auth.resetPasswordForEmail(email.data, {
-      redirectTo: `${origin}/auth/callback?next=/auth/update-password`,
-    })
-  }
+  const parsed = z.string().email().safeParse(formData.get('email'))
+  if (!parsed.success) redirect('/login?error=reset_email_required')
+
+  const supabase = await createSupabaseServerClient()
+  const origin = authEmailOrigin()
+  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data, {
+    redirectTo: `${origin}/auth/callback?next=/auth/update-password`,
+  })
+  if (error) redirect('/login?error=reset_unavailable')
+
   redirect('/login?notice=reset')
 }
