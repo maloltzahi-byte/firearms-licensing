@@ -1,0 +1,42 @@
+name: Patch Guided Responsive
+
+on:
+  push:
+    branches:
+      - rc/production-readiness-2026-08-27
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Patch approved guided layout for 901-1399px
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs')
+          const path = 'public/canonical/guided.html'
+          let s = fs.readFileSync(path, 'utf8')
+          const anchor = '@media(max-width:900px)'
+          if (!s.includes(anchor)) throw new Error('responsive anchor missing')
+          const patch = '@media(min-width:901px) and (max-width:1399px){.instrument{left:280px;right:32px;width:auto}.footer-back{left:280px}.footer-next{left:auto;right:32px}.save{left:440px;width:360px}.main-title,.main-body{width:min(632px,calc(100vw - 370px))}.payment{grid-template-columns:minmax(0,1fr) 260px}}\n'
+          if (!s.includes('@media(min-width:901px) and (max-width:1399px)')) s = s.replace(anchor, patch + anchor)
+          fs.writeFileSync(path, s)
+          NODE
+          git diff --check
+          git diff -- public/canonical/guided.html
+      - name: Commit responsive fix
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/canonical/guided.html
+          git commit -m 'Fix guided payment viewport at medium desktop widths'
+          git push origin HEAD:rc/production-readiness-2026-08-27
