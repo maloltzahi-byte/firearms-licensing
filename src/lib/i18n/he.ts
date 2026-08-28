@@ -84,6 +84,29 @@ export const HE = {
     appeal: 'טיפול בהשגה או ערר',
     closed: 'הטיפול הסתיים',
   },
+  gateStates: {
+    REVIEW: 'בבדיקה',
+    NEEDS_INFO: 'נדרש מידע נוסף',
+    BLOCK: 'לא ניתן להתקדם כעת',
+    APPROVED: 'מאושר להמשך טיפול',
+  },
+  reviewStates: {
+    pending: 'ממתין לבדיקה',
+    review: 'בבדיקה',
+    needs_info: 'נדרשת השלמה',
+    approved: 'אושר',
+    rejected: 'נדחה',
+  },
+  taskStatuses: {
+    open: 'פתוחה',
+    in_progress: 'בטיפול',
+    done: 'הושלמה',
+    cancelled: 'בוטלה',
+  },
+  auditEvents: {
+    DECISION_GATE_CHANGED: 'עודכנה החלטת עורך הדין',
+    CASE_STATUS_CHANGED: 'עודכן מצב התיק',
+  },
 } as const
 
 // Compatibility export for pre-reconstruction imports.
