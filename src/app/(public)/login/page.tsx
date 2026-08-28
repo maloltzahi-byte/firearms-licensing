@@ -29,7 +29,9 @@ export default async function LoginPage({ searchParams }: Props) {
             </h1>
             <p className="mt-6 max-w-lg text-lg leading-8 text-slate-300">{HE.auth.subtitle}</p>
           </div>
-          <p className="relative text-sm text-slate-400">RTL · Supabase Auth · RLS · Audit</p>
+          <p className="relative max-w-lg text-sm leading-6 text-slate-400">
+            כל הפרטים, המסמכים והעדכונים של התיק נשמרים במקום אחד כדי שתוכלו להמשיך בקלות בכל שלב.
+          </p>
         </section>
 
         <section className="flex items-center bg-white p-6 text-[#111827] sm:p-10 lg:p-14">
