@@ -1,5 +1,6 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
@@ -14,9 +15,43 @@ function safeNext(value: FormDataEntryValue | null) {
   return value
 }
 
-function authEmailOrigin() {
+function normalizedConfiguredOrigin() {
   const configured = process.env.NEXT_PUBLIC_APP_URL?.trim()
-  if (configured) return configured.replace(/\/+$/, '')
+  if (!configured) return null
+
+  try {
+    return new URL(configured).origin
+  } catch {
+    return null
+  }
+}
+
+function isAllowedRequestOrigin(value: string, configuredOrigin: string | null) {
+  try {
+    const url = new URL(value)
+    if (url.protocol !== 'https:') return false
+    if (url.hostname.endsWith('.vercel.app')) return true
+    return configuredOrigin ? url.origin === configuredOrigin : false
+  } catch {
+    return false
+  }
+}
+
+async function authEmailOrigin() {
+  const configuredOrigin = normalizedConfiguredOrigin()
+  const requestHeaders = await headers()
+  const requestOrigin = requestHeaders.get('origin')?.trim()
+
+  if (requestOrigin && isAllowedRequestOrigin(requestOrigin, configuredOrigin)) {
+    return new URL(requestOrigin).origin
+  }
+
+  const forwardedHost = requestHeaders.get('x-forwarded-host')?.split(',')[0]?.trim()
+  if (forwardedHost && forwardedHost.endsWith('.vercel.app')) {
+    return `https://${forwardedHost}`
+  }
+
+  if (configuredOrigin && !configuredOrigin.includes('localhost')) return configuredOrigin
 
   const vercelUrl = process.env.VERCEL_URL?.trim()
   if (vercelUrl) return `https://${vercelUrl.replace(/^https?:\/\//, '').replace(/\/+$/, '')}`
@@ -46,7 +81,7 @@ export async function signup(formData: FormData) {
   if (!parsed.success) redirect('/login?error=required')
 
   const supabase = await createSupabaseServerClient()
-  const origin = authEmailOrigin()
+  const origin = await authEmailOrigin()
   const { data, error } = await supabase.auth.signUp({
     ...parsed.data,
     options: { emailRedirectTo: `${origin}/auth/callback?next=/app` },
@@ -61,7 +96,7 @@ export async function requestPasswordReset(formData: FormData) {
   if (!parsed.success) redirect('/login?error=reset_email_required')
 
   const supabase = await createSupabaseServerClient()
-  const origin = authEmailOrigin()
+  const origin = await authEmailOrigin()
   const { error } = await supabase.auth.resetPasswordForEmail(parsed.data, {
     redirectTo: `${origin}/auth/callback?next=/auth/update-password`,
   })
