@@ -2,8 +2,8 @@
   "project_id": "lcvshepgzizrlqbzvjoe",
   "captured_at": "2026-08-28",
   "source": "Supabase live migration history",
-  "live_schema_md5": "5490f051c27738c81ed6486f34f95fed",
-  "fingerprint_input_bytes": 47019,
+  "live_schema_md5": "7a6074dd1bd3e7e7cb283ca5fb3011b6",
+  "fingerprint_input_bytes": 47247,
   "note": "Historical SQL for migrations 1-19 is not present in the canonical ZIP or repository. Do not fabricate it. Use the live-schema baseline as the reproducible current-state source.",
   "migrations": [
     ["20260811133245", "quarantine_legacy_rfl_tables"],
@@ -25,6 +25,7 @@
     ["20260827175122", "restore_rfl_case_documents_bucket_2026_08_27"],
     ["20260827182022", "document_engine_hardening_2026_08_27"],
     ["20260827182251", "case_status_rpc_2026_08_27"],
-    ["20260828070945", "grant_questionnaire_answers_update_2026_08_28"]
+    ["20260828070945", "grant_questionnaire_answers_update_2026_08_28"],
+    ["20260828080143", "add_public_health_ping_2026_08_28"]
   ]
 }
