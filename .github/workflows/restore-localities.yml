@@ -17,13 +17,25 @@ jobs:
       - name: Restore canonical locality dictionary
         run: |
           set -euo pipefail
-          archive=source-archives/firearms-licensing-project.zip
-          test -f "$archive"
-          entry="$(unzip -Z1 "$archive" | grep -E '(^|/)data/localities\.json$' | head -n 1)"
-          test -n "$entry"
-          unzip -p "$archive" "$entry" > data/localities.json
-          test "$(python3 -c "import json; print(len(json.load(open('data/localities.json'))['localities']))")" = "1298"
-          echo "7a66a50a22d1dd138e81f59ae29449fec2ea5eac3b30676bbf2e43ad10f042ea  data/localities.json" | sha256sum -c -
+          python3 - <<'PY'
+          import hashlib, json, pathlib, zipfile
+          archive = pathlib.Path('source-archives/firearms-licensing-project.zip')
+          if not archive.is_file():
+              raise SystemExit('canonical source archive missing')
+          with zipfile.ZipFile(archive) as zf:
+              matches = [n for n in zf.namelist() if n.endswith('/data/localities.json') or n == 'data/localities.json']
+              if len(matches) != 1:
+                  raise SystemExit(f'expected one localities.json, found {len(matches)}')
+              payload = zf.read(matches[0])
+          expected = '7a66a50a22d1dd138e81f59ae29449fec2ea5eac3b30676bbf2e43ad10f042ea'
+          if hashlib.sha256(payload).hexdigest() != expected:
+              raise SystemExit('canonical localities SHA mismatch')
+          data = json.loads(payload)
+          if len(data.get('localities', [])) != 1298:
+              raise SystemExit('canonical localities count mismatch')
+          pathlib.Path('data').mkdir(exist_ok=True)
+          pathlib.Path('data/localities.json').write_bytes(payload)
+          PY
       - name: Commit restored canonical file
         run: |
           if git diff --quiet -- data/localities.json && git ls-files --error-unmatch data/localities.json >/dev/null 2>&1; then
