@@ -22,7 +22,7 @@
     "db:reset": "supabase db reset",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "prepare": "husky install || true",
+    "prepare": "husky",
     "release:verify": "node scripts/verify-release.mjs",
     "providers:verify": "node scripts/verify-provider-readiness.mjs",
     "ci": "pnpm release:verify && pnpm providers:verify && pnpm typecheck && pnpm lint && pnpm test && pnpm build",
