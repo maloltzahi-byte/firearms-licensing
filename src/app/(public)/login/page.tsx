@@ -9,13 +9,17 @@ export default async function LoginPage({ searchParams }: Props) {
   const message =
     error === 'required'
       ? HE.auth.required
-      : error
-        ? HE.auth.invalid
-        : notice === 'verify'
-          ? HE.auth.verify
-          : notice === 'reset'
-            ? HE.auth.resetSent
-            : null
+      : error === 'reset_email_required'
+        ? HE.auth.resetEmailRequired
+        : error === 'reset_unavailable'
+          ? HE.auth.resetUnavailable
+          : error
+            ? HE.auth.invalid
+            : notice === 'verify'
+              ? HE.auth.verify
+              : notice === 'reset'
+                ? HE.auth.resetSent
+                : null
 
   return (
     <main className="min-h-screen bg-[#07111f] px-5 py-10 text-white">
