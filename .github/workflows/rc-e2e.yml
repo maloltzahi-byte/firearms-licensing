@@ -71,7 +71,6 @@ jobs:
             page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()) })
             page.on('pageerror', err => pageErrors.push(err.message))
 
-            // Home + real click navigation out of sandboxed canonical iframe.
             await page.goto(`${BASE}/`)
             await page.waitForLoadState('domcontentloaded')
             const homeFrame = page.frameLocator('iframe[title="RFL — מסך הבית"]')
@@ -79,7 +78,6 @@ jobs:
             await page.waitForURL('**/start/request-type')
             assert.equal(new URL(page.url()).pathname, '/start/request-type', 'home CTA did not navigate to guided intake')
 
-            // Back to home and test primary nav links from inside iframe.
             await page.goto(`${BASE}/`)
             for (const [name, expected] of [['איך זה עובד','/how-it-works'],['מסלולים','/routes'],['שאלות','/faq']]) {
               const frame = page.frameLocator('iframe[title="RFL — מסך הבית"]')
@@ -89,7 +87,6 @@ jobs:
               await page.goto(`${BASE}/`)
             }
 
-            // Every public canonical route renders and has a working home/start navigation surface.
             for (const path of publicRoutes) {
               await assertCanonicalPage(page, path)
               const frame = page.frameLocator('iframe')
@@ -97,14 +94,12 @@ jobs:
               assert.ok(await homeLink.count(), `${path}: brand/home link missing`)
             }
 
-            // Legal routes are real Next pages and contain finalized content.
             for (const path of legalRoutes) {
               await page.goto(`${BASE}${path}`)
               assert.ok(await page.locator('h1').isVisible(), `${path}: h1 missing`)
               assert.equal(await page.getByText('התוכן הסופי יוזן רק').count(), 0, `${path}: placeholder content found`)
             }
 
-            // Guided journey: click through all 20 approved screens, verify forward/back/state and final handoff.
             await page.goto(`${BASE}/start/request-type`)
             let guided = page.frameLocator('iframe')
             assert.ok(await guided.locator('.footer-next').isVisible(), 'guided next button missing')
@@ -141,25 +136,21 @@ jobs:
             await page.waitForURL('**/login?next=/app')
             assert.equal(new URL(page.url()).pathname, '/login', 'guided final handoff did not reach login')
 
-            // Auth boundaries.
             for (const path of ['/app','/cockpit']) {
               await page.goto(`${BASE}${path}`)
               await page.waitForLoadState('networkidle')
               assert.match(page.url(), /\/login/, `${path}: unauthenticated route did not redirect to login`)
             }
 
-            // Login actions exist and are enabled; do not create real users in CI.
             await page.goto(`${BASE}/login`)
-            assert.ok(await page.getByRole('button', { name: /כניסה/ }).isEnabled(), 'login button disabled')
-            assert.ok(await page.getByRole('button', { name: /הרשמה/ }).isEnabled(), 'signup button disabled')
-            assert.ok(await page.getByRole('button', { name: /שכח/ }).isEnabled(), 'password reset button disabled')
+            assert.ok(await page.getByRole('button', { name: /^כניסה$/ }).isEnabled(), 'login button disabled')
+            assert.ok(await page.getByRole('button', { name: /^יצירת חשבון$/ }).isEnabled(), 'signup button disabled')
+            assert.ok(await page.getByRole('button', { name: /שכחתי סיסמה/ }).isEnabled(), 'password reset button disabled')
 
-            // Mobile canonical surface.
             await page.setViewportSize({ width: 390, height: 844 })
             await page.goto(`${BASE}/preview/mobile/75`)
             assert.ok(await page.locator('iframe').isVisible(), 'mobile canonical iframe missing')
 
-            // Accessibility gate on user-facing Next pages.
             for (const path of ['/login', ...legalRoutes]) {
               await page.goto(`${BASE}${path}`)
               await assertNoSeriousAxe(page, path)
