@@ -10,6 +10,14 @@ This directory records the authoritative live database state used by the RC prod
 - Fingerprint input: 47,247 bytes of canonicalized metadata covering columns, constraints, selected authorization/mutation functions, RLS policies, triggers, indexes and the case-document storage bucket.
 - Current health migration: `20260828080143_add_public_health_ping_2026_08_28.sql`.
 
+## Fresh-project reconstruction order
+
+1. Apply `live-schema-baseline-2026-08-28.sql` to a fresh Supabase project.
+2. Apply `live-schema-baseline-2026-08-28-health-addendum.sql` immediately afterward.
+3. Verify the migration ledger against `live-migration-manifest-2026-08-28.json` and re-run security/RLS checks before using the reconstructed project.
+
+The addendum exists because `public.health_ping()` was introduced after the original 2026-08-28 baseline capture. It is a read-only health RPC and does not expose case data.
+
 ## Historical migration gap
 
 The repository and the canonical UAT ZIP do **not** contain the SQL bodies for live migrations 1–19. The canonical ZIP and both nested source archives contain only the old `0001_initial.sql`. That file does not represent the current hardened live architecture and must not be treated as a production database baseline.
