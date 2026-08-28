@@ -52,6 +52,18 @@ jobs:
           done
           cat /tmp/rfl-next.log
           exit 1
+      - name: Live backend health boundary
+        run: |
+          curl -fsS http://127.0.0.1:3000/api/health -o /tmp/rfl-health.json
+          cat /tmp/rfl-health.json
+          node - <<'NODE'
+          const fs = require('node:fs')
+          const health = JSON.parse(fs.readFileSync('/tmp/rfl-health.json', 'utf8'))
+          if (health.status !== 'healthy') throw new Error(`backend health status=${health.status}`)
+          if (!health.auth?.healthy || health.auth?.status !== 200) throw new Error(`auth health failed: ${JSON.stringify(health.auth)}`)
+          if (!health.database_api?.healthy || health.database_api?.status !== 200) throw new Error(`database health failed: ${JSON.stringify(health.database_api)}`)
+          console.log('LIVE BACKEND HEALTH PASS')
+          NODE
       - name: Advanced interactive QA
         run: |
           cat > .rfl-e2e.cjs <<'EOF'
@@ -194,7 +206,7 @@ jobs:
             assert.deepEqual(pageErrors, [], `page errors: ${pageErrors.join(' | ')}`)
             assert.deepEqual(ignorableConsole, [], `console errors: ${ignorableConsole.join(' | ')}`)
 
-            console.log('RC ADVANCED E2E PASS: frozen-install/gates/click-navigation/public/guided-20/auth-boundary/viewport-matrix/axe/runtime-errors')
+            console.log('RC ADVANCED E2E PASS: frozen-install/gates/live-backend-health/click-navigation/public/guided-20/auth-boundary/viewport-matrix/axe/runtime-errors')
             await context.close()
             await browser.close()
           })().catch((error) => {
