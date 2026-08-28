@@ -4,8 +4,8 @@
   "private": true,
   "description": "Israeli private firearms licensing advisor & case management — public site + lawyer cockpit.",
   "engines": {
-    "node": ">=22.0.0",
-    "pnpm": ">=8.0.0"
+    "node": ">=22.0.0 <25.0.0",
+    "pnpm": "9.15.9"
   },
   "scripts": {
     "dev": "next dev",
