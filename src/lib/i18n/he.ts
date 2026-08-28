@@ -72,6 +72,11 @@ export const HE = {
     name: 'שם',
     status: 'מצב',
   },
+  requestTypes: {
+    new: 'בקשה חדשה',
+    existing: 'טיפול ברישיון קיים',
+    appeal: 'השגה או ערר',
+  },
   caseStatuses: {
     draft: 'בתהליך מילוי',
     needs_info: 'צריך להשלים פרטים',
