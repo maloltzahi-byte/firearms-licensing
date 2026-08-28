@@ -10,7 +10,7 @@ export function CanonicalFrame({ src, title }: CanonicalFrameProps) {
         className="h-full w-full border-0"
         src={src}
         title={title}
-        sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts allow-downloads"
+        sandbox="allow-forms allow-modals allow-popups allow-same-origin allow-scripts allow-downloads allow-top-navigation-by-user-activation"
       />
     </main>
   )
