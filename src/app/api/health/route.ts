@@ -1,16 +1,7 @@
 import { NextResponse } from 'next/server'
+import { getSupabasePublishableKey, getSupabaseUrl } from '@/lib/supabase/env'
 
 export const dynamic = 'force-dynamic'
-
-function supabaseConfig() {
-  return {
-    url: process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, '') ?? '',
-    key:
-      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-      '',
-  }
-}
 
 async function probe(url: string, init?: RequestInit) {
   const started = Date.now()
@@ -35,27 +26,11 @@ async function probe(url: string, init?: RequestInit) {
 }
 
 export async function GET() {
-  const { url, key } = supabaseConfig()
-
-  if (!url || !key) {
-    return NextResponse.json(
-      {
-        status: 'degraded',
-        app: 'healthy',
-        auth: 'unconfigured',
-        database_api: 'unconfigured',
-      },
-      {
-        status: 503,
-        headers: { 'Cache-Control': 'no-store' },
-      },
-    )
-  }
-
+  const url = getSupabaseUrl().replace(/\/$/, '')
+  const key = getSupabasePublishableKey()
   const apiKeyHeaders = { apikey: key }
 
   const [auth, databaseApi] = await Promise.all([
-    // Supabase documents /auth/v1/health as the dedicated GoTrue health check.
     probe(`${url}/auth/v1/health`, { headers: apiKeyHeaders }),
     probe(`${url}/rest/v1/rpc/health_ping`, {
       method: 'POST',
