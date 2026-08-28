@@ -1,4 +1,4 @@
-import nextVitals from 'eslint-config-next/core-web-vitals'
+import nextVitals from 'eslint-config-next/core-web-vitals.js'
 import tsParser from '@typescript-eslint/parser'
 import tsPlugin from '@typescript-eslint/eslint-plugin'
 
