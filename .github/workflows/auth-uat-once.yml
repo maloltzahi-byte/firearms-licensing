@@ -16,44 +16,22 @@ jobs:
     env:
       SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
       SUPABASE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
-      UAT_EMAIL: rfl-uat-auth-20260828@example.com
-      UAT_PASSWORD: Rfl-Uat-2026-Strong-47!
     steps:
-      - name: Direct Auth REST boundary with hard timeout
+      - name: Probe Supabase edge connectivity
         shell: bash
         run: |
-          set -euo pipefail
-          payload=$(python3 - <<'PY'
-          import json, os
-          print(json.dumps({"email": os.environ["UAT_EMAIL"], "password": os.environ["UAT_PASSWORD"]}))
-          PY
-          )
-          set +e
-          http=$(curl -sS --connect-timeout 5 --max-time 15 \
-            -o /tmp/auth.json -w '%{http_code}' \
-            "$SUPABASE_URL/auth/v1/signup" \
-            -H "apikey: $SUPABASE_KEY" \
-            -H "Authorization: Bearer $SUPABASE_KEY" \
-            -H 'Content-Type: application/json' \
-            --data "$payload")
-          rc=$?
-          set -e
-          echo "AUTH_HTTP_STATUS=$http CURL_EXIT=$rc"
-          python3 - <<'PY'
-          import json, pathlib
-          p=pathlib.Path('/tmp/auth.json')
-          if not p.exists():
-              print('{"body":"none"}')
-              raise SystemExit
-          try:
-              d=json.loads(p.read_text())
-          except Exception:
-              print('{"body":"non-json"}')
-              raise SystemExit
-          safe={k:d.get(k) for k in ('code','message','msg','error_code','error_description') if k in d}
-          safe['has_user']=bool(d.get('id') or d.get('user'))
-          safe['has_access_token']=bool(d.get('access_token'))
-          print(json.dumps(safe, ensure_ascii=False))
-          PY
-          if [ "$rc" -ne 0 ]; then exit "$rc"; fi
-          if [ "$http" -ge 400 ]; then exit 1; fi
+          set -u
+          probe() {
+            label="$1"; shift
+            set +e
+            out=$(curl -4 -sS --connect-timeout 5 --max-time 10 -o /tmp/probe-body -w 'http=%{http_code} remote=%{remote_ip} connect=%{time_connect} tls=%{time_appconnect} total=%{time_total}' "$@" 2>/tmp/probe-err)
+            rc=$?
+            set -e
+            echo "$label rc=$rc $out"
+            if [ -s /tmp/probe-err ]; then sed -n '1,3p' /tmp/probe-err; fi
+          }
+          probe ROOT "$SUPABASE_URL/"
+          probe AUTH_HEALTH "$SUPABASE_URL/auth/v1/health"
+          probe REST "$SUPABASE_URL/rest/v1/" -H "apikey: $SUPABASE_KEY" -H "Authorization: Bearer $SUPABASE_KEY"
+          probe AUTH_SETTINGS "$SUPABASE_URL/auth/v1/settings" -H "apikey: $SUPABASE_KEY" -H "Authorization: Bearer $SUPABASE_KEY"
+          echo 'CONNECTIVITY_PROBE_COMPLETE'
