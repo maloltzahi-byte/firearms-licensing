@@ -11,8 +11,23 @@ function publicKey() {
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request })
+  const path = request.nextUrl.pathname
+  const protectedPath = path.startsWith('/app') || path.startsWith('/cockpit')
+  const authEntry = path === '/login' || path === '/cockpit/login'
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = publicKey()
+
+  // Fail closed for authenticated surfaces. A deployment with missing auth
+  // configuration must never silently expose a protected route.
+  if ((!url || !key) && protectedPath && path !== '/cockpit/login') {
+    return new NextResponse('השירות אינו זמין כרגע. נסו שוב מאוחר יותר.', {
+      status: 503,
+      headers: {
+        'Cache-Control': 'private, no-store',
+        'Content-Type': 'text/plain; charset=utf-8',
+      },
+    })
+  }
 
   if (!url || !key) return response
 
@@ -33,9 +48,6 @@ export async function middleware(request: NextRequest) {
 
   const { data } = await supabase.auth.getClaims()
   const claims = data?.claims
-  const path = request.nextUrl.pathname
-  const protectedPath = path.startsWith('/app') || path.startsWith('/cockpit')
-  const authEntry = path === '/login' || path === '/cockpit/login'
 
   if (protectedPath && path !== '/cockpit/login' && !claims) {
     const redirectUrl = request.nextUrl.clone()
