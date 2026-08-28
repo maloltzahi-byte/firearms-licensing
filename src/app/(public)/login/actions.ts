@@ -14,6 +14,16 @@ function safeNext(value: FormDataEntryValue | null) {
   return value
 }
 
+function authEmailOrigin() {
+  const configured = process.env.NEXT_PUBLIC_APP_URL?.trim()
+  if (configured) return configured.replace(/\/+$/, '')
+
+  const vercelUrl = process.env.VERCEL_URL?.trim()
+  if (vercelUrl) return `https://${vercelUrl.replace(/^https?:\/\//, '').replace(/\/+$/, '')}`
+
+  return 'http://localhost:3000'
+}
+
 export async function login(formData: FormData) {
   const parsed = credentials.safeParse({
     email: formData.get('email'),
@@ -36,7 +46,7 @@ export async function signup(formData: FormData) {
   if (!parsed.success) redirect('/login?error=required')
 
   const supabase = await createSupabaseServerClient()
-  const origin = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+  const origin = authEmailOrigin()
   const { data, error } = await supabase.auth.signUp({
     ...parsed.data,
     options: { emailRedirectTo: `${origin}/auth/callback?next=/app` },
@@ -50,7 +60,7 @@ export async function requestPasswordReset(formData: FormData) {
   const email = z.string().email().safeParse(formData.get('email'))
   if (email.success) {
     const supabase = await createSupabaseServerClient()
-    const origin = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+    const origin = authEmailOrigin()
     await supabase.auth.resetPasswordForEmail(email.data, {
       redirectTo: `${origin}/auth/callback?next=/auth/update-password`,
     })
