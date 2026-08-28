@@ -1,0 +1,30 @@
+{
+  "project_id": "lcvshepgzizrlqbzvjoe",
+  "captured_at": "2026-08-28",
+  "source": "Supabase live migration history",
+  "live_schema_md5": "5490f051c27738c81ed6486f34f95fed",
+  "fingerprint_input_bytes": 47019,
+  "note": "Historical SQL for migrations 1-19 is not present in the canonical ZIP or repository. Do not fabricate it. Use the live-schema baseline as the reproducible current-state source.",
+  "migrations": [
+    ["20260811133245", "quarantine_legacy_rfl_tables"],
+    ["20260811133357", "stage_07_core_backend"],
+    ["20260811133442", "stage_07_security_hardening"],
+    ["20260811133516", "stage_07_private_health_table"],
+    ["20260811133736", "stage_07_performance_hardening"],
+    ["20260811155703", "case_bootstrap_gate_trigger"],
+    ["20260812081315", "frontend_integration_contracts"],
+    ["20260812085441", "least_privilege_table_grants"],
+    ["20260812093323", "restore_rls_helper_execute_for_authenticated"],
+    ["20260812104251", "stage11_bundle_store"],
+    ["20260812104431", "stage11_bundle_store_modules"],
+    ["20260812131535", "stage11_bundle_store_write_support"],
+    ["20260827111334", "release_security_hardening_2026_08_27"],
+    ["20260827111549", "disable_unused_pg_graphql_2026_08_27"],
+    ["20260827111712", "fix_case_insert_returning_and_membership_2026_08_27"],
+    ["20260827111828", "fix_sensitive_owner_autosave_2026_08_27"],
+    ["20260827175122", "restore_rfl_case_documents_bucket_2026_08_27"],
+    ["20260827182022", "document_engine_hardening_2026_08_27"],
+    ["20260827182251", "case_status_rpc_2026_08_27"],
+    ["20260828070945", "grant_questionnaire_answers_update_2026_08_28"]
+  ]
+}
