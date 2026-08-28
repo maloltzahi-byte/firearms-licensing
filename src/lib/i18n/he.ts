@@ -102,6 +102,11 @@ export const HE = {
     approved: 'אושר',
     rejected: 'נדחה',
   },
+  sensitivityLevels: {
+    normal: 'רגיל',
+    sensitive: 'רגיש',
+    medical: 'מידע רפואי',
+  },
   taskStatuses: {
     open: 'פתוחה',
     in_progress: 'בטיפול',
