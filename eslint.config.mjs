@@ -20,12 +20,13 @@ export default [
       'public/**',
       'stage11/**',
       '*.config.js',
-      '*.config.mjs',
       '*.config.ts',
     ],
   },
   {
-    files: ['src/**/*.{js,jsx,ts,tsx}'],
+    // Include eslint.config.mjs so Next 15's plugin-detection pass can see the
+    // flat-config plugin registration when it calls calculateConfigForFile().
+    files: ['src/**/*.{js,jsx,ts,tsx}', 'eslint.config.mjs'],
     plugins: {
       '@next/next': nextPlugin,
     },
