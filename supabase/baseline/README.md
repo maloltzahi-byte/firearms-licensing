@@ -5,9 +5,10 @@ This directory records the authoritative live database state used by the RC prod
 ## Provenance
 
 - Supabase project: `lcvshepgzizrlqbzvjoe`
-- Live migration history captured: 20 versions
-- Deterministic live-schema fingerprint: `5490f051c27738c81ed6486f34f95fed`
-- Fingerprint input: 47,019 bytes of canonicalized metadata covering columns, constraints, selected authorization/mutation functions, RLS policies, triggers, indexes and the case-document storage bucket.
+- Live migration history captured: 21 versions
+- Deterministic live-schema fingerprint: `7a6074dd1bd3e7e7cb283ca5fb3011b6`
+- Fingerprint input: 47,247 bytes of canonicalized metadata covering columns, constraints, selected authorization/mutation functions, RLS policies, triggers, indexes and the case-document storage bucket.
+- Current health migration: `20260828080143_add_public_health_ping_2026_08_28.sql`.
 
 ## Historical migration gap
 
@@ -24,6 +25,7 @@ The missing historical SQL must never be reconstructed from guesses. `live-migra
 - Security-definer authorization helpers use an empty `search_path`.
 - Browser code uses only a publishable/anon key; no service-role key is exposed client-side.
 - Storage bucket: `rfl-case-documents`, private, 15 MiB limit, PDF/JPEG/PNG only, with object policies bound to case access.
+- `public.health_ping()` is a read-only RPC that returns only `ok`; it is used by `/api/health` to verify PostgREST without exposing case data.
 
 ## Open production security setting
 
