@@ -54,8 +54,19 @@ jobs:
           exit 1
       - name: Live backend health boundary
         run: |
-          curl -fsS http://127.0.0.1:3000/api/health -o /tmp/rfl-health.json
-          cat /tmp/rfl-health.json
+          set -euo pipefail
+          healthy=0
+          for attempt in 1 2 3; do
+            http=$(curl -sS --max-time 12 -o /tmp/rfl-health.json -w '%{http_code}' http://127.0.0.1:3000/api/health || true)
+            echo "health attempt ${attempt}: HTTP ${http}"
+            cat /tmp/rfl-health.json 2>/dev/null || true
+            if [ "$http" = "200" ]; then
+              healthy=1
+              break
+            fi
+            sleep $((attempt * 2))
+          done
+          test "$healthy" = "1"
           node - <<'NODE'
           const fs = require('node:fs')
           const health = JSON.parse(fs.readFileSync('/tmp/rfl-health.json', 'utf8'))
@@ -74,6 +85,7 @@ jobs:
           const BASE = 'http://127.0.0.1:3000'
           const publicRoutes = ['/how-it-works','/routes','/faq','/appeal','/pricing','/about','/contact']
           const legalRoutes = ['/privacy','/terms','/accessibility']
+          const forbiddenPublicCopy = ['CASE READINESS','COUNSEL-IN-LOOP','NO AUTO-VERDICT','FORM FOLLOWS EVIDENCE','CASE JOURNEY ENGINE','SOURCE POINTER','AI יכול']
 
           async function assertNoSeriousAxe(page, path) {
             const results = await new AxeBuilder({ page }).analyze()
@@ -87,6 +99,18 @@ jobs:
             const iframe = page.locator('iframe')
             assert.equal(await iframe.count(), 1, `${path}: canonical iframe missing`)
             await iframe.waitFor({ state: 'visible' })
+          }
+
+          async function assertPublicCopyClean(page, path) {
+            await page.goto(`${BASE}${path}`)
+            await page.waitForLoadState('domcontentloaded')
+            const frame = page.frameLocator('iframe')
+            await frame.locator('body').waitFor({ state: 'visible' })
+            const body = await frame.locator('body').innerText()
+            for (const phrase of forbiddenPublicCopy) {
+              assert.equal(body.includes(phrase), false, `${path}: internal public copy leaked: ${phrase}`)
+            }
+            assert.ok(body.includes('בדיקת זכאות וליווי משפטי'), `${path}: cleaned Hebrew public label missing`)
           }
 
           async function assertNoHorizontalOverflow(page, label) {
@@ -103,6 +127,7 @@ jobs:
             page.on('console', msg => { if (msg.type() === 'error') consoleErrors.push(msg.text()) })
             page.on('pageerror', err => pageErrors.push(err.message))
 
+            await assertPublicCopyClean(page, '/')
             await page.goto(`${BASE}/`)
             await page.waitForLoadState('domcontentloaded')
             const homeFrame = page.frameLocator('iframe[title="RFL — מסך הבית"]')
@@ -124,6 +149,10 @@ jobs:
               const frame = page.frameLocator('iframe')
               const homeLink = frame.getByRole('link', { name: /עו״ד צחי מלול/ })
               assert.ok(await homeLink.count(), `${path}: brand/home link missing`)
+              const body = await frame.locator('body').innerText()
+              for (const phrase of forbiddenPublicCopy) {
+                assert.equal(body.includes(phrase), false, `${path}: internal public copy leaked: ${phrase}`)
+              }
             }
 
             for (const path of legalRoutes) {
@@ -206,7 +235,7 @@ jobs:
             assert.deepEqual(pageErrors, [], `page errors: ${pageErrors.join(' | ')}`)
             assert.deepEqual(ignorableConsole, [], `console errors: ${ignorableConsole.join(' | ')}`)
 
-            console.log('RC ADVANCED E2E PASS: frozen-install/gates/live-backend-health/click-navigation/public/guided-20/auth-boundary/viewport-matrix/axe/runtime-errors')
+            console.log('RC ADVANCED E2E PASS: frozen-install/gates/live-backend-health/public-copy/click-navigation/public/guided-20/auth-boundary/viewport-matrix/axe/runtime-errors')
             await context.close()
             await browser.close()
           })().catch((error) => {
