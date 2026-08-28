@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>RFL — Stage 03 Client Area</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@400;500;600&display=swap');
+:root{
+ --navy:#0b223d;--orange:#ff6a1a;--blue:#0b6f9c;--soft:#ddf3fc;--ink:#07182b;--text:#526171;
+ --muted:#8d9aa6;--border:#dce3e9;--canvas:#f7f9fb;--info:#f0fafe;--white:#fff;
+ --success:#2c7a57;--warning:#a8660a;--shadow:0 2px 8px rgba(7,24,43,.06)
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--canvas);color:var(--ink);font-family:"IBM Plex Sans Hebrew",Arial,sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.shell{min-height:900px;position:relative;overflow:hidden;background:var(--canvas)}
+.top{height:72px;background:var(--navy);color:#fff;position:fixed;top:0;left:0;right:0;z-index:20}
+.top-inner{height:72px;position:relative}
+.brand{position:absolute;right:55px;top:22px;font-size:14px;line-height:20px;font-weight:500;letter-spacing:.2px;color:var(--soft)}
+.case-id{position:absolute;left:55px;top:24px;font-size:12px;line-height:18px;font-weight:500;letter-spacing:.4px;color:var(--soft)}
+.side{position:fixed;right:0;top:72px;width:260px;height:calc(100vh - 72px);min-height:828px;background:var(--navy);z-index:15;padding:34px 16px 24px}
+.side h2{font-size:26px;line-height:34px;font-weight:500;margin:0 8px 24px;color:white}
+.navbtn{width:228px;height:44px;border:0;background:transparent;color:var(--soft);text-align:right;padding:0 24px;border-radius:9px;font-size:14px;font-weight:500;display:block;margin:10px 0}
+.navbtn.active{background:var(--info);color:var(--ink)}
+.optic-rail{position:absolute;left:30px;top:358px;width:2px;height:220px;background:var(--soft)}
+.signal{position:absolute;left:18px;top:438px;width:26px;height:26px;border-radius:50%;background:var(--orange);border:6px solid var(--navy);outline:2px solid var(--soft)}
+.legal-note{position:absolute;right:24px;bottom:70px;width:212px;font-size:12px;line-height:18px;letter-spacing:.4px;color:var(--soft);text-align:right}
+.main{margin-right:260px;padding-top:72px;min-height:900px}
+.hero{position:relative;height:338px;padding-top:40px}
+.hero-copy{position:absolute;right:50px;top:38px;width:570px;text-align:right}
+.code{color:var(--blue);font-size:12px;line-height:18px;font-weight:500;letter-spacing:.4px}
+.hero h1{font-size:44px;line-height:52px;letter-spacing:-.6px;font-weight:600;margin:20px 0 0}
+.hero p{font-size:17px;line-height:28px;color:var(--text);margin:48px 0 0}
+.accent{position:absolute;right:50px;top:274px;width:238px;height:5px;border-radius:3px;background:var(--orange)}
+.workspace{width:calc(100% - 130px);max-width:1050px;min-height:400px;margin:0 auto 60px;background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:18px 23px;position:relative;overflow:hidden}
+.workspace-label{font-size:12px;line-height:18px;font-weight:500;letter-spacing:.4px;color:var(--blue);direction:ltr;text-align:left;margin-bottom:16px}
+.rows{border-top:0}
+.row{min-height:68px;border-top:1px solid var(--border);display:grid;grid-template-columns:280px 1fr 110px;gap:22px;align-items:center}
+.row:first-child{border-top:0}
+.row .title{font-size:16px;line-height:22px;font-weight:500;text-align:right}
+.row .body{font-size:15px;line-height:24px;color:var(--text);text-align:left;direction:rtl}
+.pill{height:32px;min-width:110px;padding:0 16px;border-radius:16px;background:var(--info);display:inline-flex;align-items:center;justify-content:center;font-size:12px;line-height:18px;font-weight:500;letter-spacing:.2px;color:var(--blue)}
+.pill.success{color:var(--success)}
+.pill.warning{color:var(--warning)}
+.pill.orange{color:var(--orange)}
+.btn{border:0;border-radius:9px;height:48px;padding:0 24px;font-size:16px;font-weight:500;display:inline-flex;align-items:center;justify-content:center}
+.btn.primary{background:var(--orange);color:var(--ink)}
+.btn.secondary{background:white;color:var(--ink);border:1px solid var(--muted)}
+.btn.ghost{background:var(--info);color:var(--ink);border:1px solid var(--border)}
+.btn:focus-visible,.navbtn:focus-visible,.qa-toggle:focus-visible,.qa-select:focus-visible{outline:3px solid #0b6f9c55;outline-offset:2px}
+.center-card{max-width:720px;margin:46px auto;text-align:center;padding:30px}
+.center-card .big-icon{width:64px;height:64px;background:var(--info);border:1px solid var(--border);border-radius:50%;margin:0 auto 20px;position:relative}
+.center-card .big-icon:after{content:"";position:absolute;inset:19px;border-radius:50%;background:var(--orange)}
+.center-card h3{font-size:26px;line-height:34px;font-weight:500;margin:10px 0}
+.center-card p{font-size:15px;line-height:24px;color:var(--text);max-width:560px;margin:12px auto 22px}
+.actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.receipt{width:720px;max-width:100%;margin:24px auto 0;border:1px solid var(--border);border-radius:16px;padding:28px;background:#fff}
+.receipt-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:1px solid var(--border);padding-bottom:22px;margin-bottom:6px}
+.receipt-head strong{font-size:26px;font-weight:500}.receipt-head span{font-size:12px;color:var(--blue);letter-spacing:.4px}
+.receipt-line{display:grid;grid-template-columns:150px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--border)}
+.receipt-line:last-child{border-bottom:0}.receipt-line b{font-size:16px;font-weight:500}.receipt-line span{font-size:15px;color:var(--text)}
+.dashboard-grid{display:grid;grid-template-columns:148px 148px 148px 1fr;gap:16px;margin:4px 0 28px;direction:ltr}
+.stat,.next-card{height:142px;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:18px;background:#fff;direction:rtl}
+.stat label{font-size:12px;color:var(--muted)}.stat strong{display:block;margin-top:20px;font-size:26px;font-weight:500}.stat.orange strong{color:var(--orange)}
+.next-card{background:var(--info);padding:16px 20px}.next-card .code{direction:ltr;text-align:left}.next-card h3{font-size:26px;line-height:34px;font-weight:500;margin:8px 0 6px}.next-card p{font-size:15px;color:var(--text);margin:0}
+.dashboard-lines .row{grid-template-columns:280px 1fr 110px}
+.timeline{position:relative;padding:16px 28px 12px}
+.timeline-line{position:absolute;right:44px;top:42px;bottom:42px;width:2px;background:var(--border)}
+.event{position:relative;padding:12px 58px 24px 0;min-height:72px}
+.event:before{content:"";position:absolute;right:35px;top:18px;width:20px;height:20px;border-radius:50%;background:white;border:2px solid var(--blue)}
+.event:first-child:before{background:var(--orange);border-color:var(--orange)}
+.event b{display:block;font-size:16px;font-weight:500}.event span{display:block;font-size:15px;color:var(--text);margin-top:5px}
+.messages{padding-top:4px}
+.message{width:72%;padding:14px 18px;border-radius:16px;background:var(--info);margin:12px 0 12px auto;border:1px solid var(--border)}
+.message.me{margin-left:0;margin-right:auto;background:#fff}
+.message-head{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px}.message b{font-size:12px;color:var(--blue)}.message p{font-size:15px;line-height:24px;margin:0}
+.guard{margin-top:18px;padding:14px 18px;background:var(--info);border:1px solid var(--border);border-radius:12px;font-size:12px;line-height:18px;color:var(--text)}
+.status-wrap{padding:74px 50px 34px}
+.status-line{height:2px;background:var(--muted);position:relative;margin:58px 40px 90px;display:flex;align-items:center;justify-content:space-between;direction:rtl}
+.status-step{width:24px;height:24px;border-radius:50%;background:white;border:2px solid var(--blue);position:relative;cursor:pointer}
+.status-step.done{border-color:var(--orange)}.status-step.current{background:var(--orange);border-color:var(--orange)}
+.status-step span{position:absolute;top:-54px;left:50%;transform:translateX(-50%);white-space:nowrap;width:176px;text-align:center;font-size:16px;font-weight:500;color:var(--ink)}
+.source-note{font-size:12px;color:var(--muted);letter-spacing:.4px;direction:rtl;text-align:left}
+.new-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px}
+.new-card{border:1px solid var(--border);border-radius:16px;padding:24px;min-height:180px;background:#fff;cursor:pointer;transition:.18s}
+.new-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.new-card .num{font-size:12px;color:var(--blue)}.new-card h3{font-size:26px;font-weight:500;margin:20px 0 8px}.new-card p{font-size:15px;color:var(--text)}
+.success-band{background:var(--info);border:1px solid var(--border);border-radius:16px;padding:22px 24px;margin-top:30px}
+.success-band h3{font-size:26px;font-weight:500;margin:0 0 10px}.success-band p{font-size:15px;color:var(--text);margin:0}
+.qa{position:fixed;left:14px;bottom:14px;z-index:50;direction:ltr}
+.qa-toggle{height:34px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.94);box-shadow:var(--shadow);font-size:11px;color:var(--blue);padding:0 12px}
+.qa-panel{display:none;margin-top:8px;background:white;border:1px solid var(--border);border-radius:12px;padding:8px;box-shadow:var(--shadow)}
+.qa.open .qa-panel{display:block}.qa-select{width:230px;height:34px;border:1px solid var(--border);border-radius:8px;background:white;padding:0 8px;font-size:12px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--navy);color:white;border-radius:10px;padding:11px 18px;font-size:13px;z-index:80;transition:.2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){
+ .side{width:100%;height:auto;min-height:0;top:72px;right:0;padding:10px 12px;display:flex;align-items:center;gap:4px;overflow:auto}
+ .side h2,.optic-rail,.signal,.legal-note{display:none}.navbtn{min-width:110px;width:auto;margin:0;height:42px;text-align:center;padding:0 14px}
+ .main{margin-right:0;padding-top:124px}.top .brand{right:18px}.case-id{left:18px}.hero{height:300px}.hero-copy{right:20px;left:20px;width:auto}.hero h1{font-size:36px;line-height:44px}.accent{right:20px;top:250px}.workspace{width:calc(100% - 40px);margin:0 20px 40px}
+ .dashboard-grid{grid-template-columns:1fr 1fr}.next-card{grid-column:1/-1}.row{grid-template-columns:1fr 110px}.row .body{grid-column:1/-1;grid-row:2;text-align:right;padding-bottom:12px}.row .pill{grid-column:2;grid-row:1}
+ .new-grid{grid-template-columns:1fr}.receipt{width:auto}.status-line{margin-left:0;margin-right:0}.status-step span{font-size:12px;width:90px}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<input id="filePicker" type="file" accept=".pdf,.jpg,.jpeg,.png" hidden>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>const screens={
+35:{code:"35 / PAYMENT / SUCCESS",title:"התשלום התקבל. התיק ממשיך.",body:"קבלה ושירות שנבחר נשמרים בתיק; שלבי הטיפול הבאים מוצגים בנפרד מהתשלום.",label:"PAYMENT / SUCCESS",type:"success"},
+36:{code:"36 / PAYMENT / FAILED",title:"לא בוצע חיוב.",body:"המסך מסביר מה קרה ומה אפשר לעשות בלי לאבד את הטיוטה או את הקשר לתיק.",label:"PAYMENT / FAILED",type:"failed"},
+37:{code:"37 / RECEIPT",title:"מסמך תשלום בתוך התיק.",body:"הקבלה מוצגת עם השירות, מועד התשלום ומזהה העסקה, ללא ערבוב עם סטטוס משפטי.",label:"RECEIPT",type:"receipt"},
+38:{code:"38 / CLIENT DASHBOARD",title:"מה קורה עכשיו בתיק?",body:"מסך הבית של הלקוח מציג פעולה הבאה, מסמכים פתוחים, הודעות וסטטוס — לפי סדר עדיפות.",label:"CLIENT DASHBOARD",type:"dashboard"},
+39:{code:"39 / CASE OVERVIEW",title:"תמונה אחת של התיק.",body:"מסלול שנבדק, ראיות, פערים והחלטות מוצגים באותו הקשר עם ציון מה ידוע ומה עדיין לעיון.",label:"CASE OVERVIEW",type:"rows",rows:[
+["הליך","בקשה חדשה / כפי שנבחר בפתיחת התיק","נבחר",""],
+["מסלול שנבדק","דורש אימות מול המקור והמסמכים","לעיון",""],
+["ראיות","3 מסמכים תומכים / 1 חסר","חלקי","warning"],
+["החלטת עו״ד","טרם נרשמה החלטה סופית","ממתין","warning"]]},
+40:{code:"40 / CASE TIMELINE",title:"היסטוריה שאפשר לחזור אליה.",body:"כל אירוע נשמר עם תאריך, מקור והמשמעות שלו לפעולה הבאה.",label:"CASE TIMELINE",type:"timeline"},
+41:{code:"41 / DOCUMENTS",title:"המסמכים מסודרים לפי תפקיד בתיק.",body:"לא תיקיית קבצים: כל מסמך קשור לטענה, סטטוס בדיקה ופעולה.",label:"DOCUMENTS",type:"documents"},
+42:{code:"42 / MESSAGES",title:"הודעות עם הקשר.",body:"ההתכתבות נשמרת לצד התיק והפעולה שאליה היא מתייחסת — כדי לא לאבד החלטות בתוך צ׳אט.",label:"MESSAGES",type:"messages"},
+43:{code:"43 / TASKS",title:"רואים רק את מה שצריך לעשות עכשיו.",body:"משימות נוצרות מפער, דרישה, מועד או החלטת עורך דין; הן אינן רשימת to-do כללית.",label:"TASKS",type:"tasks"},
+44:{code:"44 / AUTHORITY STATUS",title:"סטטוס בלי לפרש יותר מדי.",body:"מציגים את המידע שנקלט בתיק ואת הפעולה הבאה; כשהמקור חיצוני הוא מסומן כמקור חיצוני.",label:"AUTHORITY STATUS",type:"status"},
+45:{code:"45 / INTERVIEW PREP",title:"אם נדרש ראיון — מתכוננים מהתיק.",body:"המסך מרכז מסמכים, נושאים לבדיקה ושאלות שהמשתמש צריך להבין לפני המפגש.",label:"INTERVIEW PREP",type:"rows",rows:[
+["מסמכים שכדאי לעבור עליהם","תעודה, תימוכין והמסמכים שכבר בתיק","מוכן","success"],
+["נושאים שמסומנים לעיון","שאלה אחת דורשת תשומת לב","לעיון",""],
+["שאלות לעורך הדין","נשמרו שתי שאלות לקראת ההכנה","2",""]],
+guard:"אין תסריט תשובות “נכון”. ההכנה נועדה להבין את התיק ואת המסמכים שלכם."},
+46:{code:"46 / CONDITIONAL STEP",title:"אישור מותנה הוא שלב, לא סוף.",body:"כאשר התיק מתעד אישור מותנה, מוצגות הפעולות שנדרשות להמשך לפי המסמך והמקור שהתקבלו.",label:"CONDITIONAL STEP",type:"rows",lead:"נרשם בתיק: אישור מותנה / שלב נוסף",rows:[
+["פעולה הבאה","לפי המסמך שהתקבל בתיק","נדרש","warning"],
+["מקור","יש לפתוח את המסמך/הודעה הרשמית","מקור",""],
+["מועד","יוצג רק אם תועד מועד מחייב בתיק","מעקב",""]]},
+47:{code:"47 / FINAL STATUS",title:"מצב הרישיון מתועד בנפרד מהתהליך.",body:"אם התקבל רישיון, המסך שומר את מסמך המקור והפרטים שנמסרו; אם לא — אין הצהרה או חיזוי.",label:"FINAL STATUS",type:"final"},
+48:{code:"48 / NEW CASE",title:"פותחים תיק חדש בלי למחוק את הקודם.",body:"כל הליך נשאר עצמאי עם מסמכים, סטטוסים והחלטות משלו.",label:"NEW CASE",type:"new"}
+};
+const state=JSON.parse(localStorage.getItem("rfl-stage3")||'{"documentAdded":false,"taskDone":false,"messageRead":false}');
+function save(){localStorage.setItem("rfl-stage3",JSON.stringify(state))}
+function current(){const q=new URLSearchParams(location.search);let n=Number(q.get("screen")||38);return screens[n]?n:38}
+function activeNav(n){if(n===41)return 1;if(n===42)return 2;if(n===43)return 3;if(n>=44)return 4;return 0}
+function nav(){
+ const n=current(),a=activeNav(n),items=[["סקירה",38],["מסמכים",41],["הודעות",42],["משימות",43],["סטטוס",44]];
+ return `<aside class="side"><h2>האזור האישי</h2>${items.map((x,i)=>`<button class="navbtn ${a===i?'active':''}" onclick="go(${x[1]})">${x[0]}</button>`).join("")}<div class="optic-rail"></div><div class="signal"></div><p class="legal-note">אין חיווי זכאות אוטומטי. כל החלטה מהותית נשמרת עם מקור/הסבר.</p></aside>`
+}
+function row(r){return `<div class="row"><div class="title">${r[0]}</div><div class="body">${r[1]}</div><div><span class="pill ${r[3]||''}">${r[2]}</span></div></div>`}
+function rowsContent(d){return `${d.lead?`<div class="success-band"><h3>${d.lead}</h3><p>השלב מתועד לפי מסמך המקור והקשר התיק.</p></div>`:""}<div class="rows">${d.rows.map(row).join("")}</div>${d.guard?`<div class="guard">${d.guard}</div>`:""}`}
+function dashboard(){
+ const docs=state.documentAdded?"4 / 4":"3 / 4", tasks=state.documentAdded?"0 פתוחות":"1 פתוחה";
+ return `<div class="dashboard-grid"><div class="stat"><label>מסמכים</label><strong>${docs}</strong></div><div class="stat"><label>הודעות</label><strong>1 חדשה</strong></div><div class="stat orange"><label>משימות</label><strong>${tasks}</strong></div><button class="next-card" onclick="go(41)" style="border:1px solid var(--border);text-align:right"><div class="code">NEXT ACTION</div><h3>${state.documentAdded?"התיק מוכן להמשך בדיקה":"השלמת מסמך תומך"}</h3><p>${state.documentAdded?"המסמך נוסף. אפשר לעבור לסקירת התיק.":"פריט אחד חסר לפני בדיקת עו״ד."}</p></button></div>
+ <div class="dashboard-lines"><div class="row"><div class="title">אירוע אחרון</div><div class="body">${state.documentAdded?"נוסף תימוכין חדש ונקשר לתיק":"התקבל מסמך חדש ונקשר לתיק"}</div><div><button class="pill" onclick="go(40)">עודכן</button></div></div>
+ <div class="row"><div class="title">בדיקת עו״ד</div><div class="body">${state.documentAdded?"מוכן להעברה לעיון":"תיפתח לאחר השלמת המסמך החסר"}</div><div><button class="pill warning" onclick="go(39)">${state.documentAdded?"מוכן":"ממתין"}</button></div></div></div>`
+}
+function documents(){
+ const last=state.documentAdded?["תימוכין נוסף","נוסף ונקשר לתיק","נוסף","success"]:["תימוכין נוסף","עדיין חסר","חסר","warning"];
+ const rs=[["תעודת זהות","מקושרת לפרטי הזיהוי","נבדק","success"],["מסמך שירות / פעילות","מקושר למסלול שנבדק","לעיון",""],["מסמך רפואי","אזור רגיש / הרשאות מוגבלות","רגיש",""],last];
+ return `<div class="rows">${rs.map(row).join("")}</div><button class="btn primary" onclick="pickFile()">הוספת מסמך</button>`
+}
+function messages(){return `<div class="messages"><div class="message"><div class="message-head"><b>המשרד</b><span>10:42</span></div><p>קיבלנו את המסמך. הוא נוסף לתיק.</p></div><div class="message me"><div class="message-head"><b>אתם</b><span>10:48</span></div><p>האם נדרש מסמך נוסף?</p></div><div class="message"><div class="message-head"><b>המשרד</b><span>10:55</span></div><p>כרגע מסומן פריט אחד להשלמה; הוא מופיע במשימות.</p></div><div class="guard">ההתכתבות נשמרת כחלק מהקשר התיק. החלטות מהותיות אינן נשמרות כהודעת צ׳אט בלבד.</div></div>`}
+function tasks(){
+ const r1=state.documentAdded?["להעלות מסמך תומך","המסמך נוסף לתיק","הושלם","success"]:["להעלות מסמך תומך","נדרש לפני העברה לעורך הדין","פתוח","warning"];
+ const rs=[r1,["לאשר פרטי קשר","הושלם","הושלם","success"],["לעבור על סיכום התיק",state.documentAdded?"המשימה זמינה עכשיו":"ייפתח אחרי השלמת המסמך",state.documentAdded?"פתוח":"נעול",state.documentAdded?"warning":""]];
+ return `<div class="rows">${rs.map((r,i)=>`<div class="row" ${i===0&&!state.documentAdded?'onclick="go(41)" style="cursor:pointer"':''}><div class="title">${r[0]}</div><div class="body">${r[1]}</div><div><span class="pill ${r[3]}">${r[2]}</span></div></div>`).join("")}</div><div class="guard">המשימה נובעת מפער ממשי בתיק — לא מהמלצה כללית.</div>`
+}
+function timeline(){return `<div class="timeline"><div class="timeline-line"></div>${[["פתיחת תיק","היום · מידע שנמסר"],["העלאת מסמך","היום · מקור: המשתמש"],["בדיקה אוטומטית","מיפוי פערים בלבד"],["בדיקת עו״ד",state.documentAdded?"מוכן לעיון":"ממתין"]].map(e=>`<div class="event"><b>${e[0]}</b><span>${e[1]}</span></div>`).join("")}</div>`}
+function status(){return `<div class="status-wrap"><div class="status-line"><button class="status-step done" onclick="showToast('נשלח — תיעוד בתיק')"><span>נשלח</span></button><button class="status-step current" onclick="showToast('נקלט בתיק')"><span>נקלט בתיק</span></button><button class="status-step" onclick="go(46)"><span>ממתין לעדכון</span></button><button class="status-step" onclick="go(45)"><span>פעולה הבאה</span></button></div><div class="source-note">מקור הסטטוס: תיעוד בתיק / מידע חיצוני כאשר הוזן או סונכרן</div><div class="actions" style="margin-top:34px"><button class="btn ghost" onclick="go(45)">הכנה לראיון</button><button class="btn ghost" onclick="go(46)">אישור מותנה</button><button class="btn ghost" onclick="go(47)">סטטוס סופי</button></div></div>`}
+function success(){return `<div class="center-card"><div class="big-icon"></div><div class="code">PAYMENT / SUCCESS</div><h3>התשלום תועד בתיק</h3><p>השלב הבא: השלמת בדיקת עורך הדין / המשך טיפול לפי היקף השירות שאושר.</p><span class="pill success">שולם</span><div class="actions" style="margin-top:24px"><button class="btn primary" onclick="go(38)">פתיחת התיק</button><button class="btn ghost" onclick="go(37)">צפייה בקבלה</button></div></div>`}
+function failed(){return `<div class="center-card"><div class="code">PAYMENT / FAILED</div><h3>העסקה לא הושלמה</h3><p>לא בוצע חיוב. הטיוטה נשמרה ואפשר לנסות שוב או לבחור אמצעי אחר.</p></div><div class="rows">${[["שירות שנבחר","נשמר ללא שינוי","נשמר","success"],["מצב התיק","ממתין לתשלום / פעולה נוספת","פתוח","warning"]].map(row).join("")}</div><div class="actions" style="margin-top:22px"><button class="btn primary" onclick="showToast('Preview בלבד — לא מתבצע חיוב')">ניסיון נוסף</button><button class="btn secondary" onclick="go(38)">חזרה לתיק</button></div>`}
+function receipt(){return `<div class="receipt"><div class="receipt-head"><div><strong>עו״ד צחי מלול / RFL</strong><br><span>מסמך תשלום / אסמכתה</span></div><span>RFL-2026-001</span></div>${[["שירות","היקף הטיפול שאושר בתיק"],["מועד","מועד העסקה בפועל"],["סכום","כפי שחויב בפועל"]].map(x=>`<div class="receipt-line"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("")}</div><div class="actions" style="margin-top:18px"><button class="btn secondary" onclick="go(35)">חזרה לאישור התשלום</button></div>`}
+function finalStatus(){return `<div class="center-card"><div class="code">FINAL STATUS</div><h3>סטטוס סופי מתועד</h3><p>אם הועלה מסמך רישיון/הודעה רשמית, הוא מוצג כמקור. המסך אינו מייצר סטטוס שלא התקבל.</p><span class="pill">מקור נדרש</span><div class="guard">הסטטוס הסופי יוצג רק מתוך מסמך או הודעה רשמית שנקלטו בתיק.</div><div class="actions" style="margin-top:22px"><button class="btn primary" onclick="go(48)">פתיחת הליך נוסף</button><button class="btn secondary" onclick="go(44)">חזרה לסטטוס</button></div></div>`}
+function newCase(){return `<div class="new-grid"><button class="new-card" onclick="showToast('פתיחת מסלול חדש שייכת ל-Guided Journey שאושר בשלב 2')"><div class="num">01</div><h3>בקשה חדשה</h3><p>פתיחת מסלול מונחה חדש</p></button><button class="new-card" onclick="showToast('פתיחת ערר חדש שייכת ל-Guided Journey שאושר בשלב 2')"><div class="num">02</div><h3>דחייה / ערר</h3><p>פתיחת תיק נפרד עם החלטה ומועד</p></button></div><div class="guard" style="margin-top:26px">התיקים הקודמים נשמרים לקריאה ואינם מתערבבים עם ההליך החדש.</div><div class="actions" style="margin-top:24px"><button class="btn primary" onclick="showToast('Preview: תיק חדש ייפתח כישות נפרדת')">פתיחת תיק חדש</button></div>`}
+function renderContent(d){
+ if(d.type==="success")return success(); if(d.type==="failed")return failed(); if(d.type==="receipt")return receipt();
+ if(d.type==="dashboard")return dashboard(); if(d.type==="documents")return documents(); if(d.type==="messages")return messages();
+ if(d.type==="tasks")return tasks(); if(d.type==="timeline")return timeline(); if(d.type==="status")return status();
+ if(d.type==="final")return finalStatus(); if(d.type==="new")return newCase(); if(d.type==="rows")return rowsContent(d); return "";
+}
+function qa(){return `<div class="qa" id="qa"><button class="qa-toggle" onclick="document.getElementById('qa').classList.toggle('open')">QA PREVIEW · 35–48</button><div class="qa-panel"><select class="qa-select" onchange="go(Number(this.value))">${Object.entries(screens).map(([n,d])=>`<option value="${n}" ${Number(n)===current()?'selected':''}>${n} — ${d.title}</option>`).join("")}</select></div></div>`}
+function render(){
+ const n=current(),d=screens[n];
+ document.getElementById("root").innerHTML=`<div class="shell"><header class="top"><div class="top-inner"><div class="brand">RFL / CLIENT AREA</div><div class="case-id">תיק RFL-2026-001 · עודכן לאחרונה היום</div></div></header>${nav()}<main class="main"><section class="hero"><div class="hero-copy"><div class="code">${d.code}</div><h1>${d.title}</h1><p>${d.body}</p></div><div class="accent"></div></section><section class="workspace"><div class="workspace-label">${d.label}</div>${renderContent(d)}</section></main>${qa()}</div>`
+}
+function go(n){history.pushState({},'',location.pathname+'?screen='+n);render();window.scrollTo({top:0,behavior:"smooth"})}
+function showToast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");clearTimeout(window.__tt);window.__tt=setTimeout(()=>el.classList.remove("show"),2200)}
+function pickFile(){document.getElementById("filePicker").click()}
+document.getElementById("filePicker").addEventListener("change",e=>{if(!e.target.files[0])return;state.documentAdded=true;save();showToast("המסמך נוסף ל-Preview ונקשר לתיק");render()})
+onpopstate=render;render();</script>
+</body>
+</html>
