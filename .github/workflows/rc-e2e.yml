@@ -12,7 +12,7 @@ jobs:
   e2e:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       NEXT_PUBLIC_SUPABASE_URL: https://lcvshepgzizrlqbzvjoe.supabase.co
       NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: sb_publishable_44F1VklC5ZfK3q1IFzdIJQ_e-1xUwJT
@@ -22,15 +22,30 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Install dependencies
-        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Enable pinned pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@9.15.9 --activate
+          test "$(pnpm --version)" = "9.15.9"
+      - name: Frozen dependency install
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Release and provider readiness gates
+        run: |
+          pnpm release:verify
+          pnpm providers:verify
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Lint
+        run: pnpm lint
+      - name: Unit tests
+        run: pnpm test
       - name: Build application
-        run: npm run build
+        run: pnpm build
       - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: Run app
         run: |
-          npm start > /tmp/rfl-next.log 2>&1 &
+          pnpm start > /tmp/rfl-next.log 2>&1 &
           for i in {1..60}; do
             if curl -fsS http://127.0.0.1:3000/ >/dev/null; then exit 0; fi
             sleep 1
@@ -60,6 +75,11 @@ jobs:
             const iframe = page.locator('iframe')
             assert.equal(await iframe.count(), 1, `${path}: canonical iframe missing`)
             await iframe.waitFor({ state: 'visible' })
+          }
+
+          async function assertNoHorizontalOverflow(page, label) {
+            const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
+            assert.ok(overflow <= 2, `${label}: horizontal overflow ${overflow}px`)
           }
 
           ;(async () => {
@@ -147,6 +167,20 @@ jobs:
             assert.ok(await page.getByRole('button', { name: /^יצירת חשבון$/ }).isEnabled(), 'signup button disabled')
             assert.ok(await page.getByRole('button', { name: /שכחתי סיסמה/ }).isEnabled(), 'password reset button disabled')
 
+            for (const viewport of [
+              { width: 390, height: 844, name: 'mobile' },
+              { width: 768, height: 1024, name: 'tablet' },
+              { width: 1280, height: 800, name: 'desktop-medium' },
+              { width: 1440, height: 900, name: 'desktop-canonical' },
+            ]) {
+              await page.setViewportSize({ width: viewport.width, height: viewport.height })
+              await page.goto(`${BASE}/`)
+              await assertNoHorizontalOverflow(page, viewport.name)
+              assert.ok(await page.locator('iframe').isVisible(), `${viewport.name}: home iframe missing`)
+              await page.goto(`${BASE}/start/request-type`)
+              assert.ok(await page.locator('iframe').isVisible(), `${viewport.name}: guided iframe missing`)
+            }
+
             await page.setViewportSize({ width: 390, height: 844 })
             await page.goto(`${BASE}/preview/mobile/75`)
             assert.ok(await page.locator('iframe').isVisible(), 'mobile canonical iframe missing')
@@ -160,7 +194,7 @@ jobs:
             assert.deepEqual(pageErrors, [], `page errors: ${pageErrors.join(' | ')}`)
             assert.deepEqual(ignorableConsole, [], `console errors: ${ignorableConsole.join(' | ')}`)
 
-            console.log('RC ADVANCED E2E PASS: click-navigation/public/guided-20/auth-boundary/mobile/axe/runtime-errors')
+            console.log('RC ADVANCED E2E PASS: frozen-install/gates/click-navigation/public/guided-20/auth-boundary/viewport-matrix/axe/runtime-errors')
             await context.close()
             await browser.close()
           })().catch((error) => {
