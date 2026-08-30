@@ -1,10 +1,16 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
+import { Assistant } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { SiteHeader } from '@/components/site-header'
 import { SiteFooter } from '@/components/site-footer'
 import { site } from '@/lib/site'
 import './globals.css'
+
+const assistant = Assistant({
+  subsets: ['hebrew', 'latin'],
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -23,7 +29,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="he" dir="rtl">
-      <body>
+      <body className={assistant.className}>
         <a className="skip-link" href="#main">דלגו לתוכן הראשי</a>
         <SiteHeader />
         {children}

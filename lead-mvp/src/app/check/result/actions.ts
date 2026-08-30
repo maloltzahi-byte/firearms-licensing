@@ -13,8 +13,19 @@ export const initialLeadState: LeadState = { status: 'idle', message: '' }
 
 type HeaderReader = { get(name: string): string | null }
 
+type MailInput = Parameters<Resend['emails']['send']>[0]
+
 function getIp(headerList: HeaderReader) {
   return headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || headerList.get('x-real-ip')?.trim() || 'unknown'
+}
+
+async function sendSafely(resend: Resend, input: MailInput) {
+  try {
+    const response = await resend.emails.send(input)
+    return !response.error
+  } catch {
+    return false
+  }
 }
 
 export async function submitLead(_previous: LeadState, formData: FormData): Promise<LeadState> {
@@ -61,10 +72,15 @@ export async function submitLead(_previous: LeadState, formData: FormData): Prom
 
   const resend = new Resend(apiKey)
   const recipients = [...new Set([primary, backup])]
-  const leadDelivery = await resend.emails.send({ from, to: recipients, replyTo: parsed.data.email, subject, text })
-  if (leadDelivery.error) return { status: 'error', message: `שליחת הפנייה נכשלה.${site.phone ? ` אנא התקשרו למשרד: ${site.phone}` : ' אנא נסו שוב מאוחר יותר.'}` }
+  const deliveryResults = await Promise.all(
+    recipients.map((recipient) => sendSafely(resend, { from, to: recipient, replyTo: parsed.data.email, subject, text })),
+  )
 
-  await resend.emails.send({
+  if (deliveryResults.some((delivered) => !delivered)) {
+    return { status: 'error', message: `שליחת הפנייה לא הושלמה לכל כתובות המשרד.${site.phone ? ` אנא התקשרו למשרד: ${site.phone}` : ' אנא נסו שוב מאוחר יותר.'}` }
+  }
+
+  await sendSafely(resend, {
     from,
     to: parsed.data.email,
     subject: 'קיבלנו את פנייתך',

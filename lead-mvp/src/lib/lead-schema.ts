@@ -4,7 +4,7 @@ import { ageOptions, citizenshipOptions, residencyOptions, serviceOptions } from
 const normalizePhone = (value: unknown) => typeof value === 'string' ? value.replace(/[\s()-]/g, '') : value
 
 export const leadSchema = z.object({
-  fullName: z.string().trim().min(2).max(100),
+  fullName: z.string().trim().min(2).max(100).regex(/^[^\r\n]+$/),
   phone: z.preprocess(normalizePhone, z.string().regex(/^(?:\+972|972|0)[2-9]\d{7,8}$/)),
   email: z.string().trim().email().max(254),
   note: z.string().trim().max(500).optional().default(''),
