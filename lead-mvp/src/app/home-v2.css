@@ -1,0 +1,175 @@
+/* Approved Figma homepage — node 8:2. Loaded after globals.css + conversion.css. */
+.home-utility{background:#003765;color:#fff;font-size:13px}
+.home-utility .gov-utility-inner{min-height:36px;padding-inline:48px;direction:ltr}
+.home-utility .utility-contact,.home-utility .utility-note{direction:rtl;color:#fff}
+.utility-separator{height:2px;background:rgba(255,255,255,.15)}
+.home-gov-header{background:#0666d8!important;color:#fff}
+.home-gov-header .gov-header-inner{min-height:74px;padding-inline:48px;direction:ltr}
+.home-nav{gap:32px;height:74px;align-items:center;font-size:15px;font-weight:700;direction:ltr}
+.home-nav a{direction:rtl;position:relative;display:flex;height:100%;align-items:center;color:#fff}
+.home-nav a.active::after{content:"";position:absolute;bottom:0;left:50%;width:32px;height:3px;border-radius:3px 3px 0 0;background:#fff;transform:translateX(-50%)}
+.home-brand{align-items:flex-end!important;text-align:right;gap:2px;direction:rtl}
+.home-brand strong{font-size:22px;line-height:1.2;font-weight:800;color:#fff}
+.home-brand span{font-size:13px;color:#e0edff}
+.gov-breadcrumb{background:#fff;border:0;color:#496780;padding:14px 48px;font-size:13px}
+.home-main{background:#fff!important;padding:22px 48px 64px!important}
+.service-layout{width:min(1204px,100%)!important;margin:auto!important;display:grid!important;grid-template-columns:340px minmax(0,820px)!important;gap:44px!important;direction:ltr!important;align-items:start!important}
+.service-layout>*{direction:rtl}
+.service-content{width:820px;max-width:100%;display:flex;flex-direction:column;gap:24px;background:#fff;overflow:visible}
+
+.service-sidebar{width:340px!important;padding:0!important;gap:0!important;align-items:stretch!important;overflow:hidden!important;background:#003765!important;border:1px solid #b7c9de!important;border-radius:16px!important;box-shadow:0 12px 32px rgba(18,61,103,.08)!important;color:#fff!important}
+.sidebar-header-block{padding:24px;display:flex;flex-direction:column;gap:12px;background:#003765}
+.sidebar-header-block h2{margin:0;font-size:24px!important;line-height:32px!important;font-weight:800!important;text-align:right;color:#fff!important}
+.sidebar-glow-line{display:block;width:80px;height:4px;border-radius:2px;background:#0666d8;align-self:flex-end}
+.sidebar-content-area{padding:24px;display:flex;flex-direction:column;gap:24px;background:#003765}
+.sidebar-value-proposition{display:flex;flex-direction:column;gap:12px;width:100%}
+.sidebar-title-row{display:flex;gap:8px;align-items:center;justify-content:flex-end;width:100%}
+.sidebar-title-row h3{margin:0!important;font-size:16px!important;font-weight:700!important;color:#fff!important;white-space:nowrap}
+.sidebar-icon-badge{width:24px;height:24px;border-radius:6px;display:grid;place-items:center}
+.sidebar-value-proposition p{margin:0!important;font-size:14px!important;line-height:22px!important;text-align:right;color:#fff!important}
+.sidebar-divider{height:1px;background:rgba(255,255,255,.6);width:100%}
+.sidebar-actions-group{display:flex;flex-direction:column;gap:14px;width:100%}
+.sidebar-actions-group h4{margin:0!important;width:100%;font-size:14px!important;text-align:center;color:#fff!important;font-weight:700!important}
+.sidebar-pill{height:48px;width:100%;border-radius:24px;display:flex;gap:10px;align-items:center;justify-content:center;padding:12px 24px;font-size:16px!important;font-weight:700!important;color:#fff!important}
+.sidebar-whatsapp{background:#087a55;box-shadow:0 4px 6px rgba(8,122,85,.15)}
+.sidebar-phone{background:#003765;border:1.5px solid #fff}
+.sidebar-pill img{display:block;flex:0 0 auto}
+
+.home-hero{width:100%;padding:56px 48px;border:1px solid #b7c9de;border-radius:16px;background:#f7fafe;box-shadow:0 12px 16px rgba(5,46,87,.04);display:flex;flex-direction:column;align-items:center;gap:32px}
+.home-hero-copy{width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.home-hero h1{margin:0;width:100%;font-size:44px;line-height:52px;font-weight:800;color:#073b73;text-align:center}
+.home-hero h2{margin:0;width:100%;font-size:20px;line-height:28px;font-weight:700;color:#123d67;text-align:center}
+.home-hero-rule{width:140px;height:3px;border-radius:1.5px;background:#0666d8}
+.home-hero p{margin:0;width:640px;max-width:100%;font-size:16px;line-height:26px;color:#123d67;text-align:center}
+.home-hero-actions{width:100%;display:flex;gap:16px;align-items:center;justify-content:center;flex-wrap:wrap}
+.home-pill{height:48px;border-radius:24px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding-inline:20px;font-size:16px;font-weight:700;color:#fff;white-space:nowrap}
+.home-pill-whatsapp{background:#087a55}
+.home-pill-primary{background:#0666d8;padding-inline:24px}
+.home-info-banner{width:100%;border-radius:5px!important}
+
+.home-benefits{width:100%;padding:32px;border:1px solid #b7c9de;border-radius:4px;background:#fff;display:flex;flex-direction:column;gap:40px}
+.home-section-heading{width:100%;display:flex;flex-direction:column;gap:10px}
+.home-section-heading.centered{align-items:center;text-align:center}
+.home-section-heading h2{margin:0;width:100%;font-size:36px;line-height:1.25;font-weight:800;color:#073b73}
+.home-section-heading p{margin:0;width:100%;font-size:16px;font-weight:700;color:#123d67}
+.benefits-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;direction:rtl}
+.benefit-card{min-height:184px;padding:24px;border:1px solid #b7c9de;border-radius:8px;background:#eef5fc;display:flex;flex-direction:column;gap:16px;direction:rtl}
+.benefit-card.is-primary{background:#fff;border-color:#0666d8}
+.benefit-head{display:flex;align-items:center;justify-content:space-between;width:100%;gap:18px}
+.benefit-head h3{margin:0;font-size:20px;font-weight:700;color:#073b73;text-align:right}
+.benefit-number{font-family:var(--font-spectral),serif;font-size:48px;line-height:1;font-weight:300;color:#0666d8;direction:ltr}
+.benefit-card.is-primary .benefit-number{font-weight:700}
+.benefit-line{height:1px;width:100%;background:#b7c9de}
+.benefit-card.is-primary .benefit-line{background:#0666d8}
+.benefit-card p{margin:0;font-size:14px;line-height:22px;color:#123d67;text-align:right}
+.benefits-note{padding:16px;border:1px solid #b7c9de;border-radius:6px;background:#eef5fc;display:flex;gap:12px;align-items:center;direction:ltr}
+.benefits-note p{margin:0;flex:1;font-size:13px;color:#073b73;text-align:right;direction:rtl}
+.benefits-dot{width:8px;height:8px;border-radius:50%;background:#0666d8;flex:0 0 8px}
+
+.home-faq{width:100%;padding:32px;border:1px solid #b7c9de;border-radius:16px;background:#f7fafe;display:flex;flex-direction:column;gap:24px}
+.faq-heading{align-items:flex-end;gap:12px}
+.faq-heading h2{font-size:28px;text-align:right}
+.faq-heading-line{width:80px;height:4px;border-radius:2px;background:#0666d8}
+.faq-list{display:flex;flex-direction:column;gap:16px;width:100%}
+.faq-card{width:100%;border:1px solid #b7c9de;border-radius:12px;background:#fff;overflow:hidden}
+.faq-card[open]{border:1.5px solid #0666d8;box-shadow:0 8px 8px rgba(6,102,216,.05)}
+.faq-card summary{list-style:none;display:grid;grid-template-columns:24px minmax(0,1fr) 32px;gap:16px;align-items:center;padding:24px;cursor:pointer;direction:ltr}
+.faq-card summary::-webkit-details-marker{display:none}
+.faq-chevron{display:block;width:14px;height:14px;margin:auto;transition:transform .18s ease}
+.faq-card[open] .faq-chevron{transform:rotate(180deg)}
+.faq-question{font-size:17px;font-weight:700;color:#123d67;text-align:right;direction:rtl}
+.faq-card[open] .faq-question{color:#0666d8}
+.faq-number{font-size:16px;font-weight:800;color:#496780;opacity:.6;direction:ltr;text-align:right}
+.faq-card[open] .faq-number{color:#0666d8;opacity:1}
+.faq-answer{padding:0 24px 24px;display:flex;flex-direction:column;gap:12px}
+.faq-answer-line{height:1px;background:#b7c9de;width:100%}
+.faq-answer p{margin:0;font-size:15px;line-height:26px;color:#123d67;text-align:right}
+
+.lawyer-split{width:100%;display:grid;grid-template-columns:340px 480px;direction:ltr;border:1px solid #b7c9de;border-radius:16px;overflow:hidden;box-shadow:0 16px 32px rgba(5,46,87,.06);background:#fff}
+.lawyer-actions-panel{width:340px;padding:40px;background:#f7fafe;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;direction:rtl}
+.lawyer-contact-label{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.lawyer-contact-label span{font-size:14px;font-weight:700;color:#0666d8}
+.lawyer-contact-label strong{font-size:18px;color:#073b73}
+.lawyer-button-stack{display:flex;flex-direction:column;gap:12px;width:100%}
+.lawyer-action{height:48px;width:100%;border-radius:24px;display:flex;align-items:center;justify-content:center;gap:8px;padding-inline:20px;font-size:16px;font-weight:700;white-space:nowrap}
+.lawyer-action.whatsapp{background:#087a55;color:#fff}
+.lawyer-action.call{background:#fff;color:#073b73;border:1px solid #b7c9de}
+.lawyer-action.primary{background:#0666d8;color:#fff}
+.lawyer-trust{display:flex;gap:6px;align-items:center;color:#123d67;font-size:12px;white-space:nowrap}
+.lawyer-copy-panel{width:480px;padding:48px 40px;background:#003765;display:flex;align-items:center;justify-content:flex-end;direction:rtl}
+.lawyer-copy{width:100%;display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+.lawyer-copy h2{margin:0;width:100%;font-size:32px;line-height:40px;font-weight:800;color:#fff;text-align:right}
+.lawyer-copy-rule{width:60px;height:3px;border-radius:1.5px;background:#0666d8}
+.lawyer-copy p{margin:0;width:100%;font-size:15px;line-height:24px;color:#eef5fc;text-align:right}
+
+.home-footer{background:#0666d8!important;color:#fff!important;padding:28px 48px!important;display:flex!important;justify-content:space-between!important;gap:20px!important;font-size:13px!important;direction:ltr}
+.home-footer nav,.home-footer>span{direction:rtl}
+.home-footer nav{display:flex;gap:8px}
+
+.result-states.single-result{display:block}
+.result-state.single-state{max-width:860px;min-height:0;padding:26px;border-width:1px;margin:0}
+.result-state.single-state.active{border-width:2px}
+.result-cta-heading{font-size:22px;margin:2px 0 -6px}
+.result-actions{align-items:center}
+
+@media (hover:hover){
+  .home-pill,.sidebar-pill,.lawyer-action{transition:transform .18s ease,box-shadow .18s ease}
+  .home-pill:hover,.sidebar-pill:hover,.lawyer-action:hover{transform:translateY(-1px)}
+  .benefit-card{transition:transform .18s ease,box-shadow .18s ease}
+  .benefit-card:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(18,61,103,.07)}
+}
+
+@media(max-width:1100px){
+  .home-main{padding-inline:28px!important}
+  .service-layout{grid-template-columns:280px minmax(0,1fr)!important;gap:28px!important}
+  .service-sidebar{width:280px!important}
+  .service-content{width:100%}
+  .lawyer-split{grid-template-columns:minmax(280px,340px) minmax(0,480px)}
+  .lawyer-actions-panel,.lawyer-copy-panel{width:100%}
+}
+
+@media(max-width:900px){
+  .home-gov-header .gov-header-inner{min-height:auto;padding:16px 24px;flex-direction:column-reverse;gap:14px;align-items:stretch}
+  .home-nav{height:auto;justify-content:center;flex-wrap:wrap;gap:20px}
+  .home-nav a{height:34px}
+  .home-brand{align-items:center!important;text-align:center}
+  .home-utility .gov-utility-inner{padding-inline:24px}
+  .service-layout{display:flex!important;flex-direction:column!important;gap:24px!important;width:100%!important}
+  .service-content{order:1;width:100%}
+  .service-sidebar{order:2;width:100%!important}
+  .sidebar-content-area{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+  .sidebar-divider{display:none}
+  .lawyer-split{grid-template-columns:1fr;direction:rtl}
+  .lawyer-actions-panel,.lawyer-copy-panel{width:100%}
+  .lawyer-copy-panel{order:1}
+  .lawyer-actions-panel{order:2}
+}
+
+@media(max-width:640px){
+  .home-main{padding:18px 16px 48px!important}
+  .gov-breadcrumb{padding-inline:16px}
+  .home-utility .gov-utility-inner{padding-inline:16px;font-size:11px}
+  .home-gov-header .gov-header-inner{padding-inline:16px}
+  .home-brand strong{font-size:19px}
+  .home-brand span{font-size:11px}
+  .home-nav{font-size:13px}
+  .home-hero{padding:36px 20px;gap:24px}
+  .home-hero h1{font-size:34px;line-height:42px}
+  .home-hero h2{font-size:18px;line-height:26px}
+  .home-hero p{font-size:15px;line-height:24px}
+  .home-hero-actions{flex-direction:column}
+  .home-pill{width:100%}
+  .home-benefits,.home-faq{padding:24px 18px}
+  .home-section-heading h2{font-size:28px}
+  .benefits-grid{grid-template-columns:1fr;gap:16px}
+  .benefit-card{min-height:0}
+  .sidebar-content-area{display:flex;flex-direction:column}
+  .lawyer-actions-panel,.lawyer-copy-panel{padding:32px 22px}
+  .lawyer-copy h2{font-size:28px;line-height:36px}
+  .home-footer{padding:24px 16px!important;flex-direction:column;align-items:center;text-align:center}
+  .home-footer nav{flex-wrap:wrap;justify-content:center}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .home-pill,.sidebar-pill,.lawyer-action,.benefit-card,.faq-chevron{transition:none!important}
+}
