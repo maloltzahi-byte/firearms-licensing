@@ -66,7 +66,7 @@ export async function submitLead(_previous: LeadState, formData: FormData): Prom
   if (!apiKey || !from) return { status: 'error', message: `הטופס עדיין לא מחובר לשירות המייל. אפשר ליצור קשר מיידית בטלפון או ב־WhatsApp: ${site.phone}, או במייל ${site.email}.` }
 
   const subject = `ליד חדש — ${colorHe} — ${parsed.data.fullName}`
-  const text = `שם:      ${parsed.data.fullName}\nטלפון:   ${parsed.data.phone}\nאימייל:  ${parsed.data.email}\nהערה:    ${parsed.data.note || 'ללא'}\n\n--- תוצאת הסינון ---\nגיל:      ${labels.age[answers.age]}\nאזרחות:   ${labels.citizenship[answers.citizenship]}\nשירות:    ${labels.service[answers.service]}\nיישוב:    ${answers.locality} — זכאות יישוב לא נבדקה\nתבחינים:  ${criteriaHe}\nתוצאה:    ${colorHe}\n\nהתקבל: ${received}`
+  const text = `שם:      ${parsed.data.fullName}\nטלפון:   ${parsed.data.phone}\nאימייל:  ${parsed.data.email}\nהערה:    ${parsed.data.note || 'ללא'}\n\n--- תוצאת הסינון ---\nגיל:      ${labels.age[parsed.data.age]}\nאזרחות:   ${labels.citizenship[parsed.data.citizenship]}\nשירות:    ${labels.service[parsed.data.service]}\nיישוב:    ${answers.locality} — זכאות יישוב לא נבדקה\nתבחינים:  ${criteriaHe}\nתוצאה:    ${colorHe}\n\nהתקבל: ${received}`
 
   const resend = new Resend(apiKey)
   const delivered = await sendSafely(resend, { from, to: primary, replyTo: parsed.data.email, subject, text })
