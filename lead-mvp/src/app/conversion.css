@@ -1,0 +1,65 @@
+/* Conversion + brand differentiation layer. Keeps the GOV-inspired clarity without imitating a government service page. */
+.gov-header{background:linear-gradient(100deg,#0a5279 0%,#0b6b91 58%,#087a55 140%)}
+.gov-header-inner{direction:ltr}
+.gov-nav,.gov-brand{direction:rtl}
+.gov-brand{align-items:flex-end;text-align:right}
+.gov-breadcrumb{background:#f7fafc;border-bottom:1px solid #e5edf4}
+.home-main{background:linear-gradient(180deg,#f7fafc 0,#fff 440px);padding-top:30px}
+.service-layout{gap:32px}
+.service-sidebar,.legal-sidebar{border-radius:14px;border-color:#d4e0e9;box-shadow:0 12px 32px rgba(7,45,72,.055)}
+.office-endorsement{width:100%;padding:11px 12px;border-radius:9px;background:#edf7f3;color:#087a55!important;font-weight:700;font-size:13px!important;border:1px solid #c9e6db}
+
+.service-intro{position:relative;overflow:hidden;background:#fff;border:1px solid #d2e0ea;border-radius:16px;padding:32px;gap:16px;box-shadow:0 18px 45px rgba(7,45,72,.08)}
+.service-intro:before{content:"";position:absolute;inset-inline:0;top:0;height:5px;background:linear-gradient(90deg,#087a55,#0b6f9c)}
+.hero-label{align-self:flex-start;display:inline-flex;padding:7px 11px;border-radius:999px;background:#edf7f3;color:#087a55;font-size:13px;font-weight:800;letter-spacing:.01em}
+.service-intro h1{font-size:56px;line-height:1.05;letter-spacing:-.025em;margin-top:2px}
+.service-intro h2{font-size:22px;line-height:1.45;max-width:690px;color:#0a5279}
+.service-intro p{font-size:17px;max-width:720px;line-height:1.75}
+.hero-trust-line{margin-top:2px;padding:12px 14px;border-radius:10px;background:#f3f7fa;border-inline-start:4px solid #087a55;color:#35536a;font-size:14px;font-weight:600}
+.hero-disclaimer{margin:0;color:#60798c;font-size:12px}
+
+.interactive-section{border-radius:14px!important;border-color:#d4e0e9!important;box-shadow:0 12px 30px rgba(7,45,72,.04)}
+.section-kicker{font-size:13px;font-weight:800;color:#087a55;margin-bottom:-4px}
+.interactive-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.interactive-card,.why-card{border:1px solid #d5e1ea;border-radius:12px;background:#fff;overflow:hidden;transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease,background .22s ease}
+.interactive-card summary,.why-card summary{list-style:none;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:18px;cursor:pointer;min-height:72px}
+.interactive-card summary::-webkit-details-marker,.why-card summary::-webkit-details-marker{display:none}
+.feature-index{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#eef5fc;color:#0b6f9c;font-size:12px;font-weight:800}
+.feature-title{font-size:16px;color:#123d67;font-weight:800}
+.feature-plus{font-size:23px;color:#087a55;line-height:1;transition:transform .2s ease}
+.interactive-card p,.why-card p{margin:0;padding:0 18px 18px;color:#526d80;font-size:14px;line-height:1.7}
+.interactive-card[open],.why-card[open]{background:#f8fbfd;border-color:#86b8cf;box-shadow:0 14px 30px rgba(7,45,72,.08)}
+.interactive-card[open] .feature-plus,.why-card[open] .feature-plus{transform:rotate(45deg)}
+@media (hover:hover){.interactive-card:hover,.why-card:hover{transform:translateY(-3px);border-color:#75a9c2;box-shadow:0 14px 28px rgba(7,45,72,.09)}}
+
+.why-section{border:1px solid #d4e0e9;border-radius:14px;background:linear-gradient(180deg,#fff,#fbfdfd);padding:24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 12px 30px rgba(7,45,72,.04)}
+.why-section h2{font-size:26px;margin:0}
+.why-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.why-card summary{grid-template-columns:1fr auto;align-items:start;min-height:94px}
+.why-card .feature-title{font-size:17px;line-height:1.45}
+.pricing-note{padding:13px 15px;border-radius:10px;background:#eef7f3;border:1px solid #c9e6db;color:#2e5c4c;font-size:14px;font-weight:650}
+
+.lawyer-card{border-radius:14px;box-shadow:0 10px 26px rgba(7,45,72,.04)}
+.lawyer-card h2{font-size:24px}
+.result-states.single-result{display:block}
+.result-state.single-state{max-width:860px;min-height:0;padding:26px;border-width:1px;margin:0}
+.result-state.single-state.active{border-width:2px}
+.result-cta-heading{font-size:22px;margin:2px 0 -6px}
+.result-actions{align-items:center}
+
+@media(max-width:980px){
+  .service-layout{gap:22px}
+  .service-intro h1{font-size:48px}
+  .why-grid{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+  .gov-header-inner{direction:rtl}
+  .gov-brand{align-items:flex-start}
+  .service-intro{padding:24px 20px;border-radius:13px}
+  .service-intro h1{font-size:38px}
+  .service-intro h2{font-size:18px}
+  .interactive-card-grid{grid-template-columns:1fr}
+  .why-section{padding:18px}
+  .interactive-card summary,.why-card summary{padding:16px}
+}
+@media(prefers-reduced-motion:reduce){.interactive-card,.why-card,.feature-plus{transition:none!important}}
