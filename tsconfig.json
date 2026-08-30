@@ -46,6 +46,7 @@
   "exclude": [
     ".next",
     "node_modules",
-    "release/rc-13-files"
+    "release/rc-13-files",
+    "lead-mvp"
   ]
 }
