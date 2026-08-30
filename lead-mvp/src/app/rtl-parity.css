@@ -10,7 +10,7 @@
 .flow-header .flow-brand span{font-size:12px}
 
 /* Every icon/control marker is physically to the RIGHT of its label in Hebrew UI. */
-.btn-whatsapp,.home-pill-whatsapp,.sidebar-whatsapp,.sidebar-phone,.lawyer-action.whatsapp,.sidebar-title-row,.screen-option,.criteria-choice,.none-choice,.progress-item{flex-direction:row-reverse}
+.btn-whatsapp,.home-pill-whatsapp,.sidebar-whatsapp,.sidebar-phone,.lawyer-action.whatsapp,.sidebar-title-row,.screen-option,.criteria-choice,.none-choice,.progress-item{direction:rtl;flex-direction:row-reverse}
 .sidebar-title-row{justify-content:center!important;position:relative}
 .sidebar-title-row h3{width:100%;text-align:center!important;direction:rtl}
 .sidebar-title-row .sidebar-icon-badge{position:absolute;right:0}
