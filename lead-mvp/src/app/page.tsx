@@ -1,93 +1,56 @@
 import type { Metadata } from 'next'
-import { ScreeningStartLink } from '@/components/screening-start-link'
-import { getScreeningConfig } from '@/lib/screening-data'
+import Link from 'next/link'
+import { Breadcrumb, HomeFooter, HomeHeader, ServiceSidebar, WhatsAppIcon } from '@/components/gov-shell'
 import { phoneHref, site, whatsappHref } from '@/lib/site'
 
 export const metadata: Metadata = {
-  title: 'בדיקה ראשונית לרישוי כלי ירייה פרטי',
-  description: 'בדיקה ראשונית של תבחינים אפשריים וליווי משפטי אישי בהליך רישוי כלי ירייה פרטי בישראל.',
-  openGraph: {
-    title: 'בדיקה ראשונית לרישוי כלי ירייה פרטי',
-    description: 'חמש שאלות קצרות לבדיקת בסיס ראשוני למסלול רישוי, ולאחר מכן בדיקה פרטנית עם עורך דין.',
-  },
+  title: 'הוצאת רישיון נשק פרטי',
+  description: 'בדיקה ראשונית וליווי מקצועי לאורך תהליך הגשת בקשה לרישיון כלי ירייה פרטי.',
 }
 
-const faqs = [
-  ['האם הבדיקה באתר קובעת שאני זכאי?', 'לא. זו בדיקה ראשונית בלבד. ההכרעה אם קיים מסלול מתאים דורשת בדיקה פרטנית של הדין, הנסיבות והמסמכים.'],
-  ['כמה זמן לוקחת הבדיקה הראשונית?', 'השאלון כולל חמש שאלות קצרות ונועד להסתיים בתוך דקות ספורות, בלי העלאת מסמכים ובלי הרשמה.'],
-  ['האם אתם מבקשים תעודת זהות או מידע רפואי?', 'לא בשלב הזה. האתר אינו מבקש מספר תעודת זהות, עבר פלילי, מידע רפואי או פרטי צווי הרחקה.'],
-  ['איך נקבעת זכאות לפי יישוב?', 'היישוב שתקלידו משמש רק לזיהוי שם המקום. האתר אינו קובע זכאות יישוב; בדיקה כזו נעשית מול המקור הממשלתי הרשמי או במסגרת הבדיקה המשפטית.'],
-  ['מה קורה אחרי השארת פרטים?', 'הפנייה נשלחת למשרד במייל. עורך הדין בוחן את פרטי הסינון וחוזר אליכם לצורך בדיקה פרטנית.'],
-  ['האם משלמים באתר?', 'לא. אין באתר סליקה או חיוב. אם תחליטו להתקדם, שכר הטרחה והיקף הטיפול יסוכמו מראש ובכתב.'],
-]
-
 export default function HomePage() {
-  const { criteria } = getScreeningConfig()
   const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'LegalService',
-    name: site.lawyerName,
-    url: site.url,
-    telephone: site.phone,
-    email: site.email,
-    areaServed: { '@type': 'Country', name: 'Israel' },
-    serviceType: 'ליווי משפטי בהליכי רישוי כלי ירייה פרטי',
+    '@context': 'https://schema.org', '@type': 'LegalService', name: site.name, url: site.url,
+    telephone: site.phone, email: site.email, areaServed: { '@type': 'Country', name: 'Israel' },
+    serviceType: 'ליווי והכוונה בהליך הוצאת רישיון כלי ירייה פרטי',
   }
-
-  return (
-    <main id="main">
+  return <>
+    <HomeHeader />
+    <Breadcrumb current="ליווי בהגשת בקשה" />
+    <main id="main" className="home-main">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <section className="hero">
-        <div className="shell hero-copy">
-          <span className="eyebrow">RFL / בדיקה ראשונית וליווי משפטי</span>
-          <h1>לפני שמתחילים הליך, בודקים אם יש בכלל מסלול.</h1>
-          <p>חמש שאלות קצרות יסייעו לזהות אם קיים בסיס ראשוני לבדיקה מעמיקה. בלי הרשמה, בלי מסמכים ובלי קביעה אוטומטית של זכאות.</p>
-          <ScreeningStartLink />
-          <p className="hero-note">הבדיקה היא כלי עזר ראשוני בלבד ואינה חוות דעת משפטית.</p>
+      <div className="service-layout">
+        <ServiceSidebar />
+        <div className="service-content">
+          <section className="service-intro">
+            <h1>הוצאת רישיון נשק פרטי</h1>
+            <h2>ליווי מקצועי של משרד עו״ד צחי מלול לאורך כל התהליך</h2>
+            <p>שירות פרטי המיועד למי שמעוניין להגיש בקשה לרישיון כלי ירייה פרטי ולקבל ליווי, הכוונה ובדיקה ראשונית לפני ובמהלך ההליך.</p>
+            <div className="action-row">
+              <a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">שלחו הודעה ב-WhatsApp <WhatsAppIcon /></a>
+              <Link className="btn btn-primary" href="/check">התחילו בדיקה ראשונית</Link>
+            </div>
+          </section>
+          <div className="info-banner"><strong>i</strong><span>הבדיקה באתר מספקת אינדיקציה ראשונית בלבד. הרישיון ניתן על ידי הרשות המוסמכת ובהתאם לתנאים הקבועים בדין.</span></div>
+          <div className="single-action"><Link className="btn btn-primary" href="/check">התחילו בבדיקה</Link></div>
+          <section className="included-card" id="included">
+            <div className="blue-rule" /><h2>מה כולל הליווי?</h2>
+            <ul><li>בדיקה ראשונית של התאמה למסלול אפשרי</li><li>הכוונה לגבי שלבי הבקשה והמסמכים הנדרשים</li><li>ליווי אישי מול עורך הדין לאורך התהליך</li><li>חתימה ואימות תצהיר עו״ד כאשר ההליך דורש זאת</li></ul>
+          </section>
+          <section className="faq-stack" id="faq">
+            <details className="gov-accordion" open><summary>איך השירות עובד?</summary><p>עונים על 5 שאלות קצרות, מקבלים אינדיקציה ראשונית ולאחר מכן ממשיכים לשיחה אישית עם עורך הדין. הבדיקה אינה מחליפה החלטה רשמית של הרשות.</p></details>
+            <details className="gov-accordion"><summary>מי יכול להגיש בקשה?</summary><p>מי שעומד בתנאי הסף ובאחד התבחינים הקבועים בדין יכול לשקול הגשת בקשה. הבדיקה באתר נועדה רק למקד את הבירור הראשוני.</p></details>
+            <details className="gov-accordion"><summary>אילו מסמכים עשויים להידרש?</summary><p>המסמכים משתנים לפי התבחין והנסיבות. במסגרת הליווי נסביר אילו אישורים ומסמכים רלוונטיים למקרה שלכם.</p></details>
+            <details className="gov-accordion"><summary>מה קורה לאחר הבדיקה הראשונית?</summary><p>ניתן לפנות ישירות ב-WhatsApp, בטלפון או באימייל ולהמשיך לבדיקה פרטנית וליווי בהתאם לצורך.</p></details>
+          </section>
+          <section className="lawyer-card" id="contact">
+            <h2>ליווי עו״ד לאורך התהליך</h2>
+            <p>השירות אינו מציג כאילו קיימת חובה לשכור עורך דין לצורך עצם הגשת הבקשה. מטרת הליווי היא לעשות סדר, לצמצם טעויות, לסייע בהבנת הדרישות ולטפל ברכיבים משפטיים כאשר הם נדרשים.</p>
+            <div className="action-row compact"><a className="btn btn-outline" href={phoneHref()}>{site.phone}</a><a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a></div>
+          </section>
         </div>
-      </section>
-
-      <section className="section white" id="how">
-        <div className="shell">
-          <div className="section-head"><h2>איך זה עובד</h2><p>תהליך קצר שנועד לחסוך זמן ולהגיע לשיחה עם מידע ממוקד.</p></div>
-          <div className="steps-grid">
-            {[
-              ['01', 'עונים על 5 שאלות', 'גיל בטווח, מעמד, שירות, יישוב וקבוצת תבחין.'],
-              ['02', 'מקבלים אינדיקציה', 'ירוק, צהוב או אדום — בלי ניסוח של זכאות ובלי הבטחת תוצאה.'],
-              ['03', 'משאירים פרטים', 'שם, טלפון ואימייל בלבד, עם אפשרות להוסיף הערה קצרה.'],
-              ['04', 'עורך הדין בודק', 'הבדיקה המשפטית המלאה נעשית בשיחה ולא על ידי האלגוריתם.'],
-            ].map(([num, title, text]) => <article className="step-card" key={num}><span className="num">{num}</span><h3>{title}</h3><p>{text}</p></article>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="section" id="criteria">
-        <div className="shell">
-          <div className="section-head"><h2>התבחינים העיקריים</h2><p>השאלון נשען על 15 קבוצות התבחין שבבסיס הרגולטורי של הפרויקט. הבחירה בקבוצה אינה קביעה שהמסלול מתקיים בפועל.</p></div>
-          <div className="criteria-grid">
-            {criteria.map((criterion, index) => <article className="criterion-card" key={criterion.id}><span>{String(index + 1).padStart(2, '0')}</span><h3>{criterion.he}</h3></article>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="section white">
-        <div className="shell about-grid">
-          <div className="about-panel"><span className="eyebrow" style={{color:'var(--blue)'}}>ליווי אישי</span><h2>{site.lawyerName}</h2><p>האתר נועד לבצע סינון ראשוני בלבד. לאחר הפנייה, הבדיקה עוברת לעורך הדין לצורך בחינת המסלול הרלוונטי, המסמכים הנדרשים והצעדים האפשריים.</p></div>
-          <aside className="instrument-card"><strong>העיקרון המנחה</strong><div className="line"/><p>המערכת אינה מחליפה שיקול דעת מקצועי, אינה מכריעה בזכאות ואינה מתחייבת לקבלת רישיון.</p></aside>
-        </div>
-      </section>
-
-      <section className="section" id="faq">
-        <div className="shell"><div className="section-head"><h2>שאלות נפוצות</h2></div><div className="faq-grid">{faqs.map(([q,a]) => <article className="faq-card" key={q}><h3>{q}</h3><p>{a}</p></article>)}</div></div>
-      </section>
-
-      <section className="section white">
-        <div className="shell"><div className="section-head"><h2>מחיר ומה כלול</h2><p>האתר אינו גובה תשלום. לאחר הבדיקה הראשונית והשיחה, ואם יש הצדקה להתקדם, תקבלו מראש הצעת שכר טרחה ברורה ובכתב.</p></div><div className="value-grid"><article className="value-card"><h3>בדיקה פרטנית</h3><p>בחינת הנתונים שנמסרו מול המסלול המשפטי האפשרי.</p></article><article className="value-card"><h3>הגדרת מסמכים</h3><p>הבהרה אילו מסמכים נדרשים כדי לבדוק ולהתקדם במסלול.</p></article><article className="value-card"><h3>תוכנית פעולה</h3><p>הסבר ברור על הצעדים הבאים לפני התחייבות לטיפול.</p></article></div></div>
-      </section>
-
-      <section className="section dark">
-        <div className="shell contact-band"><div className="section-head" style={{marginBottom:0}}><h2>רוצים לבדוק את המקרה שלכם?</h2><p>אפשר להתחיל בשאלון או לפנות ישירות.</p></div><div className="contact-actions"><ScreeningStartLink /><a className="button-secondary" href={phoneHref()}>התקשרו 050-750-6224</a><a className="button-secondary" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp</a><a className="button-secondary" href={`mailto:${site.email}`}>אימייל</a></div></div>
-      </section>
+      </div>
     </main>
-  )
+    <HomeFooter />
+  </>
 }

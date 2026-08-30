@@ -1,0 +1,99 @@
+import Link from 'next/link'
+import { phoneHref, site, whatsappHref } from '@/lib/site'
+
+export function WhatsAppIcon() {
+  return <img className="wa-icon" src="/whatsapp.svg" width={20} height={20} alt="" aria-hidden="true" />
+}
+
+export function UtilityBar({ exitHref }: { exitHref?: string }) {
+  return (
+    <div className="gov-utility">
+      <div className="gov-utility-inner">
+        {exitHref ? <Link href={exitHref} className="utility-exit">ביטול ויציאה</Link> : <span className="utility-contact">{site.phone} <bdi>|</bdi> {site.email}</span>}
+        <span>שירות פרטי • ליווי משפטי והכוונה</span>
+      </div>
+    </div>
+  )
+}
+
+export function HomeHeader() {
+  return <>
+    <UtilityBar />
+    <header className="gov-header">
+      <div className="gov-header-inner">
+        <nav className="gov-nav" aria-label="ניווט ראשי">
+          <a href="#contact">צור קשר</a>
+          <a href="#faq">שאלות נפוצות</a>
+          <a href="#included">מה כולל הליווי</a>
+        </nav>
+        <Link href="/" className="gov-brand">
+          <strong>הוצאת רישיון נשק פרטי</strong>
+          <span>בליווי משרד עו״ד צחי מלול</span>
+        </Link>
+      </div>
+    </header>
+  </>
+}
+
+export function FlowHeader({ exit = false }: { exit?: boolean }) {
+  return <>
+    <UtilityBar exitHref={exit ? '/' : undefined} />
+    <header className="gov-header flow-header">
+      <div className="gov-header-inner">
+        {exit ? <a className="flow-phone" href={phoneHref()}>{site.phone}</a> : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
+        <Link href="/" className="gov-brand">
+          <strong>בדיקה ראשונית לרישיון נשק פרטי</strong>
+          <span>בליווי משרד עו״ד צחי מלול</span>
+        </Link>
+      </div>
+    </header>
+  </>
+}
+
+export function Breadcrumb({ current }: { current: string }) {
+  return <div className="gov-breadcrumb"><div>ראשי <span>‹</span> {current}</div></div>
+}
+
+export function ServiceSidebar() {
+  return <aside className="service-sidebar">
+    <div className="blue-rule" />
+    <span className="sidebar-eyebrow">שירות פרטי</span>
+    <h2>ליווי להוצאת רישיון נשק</h2>
+    <div className="thin-rule" />
+    <h3>{site.lawyerName}</h3>
+    <p>ליווי אישי לאורך תהליך הבקשה, הכוונה למסמכים, בדיקה ראשונית וטיפול בתצהיר עו״ד ככל שנדרש.</p>
+    <div className="thin-rule muted" />
+    <h4>יצירת קשר מהירה</h4>
+    <a href={phoneHref()}>טלפון: {site.phone}</a>
+    <a href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp: {site.phone}</a>
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+    <div className="private-notice"><strong>הבהרה</strong><span>זהו שירות פרטי ואינו אתר ממשלתי.</span></div>
+  </aside>
+}
+
+export function LegalSidebar() {
+  return <aside className="legal-sidebar">
+    <div className="blue-rule" />
+    <span className="sidebar-eyebrow">שירות פרטי</span>
+    <h2>הוצאת רישיון נשק פרטי</h2>
+    <h3>{site.lawyerName}</h3>
+    <a href={phoneHref()}>{site.phone}</a>
+    <a href={`mailto:${site.email}`}>{site.email}</a>
+  </aside>
+}
+
+export function LegalFooter() {
+  return <footer className="legal-footer">
+    <nav aria-label="קישורים משפטיים">
+      <Link href="/privacy">מדיניות פרטיות</Link><span>|</span><Link href="/accessibility">נגישות</Link><span>|</span><Link href="/terms">תנאי שימוש</Link>
+    </nav>
+    <span>שירות פרטי • אינו אתר ממשלתי</span>
+  </footer>
+}
+
+export function HomeFooter() {
+  return <footer className="home-footer">
+    <nav aria-label="קישורים משפטיים"><Link href="/privacy">מדיניות פרטיות</Link><span>|</span><Link href="/accessibility">הצהרת נגישות</Link><span>|</span><Link href="/terms">תנאי שימוש</Link></nav>
+    <span>{site.lawyerName} • {site.phone} • {site.email}</span>
+  </footer>
+}

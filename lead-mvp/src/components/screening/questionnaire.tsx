@@ -3,10 +3,17 @@
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { track } from '@vercel/analytics'
+import { FlowHeader } from '@/components/gov-shell'
 import { useScreening } from './screening-provider'
 import { labels, type AgeBand, type Citizenship, type ResidencyYears, type Service } from '@/lib/screening'
 
 const TOTAL = 5
+const progressLabels = ['גיל', 'מעמד', 'שירות', 'יישוב', 'תבחין']
+const criterionLabels = ['מקום מגורים','עבודה או לימודים','מורה דרך','כבאות והצלה','גופי הצלה','חקלאות','הובלת חומרי נפץ','ממונה ביטחון','מדריך ירי','שירות בכוחות הביטחון','שירות במשטרה','הכשרות אבטחה','ספורט ירי','ציד','וטרינריה / הדברה']
+
+function Radio({ selected }: { selected: boolean }) {
+  return <span className={`radio-mark${selected ? ' selected' : ''}`} aria-hidden="true"><span /></span>
+}
 
 export function Questionnaire() {
   const router = useRouter()
@@ -21,74 +28,74 @@ export function Questionnaire() {
     return config.localities.filter((name) => name.includes(q)).slice(0, 8)
   }, [config.localities, query])
 
-  function markStepComplete() {
-    track('screening_step', { step })
-  }
-
   function next() {
     if (step === 4) {
       const normalized = config.localities.find((name) => name === query.trim())
-      if (!normalized) {
-        setLocalityError('יש לבחור יישוב מתוך רשימת ההשלמה האוטומטית.')
-        return
-      }
+      if (!normalized) { setLocalityError('יש לבחור יישוב מתוך רשימת ההשלמה האוטומטית.'); return }
       setAnswers((current) => ({ ...current, locality: normalized }))
     }
-    markStepComplete()
+    track('screening_step', { step })
     if (step < TOTAL) setStep((current) => current + 1)
-    else {
-      track('screening_completed', { result })
-      router.push('/check/result')
-    }
+    else { track('screening_completed', { result }); router.push('/check/result') }
   }
 
-  function canContinue() {
+  const canContinue = (() => {
     if (step === 1) return Boolean(answers.age)
     if (step === 2) return Boolean(answers.citizenship) && (answers.citizenship !== 'PERMANENT_RESIDENT' || Boolean(answers.residencyYears))
     if (step === 3) return Boolean(answers.service)
-    if (step === 4) return Boolean(query.trim())
+    if (step === 4) return config.localities.includes(query.trim())
     return answers.unsure || answers.criteria.length > 0
-  }
+  })()
 
   function toggleCriterion(id: string) {
     setAnswers((current) => ({ ...current, unsure: false, criteria: current.criteria.includes(id) ? current.criteria.filter((item) => item !== id) : [...current.criteria, id] }))
   }
 
-  return (
-    <main id="main" className="check-shell">
-      <div className="progress-wrap" aria-label={`שלב ${step} מתוך ${TOTAL}`}>
-        <div className="progress-row"><span>בדיקה ראשונית</span><span>{step} / {TOTAL}</span></div>
-        <div className="progress-track"><div className="progress-fill" style={{ width: `${(step / TOTAL) * 100}%` }} /></div>
-      </div>
+  return <>
+    <FlowHeader exit />
+    <main id="main" className="wizard-stage">
+      <aside className="progress-sidebar" aria-label={`שלב ${step} מתוך ${TOTAL}`}>
+        <div className="blue-rule" /><h2>בדיקה ראשונית</h2><p className="step-number">שלב {step} מתוך 5</p>
+        <div className="progress-list">{progressLabels.map((label,index) => {
+          const n=index+1; const state=n<step?'done':n===step?'active':'future'
+          return <div className={`progress-item ${state}`} key={label}><span>{label}</span><i aria-hidden="true" /></div>
+        })}</div>
+      </aside>
       <section className="question-card">
-        {step === 1 ? <>
-          <h1>מה טווח הגיל שלך?</h1><p className="question-help">אין צורך בתאריך לידה מדויק.</p>
-          <div className="option-list">{Object.entries(labels.age).map(([value,label]) => <button type="button" className="option-button" aria-pressed={answers.age===value} key={value} onClick={() => setAnswers((c)=>({...c,age:value as AgeBand}))}>{label}</button>)}</div>
-        </> : null}
-        {step === 2 ? <>
-          <h1>מה המעמד שלך בישראל?</h1><p className="question-help">המידע משמש לסינון ראשוני בלבד.</p>
-          <div className="option-list">{Object.entries(labels.citizenship).map(([value,label]) => <button type="button" className="option-button" aria-pressed={answers.citizenship===value} key={value} onClick={() => setAnswers((c)=>({...c,citizenship:value as Citizenship,residencyYears:value==='PERMANENT_RESIDENT'?c.residencyYears:null}))}>{label}</button>)}</div>
-          {answers.citizenship === 'PERMANENT_RESIDENT' ? <div style={{marginTop:24}}><h2 style={{fontSize:20}}>כמה שנים אתה מתגורר בישראל?</h2><div className="option-list">{Object.entries(labels.residency).map(([value,label]) => <button type="button" className="option-button" aria-pressed={answers.residencyYears===value} key={value} onClick={() => setAnswers((c)=>({...c,residencyYears:value as ResidencyYears}))}>{label}</button>)}</div></div> : null}
-        </> : null}
-        {step === 3 ? <>
-          <h1>איזה שירות ביצעת?</h1><p className="question-help">בחרו את האפשרות שמתארת בצורה הטובה ביותר את מצבכם.</p>
-          <div className="option-list">{Object.entries(labels.service).map(([value,label]) => <button type="button" className="option-button" aria-pressed={answers.service===value} key={value} onClick={() => setAnswers((c)=>({...c,service:value as Service}))}>{label}</button>)}</div>
-        </> : null}
-        {step === 4 ? <>
-          <h1>מה יישוב המגורים שלך?</h1><p className="question-help">היישוב משמש לנרמול שם בלבד. האתר אינו קובע אם היישוב מזכה ברישיון.</p>
-          <div className="locality-wrap"><label htmlFor="locality" className="hp-field">יישוב מגורים</label><input id="locality" className="field" value={query} autoComplete="off" onChange={(e)=>{setQuery(e.target.value);setLocalityError('')}} placeholder="התחילו להקליד שם יישוב" />{suggestions.length>0 && !config.localities.includes(query.trim()) ? <ul className="suggestions">{suggestions.map((name)=><li key={name}><button type="button" onClick={()=>{setQuery(name);setAnswers((c)=>({...c,locality:name}));setLocalityError('')}}>{name}</button></li>)}</ul>:null}</div>
-          {localityError ? <p className="form-error" role="alert">{localityError}</p> : null}
-        </> : null}
-        {step === 5 ? <>
-          <h1>האם מתקיים אצלך אחד מאלה?</h1><p className="question-help">אפשר לבחור יותר מאפשרות אחת.</p>
-          <div className="criteria-options">{config.criteria.map((criterion)=><button type="button" key={criterion.id} className="criterion-option" aria-pressed={answers.criteria.includes(criterion.id)} onClick={()=>toggleCriterion(criterion.id)}>{criterion.he}</button>)}</div>
-          <button type="button" className="option-button" style={{marginTop:12}} aria-pressed={answers.unsure} onClick={()=>setAnswers((c)=>({...c,unsure:!c.unsure,criteria:[]}))}>לא בטוח / אף אחד מהם</button>
-        </> : null}
-        <div className="check-actions">
-          <button className="button-secondary" type="button" onClick={()=>step===1?router.push('/'):setStep((current)=>current-1)}>חזרה</button>
-          <button className="button-primary" type="button" disabled={!canContinue()} aria-disabled={!canContinue()} onClick={next}>{step===TOTAL?'לתוצאה':'להמשך'}</button>
+        <div className="question-progress">
+          <div className="question-progress-labels"><span>שאלה {step} מתוך 5</span><strong>שלב הסינון והבדיקה</strong></div>
+          <div className="question-progress-track"><span style={{width:`${step*20}%`}} /></div>
         </div>
+        {step === 1 && <>
+          <header className="question-heading"><h1>מה טווח הגיל שלך?</h1><p>בחרו טווח גיל. אין צורך למסור תאריך לידה מלא.</p></header>
+          <div className="option-stack">{Object.entries(labels.age).map(([value,label]) => <button type="button" className={`screen-option${answers.age===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,age:value as AgeBand}))}><span>{label}</span><Radio selected={answers.age===value}/></button>)}</div>
+        </>}
+        {step === 2 && <>
+          <header className="question-heading"><h1>מה המעמד שלך בישראל?</h1><p>בחרו את המעמד המתאים. תושב קבע יתבקש לציין גם את משך המגורים בישראל.</p></header>
+          <div className="option-stack">{Object.entries(labels.citizenship).map(([value,label]) => <button type="button" className={`screen-option${answers.citizenship===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,citizenship:value as Citizenship,residencyYears:value==='PERMANENT_RESIDENT'?c.residencyYears:null}))}><span>{label}</span><Radio selected={answers.citizenship===value}/></button>)}</div>
+          {answers.citizenship === 'PERMANENT_RESIDENT' && <div className="resident-follow"><strong>כמה שנים אתה מתגורר בישראל?</strong><div className="resident-options">{Object.entries(labels.residency).map(([value,label]) => <button type="button" className={`screen-option${answers.residencyYears===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,residencyYears:value as ResidencyYears}))}><span>{label}</span><Radio selected={answers.residencyYears===value}/></button>)}</div></div>}
+        </>}
+        {step === 3 && <>
+          <header className="question-heading"><h1>מהו סטטוס השירות שלך?</h1><p>בחרו את האפשרות המתארת בצורה הטובה ביותר את מצבכם.</p></header>
+          <div className="option-stack">{Object.entries(labels.service).map(([value,label]) => <button type="button" className={`screen-option${answers.service===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,service:value as Service}))}><span>{label}</span><Radio selected={answers.service===value}/></button>)}</div>
+        </>}
+        {step === 4 && <>
+          <header className="question-heading"><h1>מהו יישוב המגורים שלך?</h1><p>שם היישוב משמש לזיהוי ראשוני בלבד. זכאות לפי יישוב אינה נקבעת באתר.</p></header>
+          <div className="locality-field-wrap"><label className="sr-only" htmlFor="locality">יישוב מגורים</label><div className="locality-input"><span aria-hidden="true">⌕</span><input id="locality" value={query} autoComplete="off" onChange={(e)=>{setQuery(e.target.value);setLocalityError('')}} placeholder="הקלידו שם יישוב" /></div>{suggestions.length>0 && !config.localities.includes(query.trim()) && <ul className="locality-suggestions">{suggestions.map((name)=><li key={name}><button type="button" onClick={()=>{setQuery(name);setAnswers(c=>({...c,locality:name}));setLocalityError('')}}>{name}</button></li>)}</ul>}</div>
+          <div className="info-banner compact"><strong>i</strong><span>זכאות היישוב לא נבדקה בשלב זה ותיבחן בנפרד מול המקור הרשמי.</span></div>
+          {localityError && <p className="error-message" role="alert">{localityError}</p>}
+        </>}
+        {step === 5 && <>
+          <header className="question-heading"><h1>האם מתקיים אצלך אחד מהמצבים הבאים?</h1><p>אפשר לבחור יותר מאפשרות אחת. עצם הבחירה אינה קובעת זכאות לרישיון.</p></header>
+          <div className="criteria-select-grid">{config.criteria.map((criterion,index)=>{const selected=answers.criteria.includes(criterion.id); return <button type="button" key={criterion.id} className={`criteria-choice${selected?' selected':''}`} aria-pressed={selected} onClick={()=>toggleCriterion(criterion.id)}><span>{criterionLabels[index] || criterion.he}</span><i aria-hidden="true">{selected?'✓':''}</i></button>})}</div>
+          <button type="button" className={`none-choice${answers.unsure?' selected':''}`} aria-pressed={answers.unsure} onClick={()=>setAnswers(c=>({...c,unsure:!c.unsure,criteria:[]}))}><span>לא בטוח / אף אחד מהם</span><i aria-hidden="true">{answers.unsure?'✓':''}</i></button>
+        </>}
+        <div className="question-nav">
+          <button className="nav-btn back" type="button" onClick={()=>step===1?router.push('/'):setStep(current=>current-1)}>חזור</button>
+          <button className="nav-btn next" type="button" disabled={!canContinue} onClick={next}>{step===TOTAL?'הצגת תוצאה ראשונית':'המשך'}</button>
+        </div>
+        <p className="question-disclaimer">הבדיקה היא כלי עזר ראשוני בלבד ואינה החלטה רשמית.</p>
       </section>
     </main>
-  )
+  </>
 }
