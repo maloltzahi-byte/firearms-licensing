@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
-import { Noto_Sans_Hebrew } from 'next/font/google'
+import { Noto_Sans_Hebrew, Spectral } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { site } from '@/lib/site'
 import './globals.css'
 import './conversion.css'
+import './home-v2.css'
 
 const noto = Noto_Sans_Hebrew({
   subsets: ['hebrew', 'latin'],
@@ -12,15 +13,22 @@ const noto = Noto_Sans_Hebrew({
   variable: '--font-noto-hebrew',
 })
 
+const spectral = Spectral({
+  subsets: ['latin'],
+  weight: ['300', '700'],
+  display: 'swap',
+  variable: '--font-spectral',
+})
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: 'הוצאת רישיון נשק פרטי | בליווי עורך דין', template: '%s | רישיון נשק פרטי' },
+  title: { default: 'הוצאת רישיון נשק פרטי | בליווי משרד עורכי דין צחי מלול', template: '%s | רישיון נשק פרטי' },
   description: site.description,
   openGraph: {
     type: 'website',
     locale: 'he_IL',
     siteName: site.name,
-    title: 'הוצאת רישיון נשק פרטי | בליווי עורך דין',
+    title: 'הוצאת רישיון נשק פרטי | בליווי משרד עורכי דין צחי מלול',
     description: site.description,
     url: site.url,
   },
@@ -29,7 +37,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="he" dir="rtl">
-      <body className={noto.className}>
+      <body className={`${noto.className} ${spectral.variable}`}>
         <a className="skip-link" href="#main">דלגו לתוכן הראשי</a>
         {children}
         <Analytics />
