@@ -6,6 +6,7 @@ import { site } from '@/lib/site'
 import './globals.css'
 import './conversion.css'
 import './home-v2.css'
+import './rtl-parity.css'
 
 const noto = Noto_Sans_Hebrew({
   subsets: ['hebrew', 'latin'],
