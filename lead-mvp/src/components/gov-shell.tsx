@@ -10,7 +10,6 @@ export function UtilityBar({ exitHref }: { exitHref?: string }) {
     <div className="gov-utility">
       <div className="gov-utility-inner">
         {exitHref ? <Link href={exitHref} className="utility-exit">ביטול ויציאה</Link> : <span><a href={phoneHref()}>התקשרו עכשיו</a> <bdi>|</bdi> <a href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp</a></span>}
-        <span>שירות פרטי • ליווי משפטי והכוונה</span>
       </div>
     </div>
   )
@@ -29,7 +28,6 @@ export function HomeHeader() {
         </nav>
         <Link href="/" className="gov-brand">
           <strong>הוצאת רישיון נשק פרטי</strong>
-          <span>שירות פרטי בליווי משפטי</span>
         </Link>
       </div>
     </header>
@@ -44,7 +42,6 @@ export function FlowHeader({ exit = false }: { exit?: boolean }) {
         {exit ? <a className="flow-phone" href={phoneHref()}>התקשרו עכשיו</a> : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
         <Link href="/" className="gov-brand">
           <strong>בדיקה ראשונית לרישיון נשק פרטי</strong>
-          <span>בליווי של עורך דין</span>
         </Link>
       </div>
     </header>
@@ -58,7 +55,6 @@ export function Breadcrumb({ current }: { current: string }) {
 export function ServiceSidebar() {
   return <aside className="service-sidebar">
     <div className="blue-rule" />
-    <span className="sidebar-eyebrow">שירות פרטי</span>
     <h2>ליווי להוצאת רישיון נשק</h2>
     <div className="thin-rule" />
     <h3>ליווי של עורך דין</h3>
@@ -75,7 +71,6 @@ export function ServiceSidebar() {
 export function LegalSidebar() {
   return <aside className="legal-sidebar">
     <div className="blue-rule" />
-    <span className="sidebar-eyebrow">שירות פרטי</span>
     <h2>הוצאת רישיון נשק פרטי</h2>
     <h3>ליווי של עורך דין</h3>
     <div className="office-endorsement">בליווי משרד עורכי דין צחי מלול</div>

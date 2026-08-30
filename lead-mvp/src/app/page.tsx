@@ -36,7 +36,6 @@ export default function HomePage() {
         <ServiceSidebar />
         <div className="service-content">
           <section className="service-intro">
-            <span className="hero-label">שירות פרטי בליווי משפטי אישי</span>
             <h1>הוצאת רישיון נשק פרטי</h1>
             <h2>בדיקה ראשונית, הכוונה וליווי של עורך דין לאורך שלבי התהליך</h2>
             <p>השירות מיועד למי ששוקל להגיש בקשה לרישיון נשק פרטי ורוצה להבין בצורה מסודרת מה נדרש, אילו שלבים צפויים בהמשך, ומתי יש צורך בתצהיר או בליווי נוסף.</p>
@@ -49,7 +48,6 @@ export default function HomePage() {
           </section>
 
           <section className="included-card interactive-section" id="included">
-            <span className="section-kicker">ליווי מסודר, צעד אחר צעד</span>
             <h2>מה כולל הליווי?</h2>
             <div className="interactive-card-grid">
               {included.map(([index,title,body]) => <details className="interactive-card" key={title}>
@@ -60,7 +58,6 @@ export default function HomePage() {
           </section>
 
           <section className="why-section" id="why">
-            <span className="section-kicker">שירות פרטי, לא מערכת אוטומטית</span>
             <h2>למה לבחור בשירות שלנו?</h2>
             <div className="why-grid">
               {reasons.map(([title,body]) => <details className="why-card" key={title}>
