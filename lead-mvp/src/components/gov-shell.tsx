@@ -75,7 +75,10 @@ export function ServiceSidebar() {
     </div>
     <div className="sidebar-content-area">
       <div className="sidebar-value-proposition">
-        <div className="sidebar-title-row"><h3>בדיקה והכוונה אישית</h3><span className="sidebar-icon-badge"><ShieldCheckIcon variant="white" size={20} /></span></div>
+        <div className="sidebar-title-row" style={{ position: 'relative', justifyContent: 'center' }}>
+          <h3 style={{ width: '100%', textAlign: 'center' }}>בדיקה והכוונה אישית</h3>
+          <span className="sidebar-icon-badge" style={{ position: 'absolute', right: 0 }}><ShieldCheckIcon variant="white" size={20} /></span>
+        </div>
         <p>עושים סדר בתנאים, במסמכים ובשלבים. אם נדרש תצהיר, ניתן להשלים אותו מול עורך דין.</p>
       </div>
       <div className="sidebar-divider" aria-hidden="true" />
