@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { phoneHref, site, whatsappHref } from '@/lib/site'
+import { phoneHref, whatsappHref } from '@/lib/site'
 
 export function WhatsAppIcon() {
   return <img className="wa-icon" src="/whatsapp.svg" width={20} height={20} alt="" aria-hidden="true" />
@@ -24,11 +24,12 @@ export function HomeHeader() {
         <nav className="gov-nav" aria-label="ניווט ראשי">
           <a href="#contact">צור קשר</a>
           <a href="#faq">שאלות נפוצות</a>
+          <a href="#why">למה השירות</a>
           <a href="#included">מה כולל הליווי</a>
         </nav>
         <Link href="/" className="gov-brand">
           <strong>הוצאת רישיון נשק פרטי</strong>
-          <span>בליווי משרד עו״ד צחי מלול</span>
+          <span>שירות פרטי בליווי משפטי</span>
         </Link>
       </div>
     </header>
@@ -43,7 +44,7 @@ export function FlowHeader({ exit = false }: { exit?: boolean }) {
         {exit ? <a className="flow-phone" href={phoneHref()}>התקשרו עכשיו</a> : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
         <Link href="/" className="gov-brand">
           <strong>בדיקה ראשונית לרישיון נשק פרטי</strong>
-          <span>בליווי משרד עו״ד צחי מלול</span>
+          <span>בליווי של עורך דין</span>
         </Link>
       </div>
     </header>
@@ -60,8 +61,9 @@ export function ServiceSidebar() {
     <span className="sidebar-eyebrow">שירות פרטי</span>
     <h2>ליווי להוצאת רישיון נשק</h2>
     <div className="thin-rule" />
-    <h3>{site.lawyerName}</h3>
-    <p>ליווי אישי לאורך תהליך הבקשה, הכוונה למסמכים, בדיקה ראשונית וטיפול בתצהיר עו״ד ככל שנדרש.</p>
+    <h3>ליווי של עורך דין</h3>
+    <p>ליווי לאורך תהליך הבקשה, הכוונה למסמכים, בדיקה ראשונית וטיפול בתצהיר עורך דין ככל שנדרש.</p>
+    <div className="office-endorsement">בליווי משרד עורכי דין צחי מלול</div>
     <div className="thin-rule muted" />
     <h4>יצירת קשר מהירה</h4>
     <a className="btn btn-whatsapp sidebar-action" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a>
@@ -75,7 +77,8 @@ export function LegalSidebar() {
     <div className="blue-rule" />
     <span className="sidebar-eyebrow">שירות פרטי</span>
     <h2>הוצאת רישיון נשק פרטי</h2>
-    <h3>{site.lawyerName}</h3>
+    <h3>ליווי של עורך דין</h3>
+    <div className="office-endorsement">בליווי משרד עורכי דין צחי מלול</div>
     <a className="btn btn-whatsapp sidebar-action" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a>
     <a className="btn btn-outline sidebar-action" href={phoneHref()}>התקשרו עכשיו</a>
   </aside>
@@ -93,6 +96,6 @@ export function LegalFooter() {
 export function HomeFooter() {
   return <footer className="home-footer">
     <nav aria-label="קישורים משפטיים"><Link href="/privacy">מדיניות פרטיות</Link><span>|</span><Link href="/accessibility">הצהרת נגישות</Link><span>|</span><Link href="/terms">תנאי שימוש</Link></nav>
-    <span>{site.lawyerName} • ליווי פרטי לאורך התהליך</span>
+    <span>בליווי משרד עורכי דין צחי מלול</span>
   </footer>
 }

@@ -4,6 +4,7 @@ import { Noto_Sans_Hebrew } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { site } from '@/lib/site'
 import './globals.css'
+import './conversion.css'
 
 const noto = Noto_Sans_Hebrew({
   subsets: ['hebrew', 'latin'],
@@ -13,13 +14,13 @@ const noto = Noto_Sans_Hebrew({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: 'הוצאת רישיון נשק פרטי | בליווי עו״ד צחי מלול', template: '%s | רישיון נשק פרטי' },
+  title: { default: 'הוצאת רישיון נשק פרטי | בליווי עורך דין', template: '%s | רישיון נשק פרטי' },
   description: site.description,
   openGraph: {
     type: 'website',
     locale: 'he_IL',
     siteName: site.name,
-    title: 'הוצאת רישיון נשק פרטי | בליווי עו״ד צחי מלול',
+    title: 'הוצאת רישיון נשק פרטי | בליווי עורך דין',
     description: site.description,
     url: site.url,
   },

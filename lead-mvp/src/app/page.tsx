@@ -5,8 +5,21 @@ import { phoneHref, site, whatsappHref } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'הוצאת רישיון נשק פרטי',
-  description: 'בדיקה ראשונית וליווי מקצועי לאורך תהליך הגשת בקשה לרישיון כלי ירייה פרטי.',
+  description: 'בדיקה ראשונית, הכוונה וליווי של עורך דין לאורך תהליך הגשת בקשה לרישיון כלי ירייה פרטי.',
 }
+
+const included = [
+  ['01', 'בדיקה ראשונית', 'בדיקת התאמה למסלול אפשרי לפני שמתחילים, כדי להבין אם נכון להתקדם.'],
+  ['02', 'מסמכים ושלבים', 'הכוונה למסמכים ולשלבים הרלוונטיים למקרה שלכם ולשלב שבו אתם נמצאים.'],
+  ['03', 'ליווי של עורך דין', 'המשך אישי מול עורך דין ולא מול מערכת אוטומטית, בהתאם לצורך.'],
+  ['04', 'תצהיר כשנדרש', 'חתימה ואימות תצהיר עורך דין כאשר ההליך או המסלול דורשים זאת.'],
+] as const
+
+const reasons = [
+  ['בדיקה לפני שמתחילים', 'ממקדים את המסלול האפשרי מראש ומצמצמים פעולות, טעויות ועיכובים מיותרים.'],
+  ['הכוונה למסמכים ולשלבים', 'מבינים מה רלוונטי למקרה שלכם ומהו השלב הבא בתהליך, במקום לפעול בלי סדר.'],
+  ['ליווי של עורך דין', 'כשצריך להמשיך, עוברים לשיחה אישית עם עורך דין שמכיר את התהליך ומלווה לפי הצורך.'],
+] as const
 
 export default function HomePage() {
   const jsonLd = {
@@ -23,38 +36,53 @@ export default function HomePage() {
         <ServiceSidebar />
         <div className="service-content">
           <section className="service-intro">
+            <span className="hero-label">שירות פרטי בליווי משפטי אישי</span>
             <h1>הוצאת רישיון נשק פרטי</h1>
-            <h2>לפני שמגישים בקשה, עושים סדר בתבחין, במסמכים ובשלבים</h2>
-            <p>בדיקה ראשונית וליווי מקצועי לאורך התהליך, כדי לצמצם טעויות, להבין מראש מה נדרש ולהתקדם בצורה מסודרת מול ההליך הרשמי.</p>
+            <h2>בדיקה ראשונית, הכוונה וליווי של עורך דין לאורך שלבי התהליך</h2>
+            <p>השירות מיועד למי ששוקל להגיש בקשה לרישיון נשק פרטי ורוצה להבין בצורה מסודרת מה נדרש, אילו שלבים צפויים בהמשך, ומתי יש צורך בתצהיר או בליווי נוסף.</p>
             <div className="action-row">
               <Link className="btn btn-primary" href="/check">בדיקה ראשונית</Link>
               <a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">דברו איתנו ב-WhatsApp <WhatsAppIcon /></a>
             </div>
+            <div className="hero-trust-line">הבדיקה הראשונית באתר ללא עלות. המשך ליווי, ככל שיידרש, יתומחר ויסוכם מראש.</div>
+            <p className="hero-disclaimer">הבדיקה באתר מספקת אינדיקציה ראשונית בלבד. הרישיון ניתן על ידי הרשות המוסמכת ובהתאם לדין.</p>
           </section>
-          <div className="info-banner"><strong>i</strong><span>הבדיקה הראשונית באתר ללא עלות. היא מספקת אינדיקציה בלבד; הרישיון ניתן על ידי הרשות המוסמכת ובהתאם לדין.</span></div>
-          <section className="included-card" id="included">
-            <div className="blue-rule" /><h2>מה כולל הליווי?</h2>
-            <ul><li>בדיקה ראשונית של התאמה למסלול אפשרי</li><li>הכוונה לגבי שלבי הבקשה והמסמכים הנדרשים</li><li>ליווי אישי מול עורך הדין לאורך התהליך</li><li>חתימה ואימות תצהיר עו״ד כאשר ההליך דורש זאת</li></ul>
-          </section>
-          <section className="included-card" id="why">
-            <div className="blue-rule" /><h2>למה לבחור בליווי?</h2>
-            <div className="result-states">
-              <article className="summary-card"><h3 style={{margin:'0 0 8px'}}>בדיקה לפני שמתחילים</h3><p style={{margin:0}}>ממקדים את המסלול האפשרי לפני שמתקדמים ומצמצמים פעולות מיותרות.</p></article>
-              <article className="summary-card"><h3 style={{margin:'0 0 8px'}}>הכוונה למסמכים ולשלבים</h3><p style={{margin:0}}>מבינים מה רלוונטי למקרה שלכם ומהו השלב הבא בתהליך.</p></article>
-              <article className="summary-card"><h3 style={{margin:'0 0 8px'}}>ליווי אישי של עו״ד</h3><p style={{margin:0}}>ממשיכים מול עו״ד צחי מלול ולא מול מערכת אוטומטית.</p></article>
+
+          <section className="included-card interactive-section" id="included">
+            <span className="section-kicker">ליווי מסודר, צעד אחר צעד</span>
+            <h2>מה כולל הליווי?</h2>
+            <div className="interactive-card-grid">
+              {included.map(([index,title,body]) => <details className="interactive-card" key={title}>
+                <summary><span className="feature-index">{index}</span><span className="feature-title">{title}</span><span className="feature-plus" aria-hidden="true">+</span></summary>
+                <p>{body}</p>
+              </details>)}
             </div>
-            <div className="info-banner compact"><strong>₪</strong><span>הבדיקה הראשונית באתר ללא עלות. המשך הליווי, ככל שיידרש, יתומחר ויסוכם מראש.</span></div>
           </section>
+
+          <section className="why-section" id="why">
+            <span className="section-kicker">שירות פרטי, לא מערכת אוטומטית</span>
+            <h2>למה לבחור בשירות שלנו?</h2>
+            <div className="why-grid">
+              {reasons.map(([title,body]) => <details className="why-card" key={title}>
+                <summary><span className="feature-title">{title}</span><span className="feature-plus" aria-hidden="true">+</span></summary>
+                <p>{body}</p>
+              </details>)}
+            </div>
+            <div className="pricing-note">הבדיקה הראשונית באתר ללא עלות. אם יהיה צורך בהמשך ליווי, היקף השירות ושכר הטרחה יסוכמו מראש.</div>
+          </section>
+
           <section className="faq-stack" id="faq">
-            <details className="gov-accordion" open><summary>איך השירות עובד?</summary><p>עונים על 5 שאלות קצרות, מקבלים אינדיקציה ראשונית ולאחר מכן ממשיכים לשיחה אישית עם עורך הדין. הבדיקה אינה מחליפה החלטה רשמית של הרשות.</p></details>
+            <details className="gov-accordion" open><summary>איך השירות עובד?</summary><p>עונים על 5 שאלות קצרות, מקבלים אינדיקציה ראשונית ולאחר מכן, אם רוצים, ממשיכים לשיחה אישית עם עורך דין. הבדיקה אינה מחליפה החלטה רשמית של הרשות.</p></details>
             <details className="gov-accordion"><summary>מי יכול להגיש בקשה?</summary><p>מי שעומד בתנאי הסף ובאחד התבחינים הקבועים בדין יכול לשקול הגשת בקשה. הבדיקה באתר נועדה רק למקד את הבירור הראשוני.</p></details>
             <details className="gov-accordion"><summary>אילו מסמכים עשויים להידרש?</summary><p>המסמכים משתנים לפי התבחין והנסיבות. במסגרת הליווי נסביר אילו אישורים ומסמכים רלוונטיים למקרה שלכם.</p></details>
             <details className="gov-accordion"><summary>מה קורה לאחר הבדיקה הראשונית?</summary><p>ניתן לפנות ישירות ב-WhatsApp או בטלפון ולהמשיך לבדיקה פרטנית וליווי בהתאם לצורך.</p></details>
           </section>
+
           <section className="lawyer-card" id="contact">
-            <h2>הליווי מתבצע אישית על ידי עו״ד צחי מלול</h2>
-            <p>לאחר הבדיקה הראשונית ממשיכים לשיחה אישית עם עורך הדין, שמסביר את המסלול האפשרי, המסמכים והשלבים הרלוונטיים ומלווה את התהליך לפי הצורך.</p>
-            <div className="action-row compact"><a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a><a className="btn btn-outline" href={phoneHref()}>התקשרו עכשיו</a></div>
+            <h2>ליווי אישי של עורך דין</h2>
+            <p>לאחר הבדיקה הראשונית ניתן להמשיך לשיחה אישית עם עורך דין, להבין את המסלול האפשרי, המסמכים והשלבים הרלוונטיים ולהחליט אם יש צורך בהמשך ליווי.</p>
+            <div className="office-endorsement">בליווי משרד עורכי דין צחי מלול</div>
+            <div className="action-row compact"><a className="btn btn-outline" href={phoneHref()}>התקשרו עכשיו</a><a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a></div>
           </section>
         </div>
       </div>
