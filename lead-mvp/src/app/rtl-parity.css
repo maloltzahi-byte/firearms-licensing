@@ -1,0 +1,57 @@
+/* Canonical RTL/Figma parity layer. Loaded last so visual direction cannot regress. */
+
+/* Flow header: physical layout follows the Figma examples — action on the left, brand/note on the right. */
+.flow-utility .gov-utility-inner{direction:ltr}
+.flow-utility-action,.flow-utility-note{direction:rtl}
+.flow-utility-note{text-align:right;font-weight:500}
+.flow-header .gov-header-inner{direction:ltr}
+.flow-header .flow-brand{direction:rtl;align-items:flex-start;text-align:right}
+.flow-header .flow-brand strong{font-size:19px}
+.flow-header .flow-brand span{font-size:12px}
+
+/* Every icon/control marker is physically to the RIGHT of its label in Hebrew UI. */
+.btn-whatsapp,.home-pill-whatsapp,.sidebar-whatsapp,.sidebar-phone,.lawyer-action.whatsapp,.sidebar-title-row,.screen-option,.criteria-choice,.none-choice,.progress-item{flex-direction:row-reverse}
+.sidebar-title-row{justify-content:center!important;position:relative}
+.sidebar-title-row h3{width:100%;text-align:center!important;direction:rtl}
+.sidebar-title-row .sidebar-icon-badge{position:absolute;right:0}
+.screen-option>span:first-child,.criteria-choice>span,.none-choice>span,.progress-item>span{text-align:right;direction:rtl}
+
+/* Hero/result action groups have their Figma physical ordering, independent of document RTL. */
+.home-hero-actions{direction:ltr}
+.result-actions{direction:ltr!important}
+.result-actions .btn{direction:rtl}
+
+/* Question header/progress uses left/right positions exactly like Figma. */
+.question-progress-labels{direction:ltr}
+.question-progress-labels>*{direction:rtl}
+.progress-item{width:100%}
+
+/* Two-column choices are filled left-to-right as in Figma, while each choice remains Hebrew RTL internally. */
+.resident-options,.criteria-select-grid{direction:ltr}
+.resident-options>* ,.criteria-select-grid>*{direction:rtl}
+.criteria-select-grid>.criteria-choice:last-child:nth-child(odd){grid-column:2}
+
+/* Navigation is explicit: Back = physical left, Continue/Result = physical right on every step. */
+.question-nav{direction:ltr!important;width:100%}
+.question-nav .nav-btn.back{order:0;margin-right:0;margin-left:auto}
+.question-nav .nav-btn.next{order:1;margin-left:0;margin-right:auto}
+
+/* Figma places the disclaimer at the physical left on Q1–Q4 and full-width on Q5. */
+.question-disclaimer{width:282px;max-width:100%;margin-right:auto;margin-left:0;text-align:right}
+.q5-card .question-disclaimer{width:100%;margin:0;text-align:right}
+
+/* Result screen parity. */
+.result-state.single-state{max-width:none!important;width:100%!important;min-height:171px!important;padding:24px!important}
+.summary-card dl div{direction:rtl}
+.summary-card dt{order:0!important;text-align:right}
+.summary-card dd{order:0!important;text-align:left}
+.legal-notice{min-height:86px}
+
+/* Keep the common information icon to the right of its explanatory copy. */
+.info-banner{direction:rtl}
+
+@media(max-width:640px){
+  .flow-utility .gov-utility-inner{padding-inline:16px}
+  .flow-header .gov-header-inner{direction:ltr}
+  .question-nav{direction:ltr!important}
+}
