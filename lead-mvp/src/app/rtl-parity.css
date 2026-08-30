@@ -16,6 +16,11 @@
 .sidebar-title-row .sidebar-icon-badge{position:absolute;right:0}
 .screen-option>span:first-child,.criteria-choice>span,.none-choice>span,.progress-item>span{text-align:right;direction:rtl}
 
+/* FAQ chevrons are icons, so they live on the right of the Hebrew question text. */
+.faq-card summary{direction:rtl!important}
+.faq-question{direction:rtl;text-align:right}
+.faq-number{text-align:left}
+
 /* Hero/result action groups have their Figma physical ordering, independent of document RTL. */
 .home-hero-actions{direction:ltr}
 .result-actions{direction:ltr!important}
