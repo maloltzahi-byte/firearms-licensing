@@ -28,8 +28,8 @@ export default function HomePage() {
     '@type': 'LegalService',
     name: site.lawyerName,
     url: site.url,
-    telephone: site.phone || undefined,
-    address: site.address || undefined,
+    telephone: site.phone,
+    email: site.email,
     areaServed: { '@type': 'Country', name: 'Israel' },
     serviceType: 'ליווי משפטי בהליכי רישוי כלי ירייה פרטי',
   }
@@ -86,7 +86,7 @@ export default function HomePage() {
       </section>
 
       <section className="section dark">
-        <div className="shell contact-band"><div className="section-head" style={{marginBottom:0}}><h2>רוצים לבדוק את המקרה שלכם?</h2><p>אפשר להתחיל בשאלון או לפנות ישירות למשרד.</p></div><div className="contact-actions"><ScreeningStartLink />{site.phone ? <a className="button-secondary" href={phoneHref()}>התקשרו למשרד</a> : null}{site.whatsapp ? <a className="button-secondary" href={whatsappHref()} target="_blank" rel="noreferrer">וואטסאפ</a> : null}</div></div>
+        <div className="shell contact-band"><div className="section-head" style={{marginBottom:0}}><h2>רוצים לבדוק את המקרה שלכם?</h2><p>אפשר להתחיל בשאלון או לפנות ישירות.</p></div><div className="contact-actions"><ScreeningStartLink /><a className="button-secondary" href={phoneHref()}>התקשרו 050-750-6224</a><a className="button-secondary" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp</a><a className="button-secondary" href={`mailto:${site.email}`}>אימייל</a></div></div>
       </section>
     </main>
   )
