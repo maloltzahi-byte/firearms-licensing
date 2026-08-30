@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { site, phoneHref } from '@/lib/site'
+import { site, phoneHref, whatsappHref } from '@/lib/site'
 
 export function SiteFooter() {
   return (
@@ -10,11 +10,10 @@ export function SiteFooter() {
           <p>ליווי משפטי בהליכי רישוי כלי ירייה פרטי.</p>
         </div>
         <div>
-          <strong>פרטי משרד</strong>
-          <p>מספר רישיון: {site.license || 'יוגדר לפני העלייה לאוויר'}</p>
-          <p>כתובת: {site.address || 'תוגדר לפני העלייה לאוויר'}</p>
-          <p><a href={phoneHref()}>{site.phone || 'טלפון המשרד יוגדר לפני העלייה לאוויר'}</a></p>
-          {site.email ? <p><a href={`mailto:${site.email}`}>{site.email}</a></p> : null}
+          <strong>יצירת קשר</strong>
+          <p><a href={phoneHref()}>{site.phone}</a></p>
+          <p><a href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp</a></p>
+          <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
         </div>
         <nav aria-label="קישורים משפטיים">
           <strong>מידע משפטי</strong>
