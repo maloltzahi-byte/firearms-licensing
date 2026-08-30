@@ -24,18 +24,26 @@ export default function HomePage() {
         <div className="service-content">
           <section className="service-intro">
             <h1>הוצאת רישיון נשק פרטי</h1>
-            <h2>ליווי מקצועי של משרד עו״ד צחי מלול לאורך כל התהליך</h2>
-            <p>שירות פרטי המיועד למי שמעוניין להגיש בקשה לרישיון כלי ירייה פרטי ולקבל ליווי, הכוונה ובדיקה ראשונית לפני ובמהלך ההליך.</p>
+            <h2>לפני שמגישים בקשה, עושים סדר בתבחין, במסמכים ובשלבים</h2>
+            <p>בדיקה ראשונית וליווי מקצועי לאורך התהליך, כדי לצמצם טעויות, להבין מראש מה נדרש ולהתקדם בצורה מסודרת מול ההליך הרשמי.</p>
             <div className="action-row">
-              <a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">שלחו הודעה ב-WhatsApp <WhatsAppIcon /></a>
-              <Link className="btn btn-primary" href="/check">התחילו בדיקה ראשונית</Link>
+              <Link className="btn btn-primary" href="/check">בדיקה ראשונית</Link>
+              <a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">דברו איתנו ב-WhatsApp <WhatsAppIcon /></a>
             </div>
           </section>
-          <div className="info-banner"><strong>i</strong><span>הבדיקה באתר מספקת אינדיקציה ראשונית בלבד. הרישיון ניתן על ידי הרשות המוסמכת ובהתאם לתנאים הקבועים בדין.</span></div>
-          <div className="single-action"><Link className="btn btn-primary" href="/check">התחילו בבדיקה</Link></div>
+          <div className="info-banner"><strong>i</strong><span>הבדיקה הראשונית באתר ללא עלות. היא מספקת אינדיקציה בלבד; הרישיון ניתן על ידי הרשות המוסמכת ובהתאם לדין.</span></div>
           <section className="included-card" id="included">
             <div className="blue-rule" /><h2>מה כולל הליווי?</h2>
             <ul><li>בדיקה ראשונית של התאמה למסלול אפשרי</li><li>הכוונה לגבי שלבי הבקשה והמסמכים הנדרשים</li><li>ליווי אישי מול עורך הדין לאורך התהליך</li><li>חתימה ואימות תצהיר עו״ד כאשר ההליך דורש זאת</li></ul>
+          </section>
+          <section className="included-card" id="why">
+            <div className="blue-rule" /><h2>למה לבחור בליווי?</h2>
+            <div className="result-states">
+              <article className="summary-card"><h3 style={{margin:'0 0 8px'}}>בדיקה לפני שמתחילים</h3><p style={{margin:0}}>ממקדים את המסלול האפשרי לפני שמתקדמים ומצמצמים פעולות מיותרות.</p></article>
+              <article className="summary-card"><h3 style={{margin:'0 0 8px'}}>הכוונה למסמכים ולשלבים</h3><p style={{margin:0}}>מבינים מה רלוונטי למקרה שלכם ומהו השלב הבא בתהליך.</p></article>
+              <article className="summary-card"><h3 style={{margin:'0 0 8px'}}>ליווי אישי של עו״ד</h3><p style={{margin:0}}>ממשיכים מול עו״ד צחי מלול ולא מול מערכת אוטומטית.</p></article>
+            </div>
+            <div className="info-banner compact"><strong>₪</strong><span>הבדיקה הראשונית באתר ללא עלות. המשך הליווי, ככל שיידרש, יתומחר ויסוכם מראש.</span></div>
           </section>
           <section className="faq-stack" id="faq">
             <details className="gov-accordion" open><summary>איך השירות עובד?</summary><p>עונים על 5 שאלות קצרות, מקבלים אינדיקציה ראשונית ולאחר מכן ממשיכים לשיחה אישית עם עורך הדין. הבדיקה אינה מחליפה החלטה רשמית של הרשות.</p></details>
@@ -44,9 +52,9 @@ export default function HomePage() {
             <details className="gov-accordion"><summary>מה קורה לאחר הבדיקה הראשונית?</summary><p>ניתן לפנות ישירות ב-WhatsApp או בטלפון ולהמשיך לבדיקה פרטנית וליווי בהתאם לצורך.</p></details>
           </section>
           <section className="lawyer-card" id="contact">
-            <h2>ליווי עו״ד לאורך התהליך</h2>
-            <p>השירות אינו מציג כאילו קיימת חובה לשכור עורך דין לצורך עצם הגשת הבקשה. מטרת הליווי היא לעשות סדר, לצמצם טעויות, לסייע בהבנת הדרישות ולטפל ברכיבים משפטיים כאשר הם נדרשים.</p>
-            <div className="action-row compact"><a className="btn btn-outline" href={phoneHref()}>התקשרו עכשיו</a><a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a></div>
+            <h2>הליווי מתבצע אישית על ידי עו״ד צחי מלול</h2>
+            <p>לאחר הבדיקה הראשונית ממשיכים לשיחה אישית עם עורך הדין, שמסביר את המסלול האפשרי, המסמכים והשלבים הרלוונטיים ומלווה את התהליך לפי הצורך.</p>
+            <div className="action-row compact"><a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a><a className="btn btn-outline" href={phoneHref()}>התקשרו עכשיו</a></div>
           </section>
         </div>
       </div>
