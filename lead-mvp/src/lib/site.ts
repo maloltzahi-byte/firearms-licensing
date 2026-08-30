@@ -1,8 +1,8 @@
 export const site = {
-  name: 'הוצאת רישיון נשק פרטי — בליווי עו״ד צחי מלול',
+  name: 'הוצאת רישיון נשק פרטי — בליווי משרד עורכי דין צחי מלול',
   lawyerName: 'עו״ד צחי מלול',
-  description: 'בדיקה ראשונית וליווי מקצועי לאורך תהליך הגשת בקשה לרישיון כלי ירייה פרטי בישראל.',
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://rfl-lead-mvp-maloltzahi-2604s-projects.vercel.app',
+  description: 'בדיקה ראשונית והכוונה מקצועית לאורך תהליך הגשת בקשה לרישיון כלי ירייה פרטי בישראל.',
+  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://rfl-lead-live.vercel.app',
   phone: process.env.NEXT_PUBLIC_OFFICE_PHONE || '050-750-6224',
   whatsapp: process.env.NEXT_PUBLIC_WHATSAPP || '0507506224',
   email: process.env.NEXT_PUBLIC_OFFICE_EMAIL || 'tzahimaloladv@gmail.com',
