@@ -12,7 +12,6 @@ export type LeadState = { status: 'idle' | 'ok' | 'discarded' | 'error'; message
 export const initialLeadState: LeadState = { status: 'idle', message: '' }
 
 type HeaderReader = { get(name: string): string | null }
-
 type MailInput = Parameters<Resend['emails']['send']>[0]
 
 function getIp(headerList: HeaderReader) {
@@ -31,7 +30,7 @@ async function sendSafely(resend: Resend, input: MailInput) {
 export async function submitLead(_previous: LeadState, formData: FormData): Promise<LeadState> {
   const raw = Object.fromEntries(formData.entries())
   const parsed = leadSchema.safeParse(raw)
-  if (!parsed.success) return { status: 'error', message: `לא הצלחנו לאמת את הפרטים. בדקו את השדות ונסו שוב.${site.phone ? ` אפשר גם להתקשר: ${site.phone}` : ''}` }
+  if (!parsed.success) return { status: 'error', message: `לא הצלחנו לאמת את הפרטים. בדקו את השדות ונסו שוב. אפשר גם להתקשר או לשלוח WhatsApp ל־${site.phone}.` }
 
   if (parsed.data.website || Date.now() - parsed.data.startedAt < 3000) {
     return { status: 'discarded', message: 'הפנייה התקבלה.' }
@@ -39,7 +38,7 @@ export async function submitLead(_previous: LeadState, formData: FormData): Prom
 
   const headerList = await headers()
   const ip = getIp(headerList)
-  if (!allowSubmission(ip)) return { status: 'error', message: `הגעתם למגבלת השליחות הזמנית.${site.phone ? ` אפשר להתקשר למשרד: ${site.phone}` : ''}` }
+  if (!allowSubmission(ip)) return { status: 'error', message: `הגעתם למגבלת השליחות הזמנית. אפשר ליצור קשר ישירות ב־${site.phone}.` }
 
   const config = getScreeningConfig()
   const criterionIds = parsed.data.criteria ? parsed.data.criteria.split(',').filter(Boolean) : []
@@ -62,23 +61,16 @@ export async function submitLead(_previous: LeadState, formData: FormData): Prom
   const received = new Intl.DateTimeFormat('he-IL', { timeZone: 'Asia/Jerusalem', dateStyle: 'short', timeStyle: 'short' }).format(new Date())
 
   const apiKey = process.env.RESEND_API_KEY
-  const primary = process.env.LEAD_EMAIL_TO
-  const backup = process.env.LEAD_EMAIL_TO_BACKUP
+  const primary = process.env.LEAD_EMAIL_TO || site.email
   const from = process.env.LEAD_EMAIL_FROM
-  if (!apiKey || !primary || !backup || !from) return { status: 'error', message: `מערכת שליחת הפניות עדיין אינה מוגדרת.${site.phone ? ` אפשר להתקשר: ${site.phone}` : ''}` }
+  if (!apiKey || !from) return { status: 'error', message: `הטופס עדיין לא מחובר לשירות המייל. אפשר ליצור קשר מיידית בטלפון או ב־WhatsApp: ${site.phone}, או במייל ${site.email}.` }
 
   const subject = `ליד חדש — ${colorHe} — ${parsed.data.fullName}`
   const text = `שם:      ${parsed.data.fullName}\nטלפון:   ${parsed.data.phone}\nאימייל:  ${parsed.data.email}\nהערה:    ${parsed.data.note || 'ללא'}\n\n--- תוצאת הסינון ---\nגיל:      ${labels.age[answers.age]}\nאזרחות:   ${labels.citizenship[answers.citizenship]}\nשירות:    ${labels.service[answers.service]}\nיישוב:    ${answers.locality} — זכאות יישוב לא נבדקה\nתבחינים:  ${criteriaHe}\nתוצאה:    ${colorHe}\n\nהתקבל: ${received}`
 
   const resend = new Resend(apiKey)
-  const recipients = [...new Set([primary, backup])]
-  const deliveryResults = await Promise.all(
-    recipients.map((recipient) => sendSafely(resend, { from, to: recipient, replyTo: parsed.data.email, subject, text })),
-  )
-
-  if (deliveryResults.some((delivered) => !delivered)) {
-    return { status: 'error', message: `שליחת הפנייה לא הושלמה לכל כתובות המשרד.${site.phone ? ` אנא התקשרו למשרד: ${site.phone}` : ' אנא נסו שוב מאוחר יותר.'}` }
-  }
+  const delivered = await sendSafely(resend, { from, to: primary, replyTo: parsed.data.email, subject, text })
+  if (!delivered) return { status: 'error', message: `שליחת הפנייה נכשלה. אפשר ליצור קשר מיידית בטלפון או ב־WhatsApp: ${site.phone}.` }
 
   await sendSafely(resend, {
     from,
