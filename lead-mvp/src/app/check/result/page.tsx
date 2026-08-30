@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { FlowHeader, WhatsAppIcon } from '@/components/gov-shell'
 import { useScreening } from '@/components/screening/screening-provider'
 import { labels } from '@/lib/screening'
-import { phoneHref, site, whatsappHref } from '@/lib/site'
+import { phoneHref, whatsappHref } from '@/lib/site'
 
 const states = {
   green: { label:'ירוק', title:'נראה שיש בסיס לבדיקה מעמיקה', text:'לפי התשובות שנמסרו, ייתכן שקיים בסיס למסלול מתאים. השלב הבא הוא בדיקה פרטנית מול עורך הדין.' },
@@ -18,7 +18,6 @@ export default function ResultPage() {
 
   const selectedCriteria = config.criteria.filter(c=>answers.criteria.includes(c.id)).map(c=>c.he).join(', ') || 'לא בטוח / אף אחד מהם'
   const message = `שלום צחי,\nביצעתי בדיקה ראשונית באתר בנושא הוצאת רישיון נשק פרטי.\n\nתוצאה ראשונית: ${states[result].label}\nגיל: ${labels.age[answers.age]}\nמעמד: ${labels.citizenship[answers.citizenship]}\nשירות: ${labels.service[answers.service]}\nיישוב: ${answers.locality}\nתבחינים שסומנו: ${selectedCriteria}\n\nאשמח להמשך ליווי ובדיקה פרטנית.`
-  const emailHref = `mailto:${site.email}?subject=${encodeURIComponent('המשך ליווי — בדיקה ראשונית לרישיון נשק')}&body=${encodeURIComponent(message)}`
 
   return <>
     <FlowHeader />
@@ -29,7 +28,7 @@ export default function ResultPage() {
       </div>
       <section className="summary-card"><h2>סיכום הבדיקה</h2><dl><div><dt>גיל</dt><dd>{labels.age[answers.age]}</dd></div><div><dt>מעמד</dt><dd>{labels.citizenship[answers.citizenship]}</dd></div><div><dt>שירות</dt><dd>{labels.service[answers.service]}</dd></div><div><dt>יישוב</dt><dd>{answers.locality} — זכאות היישוב לא נבדקה</dd></div><div><dt>תבחינים</dt><dd>{selectedCriteria}</dd></div></dl></section>
       <div className="legal-notice"><strong>חשוב לדעת</strong><span>עבר פלילי, צו הרחקה בתוקף או מגבלה רפואית עשויים להשפיע על הבקשה. אין צורך למסור מידע כזה באתר. ניתן לדון בכך ישירות עם עורך הדין בשיחה.</span></div>
-      <div className="result-actions"><a className="btn btn-whatsapp" href={whatsappHref(message)} target="_blank" rel="noreferrer">שלחו את התוצאה ב-WhatsApp <WhatsAppIcon /></a><a className="btn btn-outline" href={phoneHref()}>התקשרו עכשיו</a><a className="btn btn-primary" href={emailHref}>שלחו אימייל</a></div>
+      <div className="result-actions"><a className="btn btn-whatsapp" href={whatsappHref(message)} target="_blank" rel="noreferrer">שלחו את התוצאה ב-WhatsApp <WhatsAppIcon /></a><a className="btn btn-outline" href={phoneHref()}>התקשרו עכשיו</a></div>
     </main>
   </>
 }

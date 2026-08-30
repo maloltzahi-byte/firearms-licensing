@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   const jsonLd = {
     '@context': 'https://schema.org', '@type': 'LegalService', name: site.name, url: site.url,
-    telephone: site.phone, email: site.email, areaServed: { '@type': 'Country', name: 'Israel' },
+    telephone: site.phone, areaServed: { '@type': 'Country', name: 'Israel' },
     serviceType: 'ליווי והכוונה בהליך הוצאת רישיון כלי ירייה פרטי',
   }
   return <>
@@ -41,12 +41,12 @@ export default function HomePage() {
             <details className="gov-accordion" open><summary>איך השירות עובד?</summary><p>עונים על 5 שאלות קצרות, מקבלים אינדיקציה ראשונית ולאחר מכן ממשיכים לשיחה אישית עם עורך הדין. הבדיקה אינה מחליפה החלטה רשמית של הרשות.</p></details>
             <details className="gov-accordion"><summary>מי יכול להגיש בקשה?</summary><p>מי שעומד בתנאי הסף ובאחד התבחינים הקבועים בדין יכול לשקול הגשת בקשה. הבדיקה באתר נועדה רק למקד את הבירור הראשוני.</p></details>
             <details className="gov-accordion"><summary>אילו מסמכים עשויים להידרש?</summary><p>המסמכים משתנים לפי התבחין והנסיבות. במסגרת הליווי נסביר אילו אישורים ומסמכים רלוונטיים למקרה שלכם.</p></details>
-            <details className="gov-accordion"><summary>מה קורה לאחר הבדיקה הראשונית?</summary><p>ניתן לפנות ישירות ב-WhatsApp, בטלפון או באימייל ולהמשיך לבדיקה פרטנית וליווי בהתאם לצורך.</p></details>
+            <details className="gov-accordion"><summary>מה קורה לאחר הבדיקה הראשונית?</summary><p>ניתן לפנות ישירות ב-WhatsApp או בטלפון ולהמשיך לבדיקה פרטנית וליווי בהתאם לצורך.</p></details>
           </section>
           <section className="lawyer-card" id="contact">
             <h2>ליווי עו״ד לאורך התהליך</h2>
             <p>השירות אינו מציג כאילו קיימת חובה לשכור עורך דין לצורך עצם הגשת הבקשה. מטרת הליווי היא לעשות סדר, לצמצם טעויות, לסייע בהבנת הדרישות ולטפל ברכיבים משפטיים כאשר הם נדרשים.</p>
-            <div className="action-row compact"><a className="btn btn-outline" href={phoneHref()}>{site.phone}</a><a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a></div>
+            <div className="action-row compact"><a className="btn btn-outline" href={phoneHref()}>התקשרו עכשיו</a><a className="btn btn-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a></div>
           </section>
         </div>
       </div>

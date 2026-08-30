@@ -9,7 +9,7 @@ export function UtilityBar({ exitHref }: { exitHref?: string }) {
   return (
     <div className="gov-utility">
       <div className="gov-utility-inner">
-        {exitHref ? <Link href={exitHref} className="utility-exit">ביטול ויציאה</Link> : <span className="utility-contact">{site.phone} <bdi>|</bdi> {site.email}</span>}
+        {exitHref ? <Link href={exitHref} className="utility-exit">ביטול ויציאה</Link> : <span><a href={phoneHref()}>התקשרו עכשיו</a> <bdi>|</bdi> <a href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp</a></span>}
         <span>שירות פרטי • ליווי משפטי והכוונה</span>
       </div>
     </div>
@@ -40,7 +40,7 @@ export function FlowHeader({ exit = false }: { exit?: boolean }) {
     <UtilityBar exitHref={exit ? '/' : undefined} />
     <header className="gov-header flow-header">
       <div className="gov-header-inner">
-        {exit ? <a className="flow-phone" href={phoneHref()}>{site.phone}</a> : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
+        {exit ? <a className="flow-phone" href={phoneHref()}>התקשרו עכשיו</a> : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
         <Link href="/" className="gov-brand">
           <strong>בדיקה ראשונית לרישיון נשק פרטי</strong>
           <span>בליווי משרד עו״ד צחי מלול</span>
@@ -64,9 +64,8 @@ export function ServiceSidebar() {
     <p>ליווי אישי לאורך תהליך הבקשה, הכוונה למסמכים, בדיקה ראשונית וטיפול בתצהיר עו״ד ככל שנדרש.</p>
     <div className="thin-rule muted" />
     <h4>יצירת קשר מהירה</h4>
-    <a href={phoneHref()}>טלפון: {site.phone}</a>
-    <a href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp: {site.phone}</a>
-    <a href={`mailto:${site.email}`}>{site.email}</a>
+    <a className="btn btn-whatsapp sidebar-action" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a>
+    <a className="btn btn-outline sidebar-action" href={phoneHref()}>התקשרו עכשיו</a>
     <div className="private-notice"><strong>הבהרה</strong><span>זהו שירות פרטי ואינו אתר ממשלתי.</span></div>
   </aside>
 }
@@ -77,8 +76,8 @@ export function LegalSidebar() {
     <span className="sidebar-eyebrow">שירות פרטי</span>
     <h2>הוצאת רישיון נשק פרטי</h2>
     <h3>{site.lawyerName}</h3>
-    <a href={phoneHref()}>{site.phone}</a>
-    <a href={`mailto:${site.email}`}>{site.email}</a>
+    <a className="btn btn-whatsapp sidebar-action" href={whatsappHref()} target="_blank" rel="noreferrer">WhatsApp <WhatsAppIcon /></a>
+    <a className="btn btn-outline sidebar-action" href={phoneHref()}>התקשרו עכשיו</a>
   </aside>
 }
 
@@ -94,6 +93,6 @@ export function LegalFooter() {
 export function HomeFooter() {
   return <footer className="home-footer">
     <nav aria-label="קישורים משפטיים"><Link href="/privacy">מדיניות פרטיות</Link><span>|</span><Link href="/accessibility">הצהרת נגישות</Link><span>|</span><Link href="/terms">תנאי שימוש</Link></nav>
-    <span>{site.lawyerName} • {site.phone} • {site.email}</span>
+    <span>{site.lawyerName} • ליווי פרטי לאורך התהליך</span>
   </footer>
 }

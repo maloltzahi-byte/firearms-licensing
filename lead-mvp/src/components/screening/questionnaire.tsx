@@ -53,15 +53,15 @@ export function Questionnaire() {
 
   return <>
     <FlowHeader exit />
-    <main id="main" className="wizard-stage">
-      <aside className="progress-sidebar" aria-label={`שלב ${step} מתוך ${TOTAL}`}>
+    <main id="main" className={`wizard-stage${step === 5 ? ' q5-stage' : ''}`}>
+      {step !== 5 && <aside className="progress-sidebar" aria-label={`שלב ${step} מתוך ${TOTAL}`}>
         <div className="blue-rule" /><h2>בדיקה ראשונית</h2><p className="step-number">שלב {step} מתוך 5</p>
         <div className="progress-list">{progressLabels.map((label,index) => {
           const n=index+1; const state=n<step?'done':n===step?'active':'future'
           return <div className={`progress-item ${state}`} key={label}><span>{label}</span><i aria-hidden="true" /></div>
         })}</div>
-      </aside>
-      <section className="question-card">
+      </aside>}
+      <section className={`question-card${step === 5 ? ' q5-card' : ''}`}>
         <div className="question-progress">
           <div className="question-progress-labels"><span>שאלה {step} מתוך 5</span><strong>שלב הסינון והבדיקה</strong></div>
           <div className="question-progress-track"><span style={{width:`${step*20}%`}} /></div>
@@ -86,7 +86,7 @@ export function Questionnaire() {
           {localityError && <p className="error-message" role="alert">{localityError}</p>}
         </>}
         {step === 5 && <>
-          <header className="question-heading"><h1>האם מתקיים אצלך אחד מהמצבים הבאים?</h1><p>אפשר לבחור יותר מאפשרות אחת. עצם הבחירה אינה קובעת זכאות לרישיון.</p></header>
+          <header className="question-heading"><h1>האם מתקיים אצלך אחד מהמצבים הבאים?</h1><p>בחרו את המצבים שמתאימים לכם. אפשר לבחור יותר מאפשרות אחת.</p></header>
           <div className="criteria-select-grid">{config.criteria.map((criterion,index)=>{const selected=answers.criteria.includes(criterion.id); return <button type="button" key={criterion.id} className={`criteria-choice${selected?' selected':''}`} aria-pressed={selected} onClick={()=>toggleCriterion(criterion.id)}><span>{criterionLabels[index] || criterion.he}</span><i aria-hidden="true">{selected?'✓':''}</i></button>})}</div>
           <button type="button" className={`none-choice${answers.unsure?' selected':''}`} aria-pressed={answers.unsure} onClick={()=>setAnswers(c=>({...c,unsure:!c.unsure,criteria:[]}))}><span>לא בטוח / אף אחד מהם</span><i aria-hidden="true">{answers.unsure?'✓':''}</i></button>
         </>}
