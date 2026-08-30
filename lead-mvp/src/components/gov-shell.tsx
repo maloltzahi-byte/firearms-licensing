@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { phoneHref, whatsappHref } from '@/lib/site'
+import { phoneHref, site, whatsappHref } from '@/lib/site'
 
 type IconVariant = 'outline' | 'filled'
 type ShieldVariant = 'white' | 'blue'
@@ -18,7 +18,20 @@ function PhoneIcon() {
   return <img className="phone-icon" src="/figma/phone-white-18.svg" width={18} height={18} alt="" aria-hidden="true" />
 }
 
-export function UtilityBar({ exitHref, home = false }: { exitHref?: string; home?: boolean }) {
+export function UtilityBar({ exitHref, home = false, flow = false }: { exitHref?: string; home?: boolean; flow?: boolean }) {
+  if (flow) {
+    return (
+      <div className="gov-utility flow-utility">
+        <div className="gov-utility-inner">
+          {exitHref
+            ? <Link href={exitHref} className="flow-utility-action">ביטול ויציאה</Link>
+            : <a href={phoneHref()} className="flow-utility-action">התקשרו עכשיו</a>}
+          <span className="flow-utility-note">{exitHref ? 'שירות פרטי • ליווי משרד עו״ד צחי מלול' : 'שירות פרטי • ליווי משפטי והכוונה'}</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={`gov-utility${home ? ' home-utility' : ''}`}>
       <div className="gov-utility-inner">
@@ -51,12 +64,15 @@ export function HomeHeader() {
 
 export function FlowHeader({ exit = false }: { exit?: boolean }) {
   return <>
-    <UtilityBar exitHref={exit ? '/' : undefined} />
+    <UtilityBar exitHref={exit ? '/' : undefined} flow />
     <header className="gov-header flow-header">
       <div className="gov-header-inner">
-        {exit ? <a className="flow-phone" href={phoneHref()}>התקשרו עכשיו</a> : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
-        <Link href="/" className="gov-brand">
+        {exit
+          ? <a className="flow-phone" href={phoneHref()}>{site.phone}</a>
+          : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
+        <Link href="/" className="gov-brand flow-brand">
           <strong>בדיקה ראשונית לרישיון נשק פרטי</strong>
+          <span>{exit ? 'בליווי עו״ד צחי מלול' : 'בליווי משרד עו״ד צחי מלול'}</span>
         </Link>
       </div>
     </header>
@@ -75,9 +91,9 @@ export function ServiceSidebar() {
     </div>
     <div className="sidebar-content-area">
       <div className="sidebar-value-proposition">
-        <div className="sidebar-title-row" style={{ position: 'relative', justifyContent: 'center' }}>
-          <h3 style={{ width: '100%', textAlign: 'center' }}>בדיקה והכוונה אישית</h3>
-          <span className="sidebar-icon-badge" style={{ position: 'absolute', right: 0 }}><ShieldCheckIcon variant="white" size={20} /></span>
+        <div className="sidebar-title-row">
+          <h3>בדיקה והכוונה אישית</h3>
+          <span className="sidebar-icon-badge"><ShieldCheckIcon variant="white" size={20} /></span>
         </div>
         <p>עושים סדר בתנאים, במסמכים ובשלבים. אם נדרש תצהיר, ניתן להשלים אותו מול עורך דין.</p>
       </div>
