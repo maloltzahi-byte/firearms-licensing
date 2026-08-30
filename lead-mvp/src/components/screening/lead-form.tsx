@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useActionState, useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { track } from '@vercel/analytics'
@@ -40,7 +41,7 @@ export function LeadForm() {
         <div className="field-group full"><label htmlFor="email">אימייל</label><input className="field" id="email" name="email" type="email" required maxLength={254} autoComplete="email" /></div>
         <div className="field-group full"><label htmlFor="note">הערה, לא חובה</label><textarea className="textarea" id="note" name="note" maxLength={500} /></div>
       </div>
-      <label className="privacy-check"><input type="checkbox" name="privacy" required /><span>קראתי ואני מאשר/ת את <a href="/privacy" target="_blank" rel="noreferrer" style={{textDecoration:'underline'}}>מדיניות הפרטיות</a> ואת שליחת פרטי הפנייה למשרד.</span></label>
+      <label className="privacy-check"><input type="checkbox" name="privacy" required /><span>קראתי ואני מאשר/ת את <Link href="/privacy" target="_blank" rel="noreferrer" style={{textDecoration:'underline'}}>מדיניות הפרטיות</Link> ואת שליחת פרטי הפנייה למשרד.</span></label>
       <button className="button-primary" type="submit" disabled={pending}>{pending ? 'שולחים…' : 'שליחת הפנייה'}</button>
       {state.status === 'error' ? <p className="form-error" role="alert">{state.message}</p> : null}
     </form>
