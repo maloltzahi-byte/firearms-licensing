@@ -1,3 +1,4 @@
+import path from 'node:path'
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
@@ -6,6 +7,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '32kb',
     },
   },
+  outputFileTracingRoot: path.join(process.cwd(), '..'),
   poweredByHeader: false,
 }
 

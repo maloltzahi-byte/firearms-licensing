@@ -11,7 +11,9 @@ import { site } from '@/lib/site'
 export type LeadState = { status: 'idle' | 'ok' | 'discarded' | 'error'; message: string }
 export const initialLeadState: LeadState = { status: 'idle', message: '' }
 
-function getIp(headerList: Headers) {
+type HeaderReader = { get(name: string): string | null }
+
+function getIp(headerList: HeaderReader) {
   return headerList.get('x-forwarded-for')?.split(',')[0]?.trim() || headerList.get('x-real-ip')?.trim() || 'unknown'
 }
 

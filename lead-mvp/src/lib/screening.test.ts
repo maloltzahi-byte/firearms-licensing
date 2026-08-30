@@ -37,4 +37,8 @@ describe('screening result', () => {
   it('returns yellow for a permanent resident under three years', () => {
     expect(computeScreeningResult(answers({ citizenship: 'PERMANENT_RESIDENT', residencyYears: 'UNDER_3' }), config)).toBe('yellow')
   })
+
+  it('keeps an unspecified exemption or special service status yellow without collecting a medical reason', () => {
+    expect(computeScreeningResult(answers({ service: 'SPECIAL_STATUS' }), config)).toBe('yellow')
+  })
 })

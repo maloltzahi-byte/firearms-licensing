@@ -3,7 +3,7 @@ import type { ScreeningConfig } from './screening-data'
 export const ageOptions = ['UNDER_18', '18_20', '21_26', '27_44', '45_PLUS'] as const
 export const citizenshipOptions = ['CITIZEN', 'PERMANENT_RESIDENT', 'NEW_IMMIGRANT', 'OTHER'] as const
 export const residencyOptions = ['UNDER_3', '3_PLUS'] as const
-export const serviceOptions = ['COMBAT', 'REGULAR', 'CIVIL', 'NONE', 'MEDICAL_OPERATIONAL_EXEMPTION'] as const
+export const serviceOptions = ['COMBAT', 'REGULAR', 'CIVIL', 'NONE', 'SPECIAL_STATUS'] as const
 
 export type AgeBand = (typeof ageOptions)[number]
 export type Citizenship = (typeof citizenshipOptions)[number]
@@ -54,7 +54,7 @@ export const labels = {
     REGULAR: 'שירות סדיר (שנתיים ומעלה)',
     CIVIL: 'שירות אזרחי־לאומי',
     NONE: 'לא שירתתי',
-    MEDICAL_OPERATIONAL_EXEMPTION: 'פטור רפואי מבצעי / נכה פעולות איבה',
+    SPECIAL_STATUS: 'פטור / סטטוס שירות מיוחד',
   },
 } as const
 
@@ -88,6 +88,7 @@ export function computeScreeningResult(answers: ScreeningAnswers, config: Screen
   if (answers.citizenship === 'OTHER') return 'red'
   if (answers.citizenship === 'PERMANENT_RESIDENT' && !answers.residencyYears) return 'yellow'
   if (answers.citizenship === 'PERMANENT_RESIDENT' && answers.residencyYears === 'UNDER_3') return 'yellow'
+  if (answers.service === 'SPECIAL_STATUS') return 'yellow'
   if (answers.unsure || answers.criteria.length === 0) return 'yellow'
 
   const min = ageBandMinimum(answers.age)
