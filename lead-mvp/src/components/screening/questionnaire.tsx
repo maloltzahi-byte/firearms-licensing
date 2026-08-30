@@ -67,7 +67,7 @@ export function Questionnaire() {
           <div className="question-progress-track"><span style={{width:`${step*20}%`}} /></div>
         </div>
         {step === 1 && <>
-          <header className="question-heading"><h1>מה טווח הגיל שלך?</h1><p>בחרו טווח גיל. אין צורך למסור תאריך לידה מלא.</p></header>
+          <header className="question-heading"><h1>מה טווח הגיל שלך?</h1><p>הגיל הוא אחד מתנאי הסף ומשתנה בהתאם לסטטוס השירות. אין צורך למסור תאריך לידה.</p></header>
           <div className="option-stack">{Object.entries(labels.age).map(([value,label]) => <button type="button" className={`screen-option${answers.age===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,age:value as AgeBand}))}><span>{label}</span><Radio selected={answers.age===value}/></button>)}</div>
         </>}
         {step === 2 && <>
@@ -76,7 +76,7 @@ export function Questionnaire() {
           {answers.citizenship === 'PERMANENT_RESIDENT' && <div className="resident-follow"><strong>כמה שנים אתה מתגורר בישראל?</strong><div className="resident-options">{Object.entries(labels.residency).map(([value,label]) => <button type="button" className={`screen-option${answers.residencyYears===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,residencyYears:value as ResidencyYears}))}><span>{label}</span><Radio selected={answers.residencyYears===value}/></button>)}</div></div>}
         </>}
         {step === 3 && <>
-          <header className="question-heading"><h1>מהו סטטוס השירות שלך?</h1><p>בחרו את האפשרות המתארת בצורה הטובה ביותר את מצבכם.</p></header>
+          <header className="question-heading"><h1>מהו סטטוס השירות שלך?</h1><p>בחרו את האפשרות המתארת בצורה הטובה ביותר את סטטוס השירות. אין צורך לציין סיבה רפואית או מידע רגיש.</p></header>
           <div className="option-stack">{Object.entries(labels.service).map(([value,label]) => <button type="button" className={`screen-option${answers.service===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,service:value as Service}))}><span>{label}</span><Radio selected={answers.service===value}/></button>)}</div>
         </>}
         {step === 4 && <>
