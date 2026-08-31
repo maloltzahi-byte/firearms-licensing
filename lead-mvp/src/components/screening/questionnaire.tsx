@@ -1,18 +1,127 @@
 'use client'
-import { useMemo,useState } from 'react'
+
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { track } from '@vercel/analytics'
 import { FlowHeader } from '@/components/gov-shell'
-import { LeadForm } from './lead-form'
 import { useScreening } from './screening-provider'
-import { labels,type AgeBand,type Citizenship,type ResidencyYears,type Service } from '@/lib/screening'
-const TOTAL=5; const progressLabels=['גיל','מעמד','שירות','יישוב','תבחין']; const criterionLabels=['מקום מגורים','עבודה או לימודים','מורה דרך','כבאות והצלה','גופי הצלה','חקלאות','הובלת חומרי נפץ','ממונה ביטחון','מדריך ירי','שירות בכוחות הביטחון','שירות במשטרה','הכשרות אבטחה','ספורט ירי','ציד','וטרינריה / הדברה']
-function Radio({selected}:{selected:boolean}){return <i className="radio-final" aria-hidden="true"/>}
-function ageLabel(label:string){return /^\d+[–-]\d+$/.test(label)?<bdi dir="ltr">{label}</bdi>:label}
-function Progress({step}:{step:number}){return <aside className="progress-final"><i className="top-rule"/><h2>בדיקה ראשונית</h2><div className="step-label">שלב {step} מתוך 5</div><div className="progress-list-final">{progressLabels.map((l,i)=>{const n=i+1;const s=n<step?'done':n===step?'active':'';return <div className={`progress-row-final ${s}`} key={l}><span>{l}</span><i/></div>})}</div></aside>}
-function Documents(){return <aside className="documents-final"><i className="top-rule"/><h2>מה כדאי להכין מראש?</h2><div className="doc-list-final">{[['הצהרת בריאות','חתומה על ידי רופא משפחה'],['צילום תעודת זהות + ספח','צילום ברור ועדכני'],['אישור שירות / פטור','צבאי, לאומי, אזרחי או פטור'],['מסמכים לפי התבחין','משתנים בהתאם למסלול הרלוונטי']].map(([a,b])=><div className="doc-row-final" key={a}><div className="doc-copy"><strong>{a}</strong><small>{b}</small></div><span className="doc-check">✓</span></div>)}</div><details className="criteria-accordion-final"><summary><span>כל התבחינים</span><span>⌄</span></summary><ul className="criteria-list-final">{criterionLabels.map(x=><li key={x}>{x}</li>)}</ul></details></aside>}
-export function Questionnaire(){const router=useRouter();const {answers,setAnswers,config,result}=useScreening();const[step,setStep]=useState(1);const[query,setQuery]=useState(answers.locality);const[localityError,setLocalityError]=useState('');const[startedAt]=useState(()=>Date.now());const suggestions=useMemo(()=>{const q=query.trim();return q?config.localities.filter(n=>n.includes(q)).slice(0,8):[]},[config.localities,query]);function next(){if(step===4){const normalized=config.localities.find(n=>n===query.trim());if(!normalized){setLocalityError('יש לבחור יישוב מתוך רשימת ההשלמה האוטומטית.');return}setAnswers(c=>({...c,locality:normalized}))}track('screening_step',{step});if(step<TOTAL)setStep(c=>c+1);else{track('screening_completed',{result});router.push('/check/result')}}const canContinue=step===1?!!answers.age:step===2?!!answers.citizenship&&(answers.citizenship!=='PERMANENT_RESIDENT'||!!answers.residencyYears):step===3?!!answers.service:step===4?config.localities.includes(query.trim()):answers.unsure||answers.criteria.length>0;function toggle(id:string){setAnswers(c=>({...c,unsure:false,criteria:c.criteria.includes(id)?c.criteria.filter(x=>x!==id):[...c.criteria,id]}))}
- const progress=<div className="question-progress-final"><div className="question-progress-labels-final"><span>שאלה {step} מתוך 5</span><strong>שלב הסינון והבדיקה</strong></div><div className="progress-track-final"><span style={{width:`${step*20}%`}}/></div></div>;
- const body=<>{step===1&&<><header className="question-title-final"><h1>מה טווח הגיל שלך?</h1><p>הגיל הוא אחד מתנאי הסף ומשתנה בהתאם לסטטוס השירות. אין צורך למסור תאריך לידה.</p></header><div className="options-final">{Object.entries(labels.age).map(([v,l])=><button className={`screen-choice${answers.age===v?' selected':''}`} key={v} onClick={()=>setAnswers(c=>({...c,age:v as AgeBand}))}><span className="choice-label">{ageLabel(l)}</span><Radio selected={answers.age===v}/></button>)}</div></>}{step===2&&<><header className="question-title-final"><h1>מה המעמד שלך בישראל?</h1><p>בחרו את המעמד המתאים. תושב קבע יתבקש לציין גם את משך המגורים בישראל.</p></header><div className="options-final">{Object.entries(labels.citizenship).map(([v,l])=><button className={`screen-choice${answers.citizenship===v?' selected':''}`} key={v} onClick={()=>setAnswers(c=>({...c,citizenship:v as Citizenship,residencyYears:v==='PERMANENT_RESIDENT'?c.residencyYears:null}))}><span className="choice-label">{l}</span><Radio selected={answers.citizenship===v}/></button>)}</div>{answers.citizenship==='PERMANENT_RESIDENT'&&<div className="resident-final"><strong>כמה שנים אתה מתגורר בישראל?</strong><div className="resident-options-final">{Object.entries(labels.residency).map(([v,l])=><button className={`screen-choice${answers.residencyYears===v?' selected':''}`} key={v} onClick={()=>setAnswers(c=>({...c,residencyYears:v as ResidencyYears}))}><span className="choice-label">{l}</span><Radio selected={answers.residencyYears===v}/></button>)}</div></div>}</>}{step===3&&<><header className="question-title-final"><h1>מהו סטטוס השירות שלך?</h1><p>בחרו את האפשרות המתארת בצורה הטובה ביותר את סטטוס השירות. אין צורך לציין סיבה רפואית או מידע רגיש.</p></header><div className="options-final">{Object.entries(labels.service).map(([v,l])=><button className={`screen-choice${answers.service===v?' selected':''}`} key={v} onClick={()=>setAnswers(c=>({...c,service:v as Service}))}><span className="choice-label">{l}</span><Radio selected={answers.service===v}/></button>)}</div></>}{step===4&&<><header className="question-title-final"><h1>מהו יישוב המגורים שלך?</h1><p>שם היישוב משמש לזיהוי ראשוני בלבד. זכאות לפי יישוב אינה נקבעת באתר.</p></header><div className="locality-search-final"><div className="locality-input-final"><span className="locality-search-icon">⌕</span><input value={query} autoComplete="off" onChange={e=>{setQuery(e.target.value);setLocalityError('')}} placeholder="הקלידו שם יישוב"/></div>{suggestions.length>0&&!config.localities.includes(query.trim())&&<ul className="locality-suggestions-final">{suggestions.map(n=><li key={n}><button onClick={()=>{setQuery(n);setAnswers(c=>({...c,locality:n}));setLocalityError('')}}>{n}</button></li>)}</ul>}</div><div className="locality-notice-final"><b>i</b><span>זכאות היישוב לא נבדקה בשלב זה ותיבחן בנפרד מול המקור הרשמי.</span></div>{localityError&&<p className="form-error">{localityError}</p>}</>}{step===5&&<><header className="question-title-final"><h1>האם מתקיים אצלך אחד מהמצבים הבאים?</h1><p>בחרו את המצבים שמתאימים לכם. אפשר לבחור יותר מאפשרות אחת.</p></header><div className="criteria-grid-final">{config.criteria.map((c,i)=>{const selected=answers.criteria.includes(c.id);return <button key={c.id} className={`criteria-choice-final${selected?' selected':''}`} onClick={()=>toggle(c.id)}><span>{criterionLabels[i]||c.he}</span><i/></button>})}</div><button className={`none-choice-final${answers.unsure?' selected':''}`} onClick={()=>setAnswers(c=>({...c,unsure:!c.unsure,criteria:[]}))}><span>לא בטוח / אף אחד מהם</span><i/></button></>}</>;
- const nav=<><div className="nav-final"><button className="nav-btn back" onClick={()=>step===1?router.push('/'):setStep(c=>c-1)}>חזור</button><button className="nav-btn next" disabled={!canContinue} onClick={next}>{step===5?'הצגת תוצאה ראשונית':'המשך'}</button></div><p className="question-disclaimer-final">הבדיקה היא כלי עזר ראשוני בלבד ואינה החלטה רשמית.</p></>;
- return <div className="questionnaire-page"><FlowHeader exit/>{step===5?<main id="main" className="q5-stage-final"><section className="q5-question-final">{progress}{body}{nav}<div className="q5-callback-slot"><LeadForm variant="q5" startedAt={startedAt}/></div></section><Documents/></main>:<main id="main" className="wizard-final"><Progress step={step}/><section className="question-final">{progress}{body}{nav}</section></main>}</div>}
+import { labels, type AgeBand, type Citizenship, type ResidencyYears, type Service } from '@/lib/screening'
+
+const TOTAL = 5
+const progressLabels = ['גיל', 'מעמד', 'שירות', 'יישוב', 'תבחין']
+const criterionLabels = ['מקום מגורים','עבודה או לימודים','מורה דרך','כבאות והצלה','גופי הצלה','חקלאות','הובלת חומרי נפץ','ממונה ביטחון','מדריך ירי','שירות בכוחות הביטחון','שירות במשטרה','הכשרות אבטחה','ספורט ירי','ציד','וטרינריה / הדברה']
+
+function Radio({ selected }: { selected: boolean }) {
+  return <i className={`radio-final${selected ? ' selected' : ''}`} aria-hidden="true" />
+}
+
+function ageLabel(label: string) {
+  return /^\d+[–-]\d+$/.test(label) ? <bdi dir="ltr">{label}</bdi> : label
+}
+
+function Progress({ step }: { step: number }) {
+  return <aside className="progress-final" aria-label={`שלב ${step} מתוך ${TOTAL}`}>
+    <i className="top-rule" />
+    <h2>בדיקה ראשונית</h2>
+    <div className="step-label">שלב {step} מתוך 5</div>
+    <div className="progress-list-final">
+      {progressLabels.map((label, index) => {
+        const n = index + 1
+        const state = n < step ? 'done' : n === step ? 'active' : ''
+        return <div className={`progress-row-final ${state}`} key={label}><span>{label}</span><i /></div>
+      })}
+    </div>
+  </aside>
+}
+
+export function Questionnaire() {
+  const router = useRouter()
+  const { answers, setAnswers, config, result } = useScreening()
+  const [step, setStep] = useState(1)
+  const [query, setQuery] = useState(answers.locality)
+  const [localityError, setLocalityError] = useState('')
+
+  const suggestions = useMemo(() => {
+    const q = query.trim()
+    return q ? config.localities.filter((name) => name.includes(q)).slice(0, 8) : []
+  }, [config.localities, query])
+
+  function next() {
+    if (step === 4) {
+      const normalized = config.localities.find((name) => name === query.trim())
+      if (!normalized) {
+        setLocalityError('יש לבחור יישוב מתוך רשימת ההשלמה האוטומטית.')
+        return
+      }
+      setAnswers((current) => ({ ...current, locality: normalized }))
+    }
+    track('screening_step', { step })
+    if (step < TOTAL) setStep((current) => current + 1)
+    else {
+      track('screening_completed', { result })
+      router.push('/check/result')
+    }
+  }
+
+  const canContinue = step === 1 ? Boolean(answers.age)
+    : step === 2 ? Boolean(answers.citizenship) && (answers.citizenship !== 'PERMANENT_RESIDENT' || Boolean(answers.residencyYears))
+    : step === 3 ? Boolean(answers.service)
+    : step === 4 ? config.localities.includes(query.trim())
+    : answers.unsure || answers.criteria.length > 0
+
+  function toggleCriterion(id: string) {
+    setAnswers((current) => ({ ...current, unsure: false, criteria: current.criteria.includes(id) ? current.criteria.filter((item) => item !== id) : [...current.criteria, id] }))
+  }
+
+  const progress = <div className="question-progress-final">
+    <div className="question-progress-labels-final"><span>שאלה {step} מתוך 5</span><strong>שלב הסינון והבדיקה</strong></div>
+    <div className="progress-track-final"><span style={{ width: `${step * 20}%` }} /></div>
+  </div>
+
+  const body = <>
+    {step === 1 && <>
+      <header className="question-title-final"><h1>מה טווח הגיל שלך?</h1><p>הגיל הוא אחד מתנאי הסף ומשתנה בהתאם לסטטוס השירות. אין צורך למסור תאריך לידה.</p></header>
+      <div className="options-final">{Object.entries(labels.age).map(([value, label]) => <button type="button" className={`screen-choice${answers.age === value ? ' selected' : ''}`} key={value} onClick={() => setAnswers((current) => ({ ...current, age: value as AgeBand }))}><span className="choice-label">{ageLabel(label)}</span><Radio selected={answers.age === value} /></button>)}</div>
+    </>}
+
+    {step === 2 && <>
+      <header className="question-title-final"><h1>מה המעמד שלך בישראל?</h1><p>בחרו את המעמד המתאים. תושב קבע יתבקש לציין גם את משך המגורים בישראל.</p></header>
+      <div className="options-final">{Object.entries(labels.citizenship).map(([value, label]) => <button type="button" className={`screen-choice${answers.citizenship === value ? ' selected' : ''}`} key={value} onClick={() => setAnswers((current) => ({ ...current, citizenship: value as Citizenship, residencyYears: value === 'PERMANENT_RESIDENT' ? current.residencyYears : null }))}><span className="choice-label">{label}</span><Radio selected={answers.citizenship === value} /></button>)}</div>
+      {answers.citizenship === 'PERMANENT_RESIDENT' && <div className="resident-final"><strong>כמה שנים אתה מתגורר בישראל?</strong><div className="resident-options-final">{Object.entries(labels.residency).map(([value, label]) => <button type="button" className={`screen-choice${answers.residencyYears === value ? ' selected' : ''}`} key={value} onClick={() => setAnswers((current) => ({ ...current, residencyYears: value as ResidencyYears }))}><span className="choice-label">{label}</span><Radio selected={answers.residencyYears === value} /></button>)}</div></div>}
+    </>}
+
+    {step === 3 && <>
+      <header className="question-title-final"><h1>מהו סטטוס השירות שלך?</h1><p>בחרו את האפשרות המתארת בצורה הטובה ביותר את סטטוס השירות. אין צורך לציין סיבה רפואית או מידע רגיש.</p></header>
+      <div className="options-final">{Object.entries(labels.service).map(([value, label]) => <button type="button" className={`screen-choice${answers.service === value ? ' selected' : ''}`} key={value} onClick={() => setAnswers((current) => ({ ...current, service: value as Service }))}><span className="choice-label">{label}</span><Radio selected={answers.service === value} /></button>)}</div>
+    </>}
+
+    {step === 4 && <>
+      <header className="question-title-final"><h1>מהו יישוב המגורים שלך?</h1><p>שם היישוב משמש לזיהוי ראשוני בלבד. זכאות לפי יישוב אינה נקבעת באתר.</p></header>
+      <div className="locality-search-final">
+        <div className="locality-input-final"><input value={query} autoComplete="off" onChange={(event) => { setQuery(event.target.value); setLocalityError('') }} placeholder="הקלידו שם יישוב" /><span className="locality-search-icon" aria-hidden="true">⌕</span></div>
+        {suggestions.length > 0 && !config.localities.includes(query.trim()) && <ul className="locality-suggestions-final">{suggestions.map((name, index) => <li key={name}><button type="button" className={index === 0 ? 'highlighted' : ''} onClick={() => { setQuery(name); setAnswers((current) => ({ ...current, locality: name })); setLocalityError('') }}>{name}</button></li>)}</ul>}
+      </div>
+      <div className="locality-notice-final"><b>i</b><span>זכאות היישוב לא נבדקה בשלב זה ותיבחן בנפרד מול המקור הרשמי.</span></div>
+      {localityError && <p className="form-error" role="alert">{localityError}</p>}
+    </>}
+
+    {step === 5 && <>
+      <header className="question-title-final"><h1>האם מתקיים אצלך אחד מהמצבים הבאים?</h1><p>בחרו את המצבים שמתאימים לכם. אפשר לבחור יותר מאפשרות אחת.</p></header>
+      <div className="criteria-grid-final">{config.criteria.map((criterion, index) => { const selected = answers.criteria.includes(criterion.id); return <button type="button" key={criterion.id} className={`criteria-choice-final${selected ? ' selected' : ''}`} aria-pressed={selected} onClick={() => toggleCriterion(criterion.id)}><span>{criterionLabels[index] || criterion.he}</span><i aria-hidden="true" /></button> })}</div>
+      <button type="button" className={`none-choice-final${answers.unsure ? ' selected' : ''}`} aria-pressed={answers.unsure} onClick={() => setAnswers((current) => ({ ...current, unsure: !current.unsure, criteria: [] }))}><span>לא בטוח / אף אחד מהם</span><i aria-hidden="true" /></button>
+    </>}
+  </>
+
+  const nav = <>
+    <div className="nav-final">
+      <button className="nav-btn next" type="button" disabled={!canContinue} onClick={next}>{step === TOTAL ? 'הצגת תוצאה ראשונית' : 'המשך'}</button>
+      <button className="nav-btn back" type="button" onClick={() => step === 1 ? router.push('/') : setStep((current) => current - 1)}>חזור</button>
+    </div>
+    <p className="question-disclaimer-final">הבדיקה היא כלי עזר ראשוני בלבד ואינה החלטה רשמית.</p>
+  </>
+
+  return <div className="questionnaire-page"><FlowHeader exit />{step === 5
+    ? <main id="main" className="q5-stage-final"><section className="q5-question-final">{progress}{body}{nav}</section></main>
+    : <main id="main" className="wizard-final"><Progress step={step} /><section className="question-final">{progress}{body}{nav}</section></main>}
+  </div>
+}
