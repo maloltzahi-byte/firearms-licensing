@@ -8,6 +8,7 @@ import './conversion.css'
 import './figma-final.css'
 import './approved-figma.css'
 import './launch-final.css'
+import './lead-flow-final.css'
 
 const noto = Noto_Sans_Hebrew({ subsets: ['hebrew','latin'], display:'swap', variable:'--font-noto-hebrew' })
 const spectral = Spectral({ subsets:['latin'], weight:['300','700'], display:'swap', variable:'--font-spectral' })
