@@ -1,13 +1,18 @@
 /* Canonical RTL/Figma parity layer. Loaded last so visual direction cannot regress. */
 
-/* Flow header: physical layout follows the Figma examples — action on the left, brand/note on the right. */
-.flow-utility .gov-utility-inner{direction:ltr}
-.flow-utility-action,.flow-utility-note{direction:rtl}
-.flow-utility-note{text-align:right;font-weight:500}
+/* Flow header: action is physically left, brand is physically right. */
+.flow-utility .gov-utility-inner{direction:ltr;justify-content:flex-start}
+.flow-utility-action{direction:rtl}
 .flow-header .gov-header-inner{direction:ltr}
-.flow-header .flow-brand{direction:rtl;align-items:flex-start;text-align:right}
+.flow-header .flow-brand{direction:rtl;align-items:stretch;text-align:right}
+.flow-header .flow-brand strong,.flow-header .flow-brand span{display:block;width:100%;text-align:right}
 .flow-header .flow-brand strong{font-size:19px}
 .flow-header .flow-brand span{font-size:12px}
+.flow-whatsapp{height:40px;min-width:132px;padding:0 18px;border-radius:22px;background:#087a55;color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:700;direction:rtl;flex-direction:row-reverse}
+
+/* Homepage brand lines share the exact same physical right edge. */
+.home-brand{width:285px!important;align-items:stretch!important;text-align:right!important;direction:rtl}
+.home-brand strong,.home-brand span{display:block!important;width:100%!important;text-align:right!important;margin:0!important}
 
 /* Every icon/control marker is physically to the RIGHT of its label in Hebrew UI. */
 .btn-whatsapp,.home-pill-whatsapp,.sidebar-whatsapp,.sidebar-phone,.lawyer-action.whatsapp,.sidebar-title-row,.screen-option,.criteria-choice,.none-choice,.progress-item{direction:rtl;flex-direction:row-reverse}
@@ -16,10 +21,10 @@
 .sidebar-title-row .sidebar-icon-badge{position:absolute;right:0}
 .screen-option>span:first-child,.criteria-choice>span,.none-choice>span,.progress-item>span{text-align:right;direction:rtl}
 
-/* FAQ chevrons are icons, so they live on the right of the Hebrew question text. */
-.faq-card summary{direction:rtl!important}
-.faq-question{direction:rtl;text-align:right}
-.faq-number{text-align:left}
+/* FAQ: no numbering; chevron icon sits on the right of Hebrew copy. */
+.faq-card summary{display:flex!important;flex-direction:row!important;direction:rtl!important;align-items:center;gap:16px}
+.faq-chevron{flex:0 0 14px}
+.faq-question{flex:1;direction:rtl;text-align:right}
 
 /* Hero/result action groups have their Figma physical ordering, independent of document RTL. */
 .home-hero-actions{direction:ltr}
@@ -36,10 +41,10 @@
 .resident-options>* ,.criteria-select-grid>*{direction:rtl}
 .criteria-select-grid>.criteria-choice:last-child:nth-child(odd){grid-column:2}
 
-/* Navigation is explicit: Back = physical left, Continue/Result = physical right on every step. */
-.question-nav{direction:ltr!important;width:100%;justify-content:space-between!important}
-.question-nav .nav-btn.back{order:0;margin:0!important}
-.question-nav .nav-btn.next{order:1;margin:0!important}
+/* Navigation is locked: Back = physical left, Continue/Result = physical right on every step. */
+.question-nav{display:flex!important;direction:ltr!important;width:100%;justify-content:space-between!important;align-items:center!important}
+.question-nav .nav-btn.back{order:0!important;margin:0!important}
+.question-nav .nav-btn.next{order:1!important;margin:0!important}
 
 /* Figma places the disclaimer at the physical left on Q1–Q4 and full-width on Q5. */
 .question-disclaimer{width:282px;max-width:100%;margin-right:auto;margin-left:0;text-align:right}
@@ -55,8 +60,12 @@
 /* Keep the common information icon to the right of its explanatory copy. */
 .info-banner{direction:rtl}
 
+@media(max-width:900px){
+  .home-brand{width:100%!important}
+}
 @media(max-width:640px){
   .flow-utility .gov-utility-inner{padding-inline:16px}
   .flow-header .gov-header-inner{direction:ltr}
   .question-nav{direction:ltr!important;justify-content:space-between!important}
+  .flow-whatsapp{min-width:118px;height:38px;padding-inline:14px}
 }

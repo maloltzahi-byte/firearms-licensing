@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { phoneHref, site, whatsappHref } from '@/lib/site'
+import { phoneHref, whatsappHref } from '@/lib/site'
 
 type IconVariant = 'outline' | 'filled'
 type ShieldVariant = 'white' | 'blue'
@@ -26,7 +26,6 @@ export function UtilityBar({ exitHref, home = false, flow = false }: { exitHref?
           {exitHref
             ? <Link href={exitHref} className="flow-utility-action">ביטול ויציאה</Link>
             : <a href={phoneHref()} className="flow-utility-action">התקשרו עכשיו</a>}
-          <span className="flow-utility-note">{exitHref ? 'שירות פרטי • ליווי משרד עו״ד צחי מלול' : 'שירות פרטי • ליווי משפטי והכוונה'}</span>
         </div>
       </div>
     )
@@ -68,7 +67,7 @@ export function FlowHeader({ exit = false }: { exit?: boolean }) {
     <header className="gov-header flow-header">
       <div className="gov-header-inner">
         {exit
-          ? <a className="flow-phone" href={phoneHref()}>{site.phone}</a>
+          ? <a className="flow-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer"><span>וואטסאפ</span><WhatsAppIcon variant="outline" size={18} /></a>
           : <Link className="flow-home" href="/">חזרה לעמוד הבית</Link>}
         <Link href="/" className="gov-brand flow-brand">
           <strong>בדיקה ראשונית לרישיון נשק פרטי</strong>

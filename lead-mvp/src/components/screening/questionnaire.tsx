@@ -15,6 +15,10 @@ function Radio({ selected }: { selected: boolean }) {
   return <span className={`radio-mark${selected ? ' selected' : ''}`} aria-hidden="true"><span /></span>
 }
 
+function ageLabel(label: string) {
+  return /^\d+[–-]\d+$/.test(label) ? <bdi dir="ltr">{label}</bdi> : label
+}
+
 export function Questionnaire() {
   const router = useRouter()
   const { answers, setAnswers, config, result } = useScreening()
@@ -68,7 +72,7 @@ export function Questionnaire() {
         </div>
         {step === 1 && <>
           <header className="question-heading"><h1>מה טווח הגיל שלך?</h1><p>הגיל הוא אחד מתנאי הסף ומשתנה בהתאם לסטטוס השירות. אין צורך למסור תאריך לידה.</p></header>
-          <div className="option-stack">{Object.entries(labels.age).map(([value,label]) => <button type="button" className={`screen-option${answers.age===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,age:value as AgeBand}))}><span>{label}</span><Radio selected={answers.age===value}/></button>)}</div>
+          <div className="option-stack">{Object.entries(labels.age).map(([value,label]) => <button type="button" className={`screen-option${answers.age===value?' selected':''}`} key={value} onClick={()=>setAnswers(c=>({...c,age:value as AgeBand}))}><span>{ageLabel(label)}</span><Radio selected={answers.age===value}/></button>)}</div>
         </>}
         {step === 2 && <>
           <header className="question-heading"><h1>מה המעמד שלך בישראל?</h1><p>בחרו את המעמד המתאים. תושב קבע יתבקש לציין גם את משך המגורים בישראל.</p></header>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Breadcrumb, HomeFooter, HomeHeader, ServiceSidebar, ShieldCheckIcon, WhatsAppIcon } from '@/components/gov-shell'
+import { HomeFooter, HomeHeader, ServiceSidebar, ShieldCheckIcon, WhatsAppIcon } from '@/components/gov-shell'
 import { phoneHref, site, whatsappHref } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -16,10 +16,10 @@ const benefits = [
 ] as const
 
 const faqs = [
-  ['01', 'איך השירות עובד?', 'עונים על 5 שאלות קצרות, מקבלים אינדיקציה ראשונית ולאחר מכן ממשיכים לשיחה אישית עם עורך דין. הבדיקה אינה מחליפה החלטה רשמית של הרשות.'],
-  ['02', 'מי יכול להגיש בקשה?', 'מי שעומד בתנאי הסף ובאחד התבחינים הקבועים בדין יכול לשקול הגשת בקשה. הבדיקה באתר נועדה למקד את הבירור הראשוני.'],
-  ['03', 'אילו מסמכים עשויים להידרש?', 'המסמכים משתנים לפי התבחין והנסיבות. במסגרת השירות נסביר אילו אישורים ומסמכים רלוונטיים למקרה שלכם.'],
-  ['04', 'מה קורה לאחר הבדיקה הראשונית?', 'ניתן לפנות ישירות בוואטסאפ או בטלפון ולהמשיך לבדיקה פרטנית בהתאם לצורך.'],
+  ['איך השירות עובד?', 'עונים על 5 שאלות קצרות, מקבלים אינדיקציה ראשונית ולאחר מכן ממשיכים לשיחה אישית עם עורך דין. הבדיקה אינה מחליפה החלטה רשמית של הרשות.'],
+  ['מי יכול להגיש בקשה?', 'מי שעומד בתנאי הסף ובאחד התבחינים הקבועים בדין יכול לשקול הגשת בקשה. הבדיקה באתר נועדה למקד את הבירור הראשוני.'],
+  ['אילו מסמכים עשויים להידרש?', 'המסמכים משתנים לפי התבחין והנסיבות. במסגרת השירות נסביר אילו אישורים ומסמכים רלוונטיים למקרה שלכם.'],
+  ['מה קורה לאחר הבדיקה הראשונית?', 'ניתן לפנות ישירות בוואטסאפ או בטלפון ולהמשיך לבדיקה פרטנית בהתאם לצורך.'],
 ] as const
 
 export default function HomePage() {
@@ -35,7 +35,6 @@ export default function HomePage() {
 
   return <>
     <HomeHeader />
-    <Breadcrumb current="רישוי כלי ירייה  ‹  ליווי בהגשת בקשה" />
     <main id="main" className="home-main">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="service-layout">
@@ -88,12 +87,11 @@ export default function HomePage() {
               <span className="faq-heading-line" aria-hidden="true" />
             </header>
             <div className="faq-list">
-              {faqs.map(([number, question, answer], index) => (
-                <details className="faq-card" key={number} open={index === 0}>
+              {faqs.map(([question, answer], index) => (
+                <details className="faq-card" key={question} open={index === 0}>
                   <summary>
                     <img className="faq-chevron" src="/figma/chevron-down-14.svg" width={14} height={14} alt="" aria-hidden="true" />
                     <span className="faq-question">{question}</span>
-                    <span className="faq-number">{number}</span>
                   </summary>
                   <div className="faq-answer"><div className="faq-answer-line" aria-hidden="true" /><p>{answer}</p></div>
                 </details>
