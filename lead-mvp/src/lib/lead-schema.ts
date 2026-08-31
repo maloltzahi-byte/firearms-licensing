@@ -6,7 +6,7 @@ const normalizePhone = (value: unknown) => typeof value === 'string' ? value.rep
 export const leadSchema = z.object({
   fullName: z.string().trim().min(2).max(100).regex(/^[^\r\n]+$/),
   phone: z.preprocess(normalizePhone, z.string().regex(/^(?:\+972|972|0)[2-9]\d{7,8}$/)),
-  email: z.string().trim().email().max(254),
+  email: z.union([z.string().trim().email().max(254), z.literal('')]).default(''),
   note: z.string().trim().max(500).optional().default(''),
   privacy: z.literal('on'),
   website: z.string().max(200).optional().default(''),
