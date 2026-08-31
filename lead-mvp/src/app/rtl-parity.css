@@ -41,10 +41,10 @@
 .resident-options>* ,.criteria-select-grid>*{direction:rtl}
 .criteria-select-grid>.criteria-choice:last-child:nth-child(odd){grid-column:2}
 
-/* Navigation is locked: Back = physical left, Continue/Result = physical right on every step. */
+/* Navigation is locked on every questionnaire step: Continue/Result = physical LEFT, Back = physical RIGHT. */
 .question-nav{display:flex!important;direction:ltr!important;width:100%;justify-content:space-between!important;align-items:center!important}
-.question-nav .nav-btn.back{order:0!important;margin:0!important}
-.question-nav .nav-btn.next{order:1!important;margin:0!important}
+.question-nav .nav-btn.next{order:0!important;margin:0!important}
+.question-nav .nav-btn.back{order:1!important;margin:0!important}
 
 /* Figma places the disclaimer at the physical left on Q1–Q4 and full-width on Q5. */
 .question-disclaimer{width:282px;max-width:100%;margin-right:auto;margin-left:0;text-align:right}
@@ -67,5 +67,7 @@
   .flow-utility .gov-utility-inner{padding-inline:16px}
   .flow-header .gov-header-inner{direction:ltr}
   .question-nav{direction:ltr!important;justify-content:space-between!important}
+  .question-nav .nav-btn.next{order:0!important}
+  .question-nav .nav-btn.back{order:1!important}
   .flow-whatsapp{min-width:118px;height:38px;padding-inline:14px}
 }
