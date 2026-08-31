@@ -4,11 +4,13 @@ import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { track } from '@vercel/analytics'
 import { FlowHeader } from '@/components/gov-shell'
+import { QuestionnaireLeadForm } from './lead-form'
 import { useScreening } from './screening-provider'
 import { labels, type AgeBand, type Citizenship, type ResidencyYears, type Service } from '@/lib/screening'
 
-const TOTAL = 5
-const progressLabels = ['גיל', 'מעמד', 'שירות', 'יישוב', 'תבחין']
+const TOTAL_QUESTIONS = 5
+const TOTAL_STEPS = 6
+const progressLabels = ['גיל', 'מעמד', 'שירות', 'יישוב', 'תבחין', 'פרטים']
 const criterionLabels = ['מקום מגורים','עבודה או לימודים','מורה דרך','כבאות והצלה','גופי הצלה','חקלאות','הובלת חומרי נפץ','ממונה ביטחון','מדריך ירי','שירות בכוחות הביטחון','שירות במשטרה','הכשרות אבטחה','ספורט ירי','ציד','וטרינריה / הדברה']
 
 function Radio({ selected }: { selected: boolean }) {
@@ -20,10 +22,10 @@ function ageLabel(label: string) {
 }
 
 function Progress({ step }: { step: number }) {
-  return <aside className="progress-final" aria-label={`שלב ${step} מתוך ${TOTAL}`}>
+  return <aside className="progress-final" aria-label={`שלב ${step} מתוך ${TOTAL_STEPS}`}>
     <i className="top-rule" />
     <h2>בדיקה ראשונית</h2>
-    <div className="step-label">שלב {step} מתוך 5</div>
+    <div className="step-label">שלב {step} מתוך {TOTAL_STEPS}</div>
     <div className="progress-list-final">
       {progressLabels.map((label, index) => {
         const n = index + 1
@@ -36,7 +38,7 @@ function Progress({ step }: { step: number }) {
 
 export function Questionnaire() {
   const router = useRouter()
-  const { answers, setAnswers, config, result } = useScreening()
+  const { answers, setAnswers, config } = useScreening()
   const [step, setStep] = useState(1)
   const [query, setQuery] = useState(answers.locality)
   const [localityError, setLocalityError] = useState('')
@@ -56,26 +58,26 @@ export function Questionnaire() {
       setAnswers((current) => ({ ...current, locality: normalized }))
     }
     track('screening_step', { step })
-    if (step < TOTAL) setStep((current) => current + 1)
-    else {
-      track('screening_completed', { result })
-      router.push('/check/result')
-    }
+    if (step < TOTAL_STEPS) setStep((current) => current + 1)
   }
 
   const canContinue = step === 1 ? Boolean(answers.age)
     : step === 2 ? Boolean(answers.citizenship) && (answers.citizenship !== 'PERMANENT_RESIDENT' || Boolean(answers.residencyYears))
     : step === 3 ? Boolean(answers.service)
     : step === 4 ? config.localities.includes(query.trim())
-    : answers.unsure || answers.criteria.length > 0
+    : step === 5 ? answers.unsure || answers.criteria.length > 0
+    : false
 
   function toggleCriterion(id: string) {
     setAnswers((current) => ({ ...current, unsure: false, criteria: current.criteria.includes(id) ? current.criteria.filter((item) => item !== id) : [...current.criteria, id] }))
   }
 
   const progress = <div className="question-progress-final">
-    <div className="question-progress-labels-final"><span>שאלה {step} מתוך 5</span><strong>שלב הסינון והבדיקה</strong></div>
-    <div className="progress-track-final"><span style={{ width: `${step * 20}%` }} /></div>
+    <div className="question-progress-labels-final">
+      <span>{step <= TOTAL_QUESTIONS ? `שאלה ${step} מתוך ${TOTAL_QUESTIONS}` : 'שלב סיום'}</span>
+      <strong>{step <= TOTAL_QUESTIONS ? 'שלב הסינון והבדיקה' : 'פרטי קשר ושליחה למשרד'}</strong>
+    </div>
+    <div className="progress-track-final"><span style={{ width: `${(step / TOTAL_STEPS) * 100}%` }} /></div>
   </div>
 
   const body = <>
@@ -110,15 +112,17 @@ export function Questionnaire() {
       <div className="criteria-grid-final">{config.criteria.map((criterion, index) => { const selected = answers.criteria.includes(criterion.id); return <button type="button" key={criterion.id} className={`criteria-choice-final${selected ? ' selected' : ''}`} aria-pressed={selected} onClick={() => toggleCriterion(criterion.id)}><span>{criterionLabels[index] || criterion.he}</span><i aria-hidden="true" /></button> })}</div>
       <button type="button" className={`none-choice-final${answers.unsure ? ' selected' : ''}`} aria-pressed={answers.unsure} onClick={() => setAnswers((current) => ({ ...current, unsure: !current.unsure, criteria: [] }))}><span>לא בטוח / אף אחד מהם</span><i aria-hidden="true" /></button>
     </>}
+
+    {step === 6 && <QuestionnaireLeadForm onBack={() => setStep(5)} />}
   </>
 
-  const nav = <>
+  const nav = step <= TOTAL_QUESTIONS ? <>
     <div className="nav-final">
-      <button className="nav-btn next" type="button" disabled={!canContinue} onClick={next}>{step === TOTAL ? 'הצגת תוצאה ראשונית' : 'המשך'}</button>
+      <button className="nav-btn next" type="button" disabled={!canContinue} onClick={next}>{step === TOTAL_QUESTIONS ? 'המשך לפרטי קשר' : 'המשך'}</button>
       <button className="nav-btn back" type="button" onClick={() => step === 1 ? router.push('/') : setStep((current) => current - 1)}>חזור</button>
     </div>
     <p className="question-disclaimer-final">הבדיקה היא כלי עזר ראשוני בלבד ואינה החלטה רשמית.</p>
-  </>
+  </> : null
 
   return <div className="questionnaire-page"><FlowHeader exit />{step === 5
     ? <main id="main" className="q5-stage-final"><section className="q5-question-final">{progress}{body}{nav}</section></main>
