@@ -75,7 +75,7 @@ function DocumentsCard() {
     <div className="top-rule" />
     <h2>מה כדאי להכין מראש?</h2>
     <div className="doc-list-final">
-      {baseDocuments.map(([title, body]) => <div className="doc-row-final" key={title}><div className="doc-copy-final"><strong>{title}</strong><small>{body}</small></div><span className="doc-check-final" aria-hidden="true">✓</span></div>)}
+      {baseDocuments.map(([title, body]) => <div className="doc-row-final" key={title}><span className="doc-check-final" aria-hidden="true">✓</span><div className="doc-copy-final"><strong>{title}</strong><small>{body}</small></div></div>)}
     </div>
     <details className="criteria-accordion-final">
       <summary><img src="/figma/chevron-down-14.svg" width={14} height={14} alt="" aria-hidden="true" /><span>כל התבחינים</span></summary>
