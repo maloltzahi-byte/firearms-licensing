@@ -5,44 +5,18 @@ import { Analytics } from '@vercel/analytics/next'
 import { site } from '@/lib/site'
 import './globals.css'
 import './conversion.css'
-import './home-v2.css'
-import './rtl-parity.css'
+import './figma-final.css'
 
-const noto = Noto_Sans_Hebrew({
-  subsets: ['hebrew', 'latin'],
-  display: 'swap',
-  variable: '--font-noto-hebrew',
-})
-
-const spectral = Spectral({
-  subsets: ['latin'],
-  weight: ['300', '700'],
-  display: 'swap',
-  variable: '--font-spectral',
-})
+const noto = Noto_Sans_Hebrew({ subsets: ['hebrew','latin'], display:'swap', variable:'--font-noto-hebrew' })
+const spectral = Spectral({ subsets:['latin'], weight:['300','700'], display:'swap', variable:'--font-spectral' })
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: { default: 'הוצאת רישיון נשק פרטי | בליווי משרד עורכי דין צחי מלול', template: '%s | רישיון נשק פרטי' },
+  title: { default:'הוצאת רישיון נשק פרטי | בליווי משרד עורכי דין צחי מלול', template:'%s | רישיון נשק פרטי' },
   description: site.description,
-  openGraph: {
-    type: 'website',
-    locale: 'he_IL',
-    siteName: site.name,
-    title: 'הוצאת רישיון נשק פרטי | בליווי משרד עורכי דין צחי מלול',
-    description: site.description,
-    url: site.url,
-  },
+  openGraph: { type:'website', locale:'he_IL', siteName:site.name, title:'הוצאת רישיון נשק פרטי | בליווי משרד עורכי דין צחי מלול', description:site.description, url:site.url },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return (
-    <html lang="he" dir="rtl">
-      <body className={`${noto.className} ${spectral.variable}`}>
-        <a className="skip-link" href="#main">דלגו לתוכן הראשי</a>
-        {children}
-        <Analytics />
-      </body>
-    </html>
-  )
+  return <html lang="he" dir="rtl"><body className={`${noto.className} ${spectral.variable}`}><a className="skip-link" href="#main">דלגו לתוכן הראשי</a>{children}<Analytics /></body></html>
 }
