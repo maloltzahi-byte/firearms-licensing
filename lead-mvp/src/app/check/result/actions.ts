@@ -99,13 +99,14 @@ export async function submitLead(_previous: LeadState, formData: FormData): Prom
     const color = computeScreeningResult(answers, config)
     const colorHe = color === 'green' ? 'ירוק' : color === 'yellow' ? 'צהוב' : 'אדום'
     const criteriaHe = criterionIds.length ? config.criteria.filter((criterion) => criterionIds.includes(criterion.id)).map((criterion) => criterion.he).join(', ') : (parsed.data.unsure ? 'לא בטוח / אף אחד מהם' : 'טרם סומן')
+    const residencyHe = parsed.data.citizenship === 'PERMANENT_RESIDENT' && parsed.data.residencyYears ? labels.residency[parsed.data.residencyYears] : 'לא רלוונטי'
     const { apiKey, from, to } = mailSetup()
     if (!apiKey || !from) return { status: 'error', message: 'הטופס עדיין לא מחובר לשירות המייל. אפשר לפנות ב-WhatsApp או בטלפון.' }
 
     const received = new Intl.DateTimeFormat('he-IL', { timeZone: 'Asia/Jerusalem', dateStyle: 'short', timeStyle: 'short' }).format(new Date())
     const resend = new Resend(apiKey)
-    const text = `שם: ${parsed.data.fullName}\nטלפון: ${parsed.data.phone}\n\n--- תוצאת הסינון ---\nגיל: ${labels.age[parsed.data.age]}\nמעמד: ${labels.citizenship[parsed.data.citizenship]}\nשירות: ${labels.service[parsed.data.service]}\nיישוב: ${answers.locality}\nתבחינים: ${criteriaHe}\nתוצאה: ${colorHe}\n\nהתקבל: ${received}`
-    const delivered = await sendSafely(resend, { from, to, subject: `ליד חדש — ${colorHe} — ${parsed.data.fullName}`, text })
+    const text = `ליד חדש מאתר רישיון נשק\n\n--- פרטי קשר ---\nשם: ${parsed.data.fullName}\nטלפון: ${parsed.data.phone}\n\n--- כל תשובות השאלון ---\nגיל: ${labels.age[parsed.data.age]}\nמעמד: ${labels.citizenship[parsed.data.citizenship]}\nמשך מגורים כתושב קבע: ${residencyHe}\nשירות: ${labels.service[parsed.data.service]}\nיישוב: ${answers.locality}\nתבחינים שסומנו: ${criteriaHe}\nלא בטוח / אף אחד מהם: ${parsed.data.unsure ? 'כן' : 'לא'}\n\n--- תוצאה ראשונית ---\n${colorHe}\n\nהתקבל: ${received}`
+    const delivered = await sendSafely(resend, { from, to, subject: `ליד חדש — ${colorHe} — ${parsed.data.fullName} — ${parsed.data.phone}`, text })
     return delivered ? { status: 'ok', message: 'הפנייה נשלחה בהצלחה.' } : { status: 'error', message: 'שליחת הפנייה נכשלה. אפשר לפנות ב-WhatsApp או בטלפון.' }
   } catch (error) {
     console.error('submitLead failed', error)
