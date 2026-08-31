@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { track } from '@vercel/analytics'
 import { FlowHeader } from '@/components/gov-shell'
+import { LeadForm } from './lead-form'
 import { useScreening } from './screening-provider'
 import { labels, type AgeBand, type Citizenship, type ResidencyYears, type Service } from '@/lib/screening'
 
@@ -25,6 +26,7 @@ export function Questionnaire() {
   const [step, setStep] = useState(1)
   const [query, setQuery] = useState(answers.locality)
   const [localityError, setLocalityError] = useState('')
+  const [flowStartedAt] = useState(() => Date.now())
 
   const suggestions = useMemo(() => {
     const q = query.trim()
@@ -99,6 +101,7 @@ export function Questionnaire() {
           <button className="nav-btn next" type="button" disabled={!canContinue} onClick={next}>{step===TOTAL?'הצגת תוצאה ראשונית':'המשך'}</button>
         </div>
         <p className="question-disclaimer">הבדיקה היא כלי עזר ראשוני בלבד ואינה החלטה רשמית.</p>
+        {step === 5 && <LeadForm compact startedAt={flowStartedAt} />}
       </section>
     </main>
   </>
