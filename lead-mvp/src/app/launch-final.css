@@ -1,0 +1,37 @@
+/* Launch-approved fixes — 2026-08-31. Loaded last. */
+
+/* Never render honeypot / anti-bot fields as visible UI. */
+.hp-field{display:none!important;position:absolute!important;left:-9999px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+
+/* Home benefits: canonical Hebrew RTL order — 01 right, 02 left, 03 right, 04 left. */
+.benefits-grid-final{direction:rtl!important}
+.benefit-final{direction:rtl!important;text-align:right!important}
+.benefit-head-final{direction:rtl!important;display:flex!important;align-items:center!important;justify-content:space-between!important}
+.benefit-head-final .num{order:0!important;text-align:right!important}
+.benefit-head-final h3{order:1!important;flex:1!important;text-align:right!important;margin-inline-start:18px!important}
+
+/* FAQ: all closed initially; controlled component opens only one at a time. */
+.faq-item-final summary{user-select:none}
+
+/* Final attorney section. */
+.lawyer-head-final{direction:rtl!important;text-align:right!important;align-items:flex-end!important}
+.lawyer-head-final h2{width:100%!important;text-align:right!important;justify-content:flex-start!important;direction:rtl!important}
+.lawyer-head-final p{width:100%!important;text-align:right!important;direction:rtl!important}
+.lawyer-body-title-final{margin:0!important;font-size:20px!important;line-height:28px!important;font-weight:700!important;color:var(--rfl-heading)!important;text-align:right!important;direction:rtl!important}
+.lawyer-body-final>p{text-align:right!important;direction:rtl!important}
+
+/* Result page: all content blocks share the exact 1200px content width of the callback form. */
+.result-final{width:1200px!important;max-width:calc(100% - 48px)!important;margin:0 auto!important;padding:48px 0 64px!important;align-items:stretch!important}
+.result-final>h1,.result-final>.result-sub-final,.result-final>.result-state-final,.result-final>.summary-final,.result-final>.legal-notice-final,.result-final>.result-cta-final,.result-final>.result-actions-final,.result-final>.result-callback-final{width:100%!important;max-width:none!important;box-sizing:border-box!important}
+.result-state-final,.summary-final,.legal-notice-final,.result-callback-final{margin-inline:0!important}
+.result-actions-final{align-self:stretch!important}
+.result-callback-final{width:100%!important}
+.result-callback-final .callback-form-final{width:100%!important}
+
+@media(max-width:900px){
+  .result-final{max-width:calc(100% - 32px)!important;padding:32px 0 48px!important}
+}
+@media(max-width:640px){
+  .benefits-grid-final{grid-template-columns:1fr!important}
+  .result-final{max-width:calc(100% - 24px)!important;padding:24px 0 40px!important}
+}
