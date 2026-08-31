@@ -50,6 +50,14 @@
 .question-disclaimer{width:282px;max-width:100%;margin-right:auto;margin-left:0;text-align:right}
 .q5-card .question-disclaimer{width:100%;margin:0;text-align:right}
 
+/* Compact optional callback form on the last questionnaire step. */
+.q5-lead-form{width:100%;margin-top:6px;padding:20px;border:1px solid #b7c9de;border-radius:8px;background:#f7fafe;display:flex;flex-direction:column;gap:14px;direction:rtl}
+.q5-lead-heading{display:flex;flex-direction:column;gap:4px;text-align:right}.q5-lead-heading h2{margin:0;font-size:20px;color:#123d67}.q5-lead-heading p{margin:0;font-size:13px;color:#496780}
+.q5-lead-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 150px;gap:12px;align-items:end;direction:rtl}
+.q5-lead-field{display:flex;flex-direction:column;gap:6px}.q5-lead-field label{font-size:13px;font-weight:700;color:#123d67;text-align:right}.q5-lead-field input{height:46px;width:100%;border:1px solid #b7c9de;border-radius:6px;background:#fff;padding:0 14px;color:#123d67;text-align:right;outline:none}.q5-lead-field input:focus{border-color:#0666d8;box-shadow:0 0 0 2px rgba(6,102,216,.12)}
+.q5-lead-submit{height:46px;border:0;border-radius:6px;background:#0666d8;color:#fff;font-weight:800;font-size:14px;padding:0 18px}.q5-lead-submit:disabled{opacity:.55}
+.q5-privacy-check{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#496780;text-align:right}.q5-privacy-check input{margin-top:2px;flex:0 0 auto}.q5-privacy-check a{text-decoration:underline;color:#073b73}.q5-lead-success{width:100%;margin-top:6px;padding:18px 20px;border:1px solid #9bcbb8;border-radius:8px;background:#edf7f3;color:#205c46;display:flex;flex-direction:column;gap:4px;text-align:right}.q5-lead-success strong{font-size:16px}.q5-lead-success span{font-size:13px}
+
 /* Result screen parity. */
 .result-state.single-state{max-width:none!important;width:100%!important;min-height:171px!important;padding:24px!important}
 .summary-card dl div{direction:rtl}
@@ -62,6 +70,7 @@
 
 @media(max-width:900px){
   .home-brand{width:100%!important}
+  .q5-lead-grid{grid-template-columns:1fr 1fr}.q5-lead-submit{grid-column:1/-1}
 }
 @media(max-width:640px){
   .flow-utility .gov-utility-inner{padding-inline:16px}
@@ -70,4 +79,5 @@
   .question-nav .nav-btn.next{order:0!important}
   .question-nav .nav-btn.back{order:1!important}
   .flow-whatsapp{min-width:118px;height:38px;padding-inline:14px}
+  .q5-lead-form{padding:16px}.q5-lead-grid{grid-template-columns:1fr}.q5-lead-submit{grid-column:auto;width:100%}
 }
