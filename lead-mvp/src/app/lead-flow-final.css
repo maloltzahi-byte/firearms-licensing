@@ -1,0 +1,29 @@
+/* Integrated questionnaire lead-capture flow — loaded last. */
+
+.screening-contact-form-final{display:flex;flex-direction:column;gap:22px;width:100%;direction:rtl}
+.screening-contact-title-final{width:100%;text-align:right}
+.screening-contact-title-final h1{margin:0;font-size:30px;line-height:41px;font-weight:700;color:var(--rfl-heading)}
+.screening-contact-title-final p{margin:8px 0 0;font-size:15px;line-height:24px;color:var(--rfl-muted)}
+.screening-contact-fields-final{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;direction:rtl}
+.screening-contact-field-final{display:flex;flex-direction:column;gap:8px;text-align:right}
+.screening-contact-field-final>span{font-size:14px;font-weight:400;color:var(--rfl-heading)}
+.screening-contact-field-final input{width:100%;height:56px;border:1px solid var(--rfl-border);border-radius:5px;background:#fff;padding:0 16px;text-align:right;color:var(--rfl-text);outline:none;font-weight:400}
+.screening-contact-field-final input:focus{border-color:var(--rfl-blue);box-shadow:0 0 0 2px rgba(6,102,216,.12)}
+.screening-submit-note-final{padding:14px 16px;border:1px solid #a9c8ea;border-radius:5px;background:var(--rfl-info);font-size:13px;line-height:21px;text-align:right;color:var(--rfl-text)}
+.screening-contact-nav-final{margin-top:2px}
+.screening-contact-nav-final .nav-btn{min-width:180px;font-weight:400!important}
+.screening-contact-form-final .callback-note{margin:0;font-size:11px;line-height:18px;text-align:right;color:var(--rfl-muted)}
+.screening-contact-form-final .form-error{padding:12px 14px;border:1px solid #d86767;border-radius:5px;background:#fff2f2;color:#8f1d1d;text-align:right}
+
+/* Result appears only after a successful questionnaire lead submission. */
+.result-lead-sent-final{width:100%!important;max-width:none!important;margin:0!important;box-sizing:border-box!important;text-align:right!important}
+.result-final>.result-lead-sent-final{width:100%!important}
+
+/* The old standalone result callback form is retired. */
+.result-callback-final{display:none!important}
+
+@media(max-width:720px){
+  .screening-contact-fields-final{grid-template-columns:1fr}
+  .screening-contact-nav-final{gap:12px}
+  .screening-contact-nav-final .nav-btn{min-width:0}
+}
