@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { HomeFooter, HomeHeader, PhoneIcon, ServiceSidebar, WhatsAppIcon } from '@/components/gov-shell'
+import { HomeFaq } from '@/components/home/home-faq'
 import { LeadForm } from '@/components/screening/lead-form'
 import { phoneHref, site, whatsappHref } from '@/lib/site'
 
@@ -29,7 +30,7 @@ export default function HomePage() {
       <div className="home-content-final">
         <section className="home-hero-final" aria-labelledby="home-title">
           <h1 id="home-title">הוצאת רישיון נשק פרטי</h1>
-          <h2>בדיקה ראשונית והכוונה של עורך דין לאורך שלבי התהליך</h2>
+          <h2>בדיקה ראשונית והכוונה מקצועית של עורך דין לכל אורך התהליך והגשת הבקשה</h2>
           <i className="hero-rule" aria-hidden="true" />
           <p>השירות מיועד למי ששוקל להגיש בקשה לרישיון נשק פרטי ורוצה להבין בצורה מסודרת מה נדרש, אילו שלבים צפויים בהמשך, ומתי יש צורך בתצהיר או בבדיקה משפטית נוספת.</p>
           <Link className="home-primary" href="/check">התחילו בדיקה ראשונית</Link>
@@ -44,13 +45,17 @@ export default function HomePage() {
 
         <section id="faq" className="faq-final" aria-labelledby="faq-title">
           <header className="faq-title-final"><h2 id="faq-title">שאלות נפוצות</h2><i aria-hidden="true" /></header>
-          <div className="faq-stack-final">{faqs.map(([question, answer], index) => <details className="faq-item-final" key={question} open={index === 0}><summary><img className="faq-chev" src="/figma/chevron-down-14.svg" width={14} height={14} alt="" aria-hidden="true" /><span>{question}</span></summary><div className="faq-answer-final">{answer}</div></details>)}</div>
+          <HomeFaq items={faqs} />
         </section>
 
         <section id="contact" className="lawyer-callback-final" aria-labelledby="lawyer-title">
-          <header className="lawyer-head-final"><h2 id="lawyer-title"><span>ליווי אישי של עורך דין</span><span className="gavel-mark" aria-hidden="true">⌁</span></h2><p>מקצועיות, סדר והכוונה משפטית לאורך שלבי הבקשה</p></header>
+          <header className="lawyer-head-final">
+            <h2 id="lawyer-title">עורך דין לצדכם בהמשך התהליך</h2>
+            <p>הכוונה מסודרת והמשך טיפול בהתאם לצורך</p>
+          </header>
           <div className="lawyer-body-final">
-            <p>לאחר הבדיקה הראשונית אפשר להמשיך לשירות אישי עם עורך דין, שיסביר את המסלול האפשרי, את המסמכים והשלבים הרלוונטיים, וילווה את הטיפול לפי הצורך.</p>
+            <h3 className="lawyer-body-title-final">מענה אישי של עורך דין</h3>
+            <p>לאחר הבדיקה הראשונית אפשר להמשיך למענה אישי של עורך דין, כדי להבין את המסלול האפשרי, את המסמכים הנדרשים ואת הצעדים הבאים בצורה מסודרת וברורה.</p>
             <div className="contact-split-final">
               <div className="direct-buttons-final"><Link className="rfl-btn home-primary" href="/check">התחילו בדיקה ראשונית</Link><a className="rfl-btn rfl-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer"><span>וואטסאפ</span><WhatsAppIcon /></a><a className="rfl-btn rfl-call" href={phoneHref()}><span>התקשרו עכשיו</span><PhoneIcon /></a></div>
               <div className="contact-label-final"><h3>צרו קשר ישיר:</h3><p>מענה מהיר ומקצועי על ידי צוות המשרד</p><span className="trust-pill">עמידה קפדנית בכל דרישות החוק</span></div>
