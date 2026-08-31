@@ -57,27 +57,37 @@ export async function submitLead(_previous: LeadState, formData: FormData): Prom
   }
   const color = computeScreeningResult(answers, config)
   const colorHe = color === 'green' ? 'ירוק' : color === 'yellow' ? 'צהוב' : 'אדום'
-  const criteriaHe = criterionIds.length ? config.criteria.filter((criterion) => criterionIds.includes(criterion.id)).map((criterion) => criterion.he).join(', ') : 'לא בטוח / אף אחד מהם'
+  const criteriaHe = criterionIds.length
+    ? config.criteria.filter((criterion) => criterionIds.includes(criterion.id)).map((criterion) => criterion.he).join(', ')
+    : parsed.data.unsure ? 'לא בטוח / אף אחד מהם' : 'טרם סומן'
   const received = new Intl.DateTimeFormat('he-IL', { timeZone: 'Asia/Jerusalem', dateStyle: 'short', timeStyle: 'short' }).format(new Date())
 
   const apiKey = process.env.RESEND_API_KEY
-  const primary = process.env.LEAD_EMAIL_TO || site.email
+  const primary = process.env.LEAD_EMAIL_TO || 'tzahimaloladv@gmail.com'
   const from = process.env.LEAD_EMAIL_FROM
-  if (!apiKey || !from) return { status: 'error', message: `הטופס עדיין לא מחובר לשירות המייל. אפשר ליצור קשר מיידית בטלפון או ב־WhatsApp: ${site.phone}, או במייל ${site.email}.` }
+  if (!apiKey || !from) return { status: 'error', message: `הטופס עדיין לא מחובר לשירות המייל. אפשר ליצור קשר מיידית בטלפון או ב־WhatsApp: ${site.phone}.` }
 
   const subject = `ליד חדש — ${colorHe} — ${parsed.data.fullName}`
-  const text = `שם:      ${parsed.data.fullName}\nטלפון:   ${parsed.data.phone}\nאימייל:  ${parsed.data.email}\nהערה:    ${parsed.data.note || 'ללא'}\n\n--- תוצאת הסינון ---\nגיל:      ${labels.age[parsed.data.age]}\nאזרחות:   ${labels.citizenship[parsed.data.citizenship]}\nשירות:    ${labels.service[parsed.data.service]}\nיישוב:    ${answers.locality} — זכאות יישוב לא נבדקה\nתבחינים:  ${criteriaHe}\nתוצאה:    ${colorHe}\n\nהתקבל: ${received}`
+  const text = `שם:      ${parsed.data.fullName}\nטלפון:   ${parsed.data.phone}\nאימייל:  ${parsed.data.email || 'לא נמסר'}\nהערה:    ${parsed.data.note || 'ללא'}\n\n--- תוצאת הסינון ---\nגיל:      ${labels.age[parsed.data.age]}\nאזרחות:   ${labels.citizenship[parsed.data.citizenship]}\nשירות:    ${labels.service[parsed.data.service]}\nיישוב:    ${answers.locality} — זכאות יישוב לא נבדקה\nתבחינים:  ${criteriaHe}\nתוצאה:    ${colorHe}\n\nהתקבל: ${received}`
 
   const resend = new Resend(apiKey)
-  const delivered = await sendSafely(resend, { from, to: primary, replyTo: parsed.data.email, subject, text })
+  const delivered = await sendSafely(resend, {
+    from,
+    to: primary,
+    ...(parsed.data.email ? { replyTo: parsed.data.email } : {}),
+    subject,
+    text,
+  })
   if (!delivered) return { status: 'error', message: `שליחת הפנייה נכשלה. אפשר ליצור קשר מיידית בטלפון או ב־WhatsApp: ${site.phone}.` }
 
-  await sendSafely(resend, {
-    from,
-    to: parsed.data.email,
-    subject: 'קיבלנו את פנייתך',
-    text: `שלום ${parsed.data.fullName},\n\nקיבלנו את פנייתך בנושא בדיקה ראשונית לרישוי כלי ירייה פרטי. נחזור אליך בתוך יום עסקים.\n\n${resultCopy(color).title}\n\nלתשומת לבך: תוצאת הסינון היא כלי עזר ראשוני בלבד ואינה חוות דעת משפטית.`,
-  })
+  if (parsed.data.email) {
+    await sendSafely(resend, {
+      from,
+      to: parsed.data.email,
+      subject: 'קיבלנו את פנייתך',
+      text: `שלום ${parsed.data.fullName},\n\nקיבלנו את פנייתך בנושא בדיקה ראשונית לרישוי כלי ירייה פרטי. נחזור אליך בתוך יום עסקים.\n\n${resultCopy(color).title}\n\nלתשומת לבך: תוצאת הסינון היא כלי עזר ראשוני בלבד ואינה חוות דעת משפטית.`,
+    })
+  }
 
   return { status: 'ok', message: 'הפנייה נשלחה בהצלחה.' }
 }
