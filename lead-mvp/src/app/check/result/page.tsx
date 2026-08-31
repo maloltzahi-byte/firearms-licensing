@@ -1,7 +1,6 @@
 'use client'
 import Link from 'next/link'
 import { FlowHeader,PhoneIcon,WhatsAppIcon } from '@/components/gov-shell'
-import { LeadForm } from '@/components/screening/lead-form'
 import { useScreening } from '@/components/screening/screening-provider'
 import { labels } from '@/lib/screening'
 import { phoneHref,whatsappHref } from '@/lib/site'
@@ -21,6 +20,7 @@ export default function ResultPage(){
   return <><FlowHeader/><main id="main" className="result-final">
     <h1>תוצאה ראשונית</h1>
     <p className="result-sub-final">התוצאה היא אינדיקציה בלבד ואינה קביעה רשמית של זכאות.</p>
+    <div className="lead-success-final result-lead-sent-final" role="status">פרטי הקשר ותשובות השאלון נשלחו למשרד. נחזור אליכם בהקדם.</div>
     <article className={`result-state-final ${result}`}><span className="result-badge-final">{s.label}</span><h2>{s.title}</h2><p>{s.text}</p></article>
     <section className="summary-final"><h2>הפרטים שמסרת</h2><dl>
       <div><dt>גיל</dt><dd><bdi dir="ltr">{labels.age[answers.age]}</bdi></dd></div>
@@ -30,8 +30,7 @@ export default function ResultPage(){
       <div><dt>תבחינים</dt><dd>{selected}</dd></div>
     </dl></section>
     <div className="legal-notice-final"><strong>חשוב לדעת</strong><span>התוצאה היא אינדיקציה ראשונית בלבד. אין צורך למסור באתר מידע רפואי, עבר פלילי או מידע רגיש; אם הוא רלוונטי, מדברים עליו בשיחה פרטנית.</span></div>
-    <h2 className="result-cta-final">רוצים שנבדוק את המקרה שלכם?</h2>
+    <h2 className="result-cta-final">רוצים לדבר איתנו כבר עכשיו?</h2>
     <div className="result-actions-final"><a className="rfl-btn rfl-whatsapp" href={whatsappHref(msg)} target="_blank" rel="noreferrer"><span>וואטסאפ</span><WhatsAppIcon/></a><a className="rfl-btn rfl-call" href={phoneHref()}><span>התקשרו עכשיו</span><PhoneIcon/></a></div>
-    <div className="result-callback-final"><LeadForm variant="result"/></div>
   </main></>
 }
