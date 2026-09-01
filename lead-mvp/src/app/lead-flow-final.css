@@ -15,6 +15,11 @@
 .screening-contact-form-final .callback-note{margin:0;font-size:11px;line-height:18px;text-align:right;color:var(--rfl-muted)}
 .screening-contact-form-final .form-error{padding:12px 14px;border:1px solid #d86767;border-radius:5px;background:#fff2f2;color:#8f1d1d;text-align:right}
 
+/* Home callback section: action button uses the exact CTA sizing language from the attorney section above. */
+.home-callback-form .callback-row-final{grid-template-columns:1fr 1fr!important;gap:12px 16px!important;align-items:end!important}
+.home-callback-form .callback-submit{grid-column:1 / -1!important;grid-row:2!important;width:calc(100% - 312px)!important;min-width:230px!important;height:48px!important;border-radius:24px!important;font-size:16px!important;font-weight:400!important;justify-self:start!important;padding:0 24px!important}
+.home-callback-form .callback-field-final input{height:48px!important;border-radius:24px!important}
+
 /* Result appears only after a successful questionnaire lead submission. */
 .result-lead-sent-final{width:100%!important;max-width:none!important;margin:0!important;box-sizing:border-box!important;text-align:right!important}
 .result-final>.result-lead-sent-final{width:100%!important}
@@ -26,4 +31,6 @@
   .screening-contact-fields-final{grid-template-columns:1fr}
   .screening-contact-nav-final{gap:12px}
   .screening-contact-nav-final .nav-btn{min-width:0}
+  .home-callback-form .callback-row-final{grid-template-columns:1fr!important}
+  .home-callback-form .callback-submit{grid-column:1!important;grid-row:auto!important;width:100%!important;min-width:0!important;justify-self:stretch!important}
 }
