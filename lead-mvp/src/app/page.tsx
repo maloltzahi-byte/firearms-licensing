@@ -8,10 +8,10 @@ import { phoneHref, site, whatsappHref } from '@/lib/site'
 export const metadata: Metadata = { title: 'הוצאת רישיון נשק פרטי', description: site.description }
 
 const benefits = [
-  ['01', 'בדיקה ראשונית', 'בודקים אם יש טעם להתקדם ומה נכון לבדוק כבר בתחילת הדרך, כולל עמידה בתנאי הסף הנדרשים.', true],
-  ['02', 'סדר במסמכים', 'מבינים אילו מסמכים עשויים להיות רלוונטיים ואיך להתארגן נכון כדי למנוע דחיות ועיכובים מיותרים.', false],
-  ['03', 'מיקוד בתהליך', 'מקבלים תמונה מסודרת של השלבים האפשריים במקום לפעול בחוסר ודאות מול המערכת הבירוקרטית.', false],
-  ['04', 'אימות תצהיר מול עורך דין', 'אם בהמשך עולה צורך בתצהיר משפטי חתום, ניתן להשלים אותו במהירות ובאופן מסודר מול עורך דין.', true],
+  ['01', 'בדיקה ראשונית', 'בודקים אם יש טעם להתקדם ומה נכון לבדוק כבר בתחילת הדרך, כולל עמידה בתנאי הסף הנדרשים.', 'plain'],
+  ['02', 'סדר במסמכים', 'מבינים אילו מסמכים עשויים להיות רלוונטיים ואיך להתארגן נכון כדי למנוע דחיות ועיכובים מיותרים.', 'soft'],
+  ['03', 'אימות תצהיר מול עורך דין', 'לצורך הגשת הבקשה נדרש לחתום על תצהירים בפני עורך דין, משרדנו דואג לכך כחלק מהתהליך.', 'soft'],
+  ['04', 'הגשת בקשה', 'הגשת בקשה ומעקב עד לקבלת רישיון הנשק, מקבלים תמונה מסודרת של השלבים האפשריים במקום לפעול בחוסר ודאות מול המערכת הבירוקרטית.', 'plain'],
 ] as const
 
 const faqs = [
@@ -20,6 +20,8 @@ const faqs = [
   ['אילו מסמכים עשויים להידרש?', 'המסמכים משתנים לפי התבחין והנסיבות. במסגרת השירות נסביר אילו אישורים ומסמכים רלוונטיים למקרה שלכם.'],
   ['מה קורה לאחר הבדיקה הראשונית?', 'לאחר השלמת השאלון ופרטי הקשר, המידע נשלח למשרד לצורך בדיקה וחזרה אליכם. ניתן גם לפנות ישירות בוואטסאפ או בטלפון.'],
 ] as const
+
+const GAVEL_ASSET = 'https://www.figma.com/api/mcp/asset/df6003ef-9f96-4955-b2bf-044b870c0b9e.png'
 
 export default function HomePage() {
   return <div className="home-final">
@@ -30,17 +32,17 @@ export default function HomePage() {
       <div className="home-content-final">
         <section className="home-hero-final" aria-labelledby="home-title">
           <h1 id="home-title">הוצאת רישיון נשק פרטי</h1>
-          <h2>בדיקה ראשונית והכוונה מקצועית של עורך דין לכל אורך התהליך והגשת הבקשה</h2>
+          <h2>בדיקה ראשונית והכוונה מקצועית של עורך דין</h2>
           <i className="hero-rule" aria-hidden="true" />
-          <p>השירות מיועד למי ששוקל להגיש בקשה לרישיון נשק פרטי ורוצה להבין בצורה מסודרת מה נדרש, אילו שלבים צפויים בהמשך, ומתי יש צורך בתצהיר או בבדיקה משפטית נוספת.</p>
+          <p>השירות מיועד למי ששוקל להגיש בקשה לרישיון נשק פרטי ורוצה להבין בצורה מסודרת מה נדרש, אילו שלבים צפויים בהמשך עד לקבלת רישיון הנשק.</p>
           <Link className="home-primary" href="/check">התחילו בדיקה ראשונית</Link>
         </section>
 
         <div className="info-banner-final"><span>הבדיקה הראשונית באתר ללא עלות. המשך ליווי, ככל שיידרש, יתומחר ויסוכם מראש.</span><b className="info-dot" aria-hidden="true">i</b></div>
 
         <section id="included" className="benefits-final" aria-labelledby="benefits-title">
-          <header className="section-head-final"><h2 id="benefits-title">מה מקבלים בפועל?</h2><p>בדיקה ראשונית, סדר בתהליך והכוונה ברורה להמשך.</p></header>
-          <div className="benefits-grid-final">{benefits.map(([number, title, body, primary]) => <article className={`benefit-final${primary ? ' primary' : ''}`} key={number}><div className="benefit-head-final"><span className="num">{number}</span><h3>{title}</h3></div><hr /><p>{body}</p></article>)}</div>
+          <header className="section-head-final"><h2 id="benefits-title">מה השירות כולל?</h2><p>בדיקה ראשונית, סדר בתהליך, הגשת בקשה ומעקב עד לסיום התהליך.</p></header>
+          <div className="benefits-grid-final">{benefits.map(([number, title, body, tone]) => <article className={`benefit-final ${tone}`} key={number}><div className="benefit-head-final"><span className="num">{number}</span><h3>{title}</h3></div><hr /><p>{body}</p></article>)}</div>
         </section>
 
         <section id="faq" className="faq-final" aria-labelledby="faq-title">
@@ -50,16 +52,12 @@ export default function HomePage() {
 
         <section id="contact" className="lawyer-callback-final" aria-labelledby="lawyer-title">
           <header className="lawyer-head-final">
-            <h2 id="lawyer-title">עורך דין לצדכם בהמשך התהליך</h2>
-            <p>הכוונה מסודרת והמשך טיפול בהתאם לצורך</p>
+            <h2 id="lawyer-title">רוצים להתייעץ עם עורך דין?<img className="gavel-icon-final" src={GAVEL_ASSET} width={20} height={20} alt="" aria-hidden="true" /></h2>
           </header>
           <div className="lawyer-body-final">
-            <h3 className="lawyer-body-title-final">מענה אישי של עורך דין</h3>
-            <p>לאחר הבדיקה הראשונית אפשר להמשיך למענה אישי של עורך דין, כדי להבין את המסלול האפשרי, את המסמכים הנדרשים ואת הצעדים הבאים בצורה מסודרת וברורה.</p>
-            <div className="contact-split-final">
-              <div className="direct-buttons-final"><Link className="rfl-btn home-primary" href="/check">התחילו בדיקה ראשונית</Link><a className="rfl-btn rfl-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer"><span>וואטסאפ</span><WhatsAppIcon /></a><a className="rfl-btn rfl-call" href={phoneHref()}><span>התקשרו עכשיו</span><PhoneIcon /></a></div>
-              <div className="contact-label-final"><h3>צרו קשר ישיר:</h3><p>מענה מהיר ומקצועי על ידי צוות המשרד</p><span className="trust-pill">עמידה קפדנית בכל דרישות החוק</span></div>
-            </div>
+            <h3 className="lawyer-body-title-final">דברו איתנו:</h3>
+            <p className="lawyer-contact-subtitle-final">מענה מהיר ומקצועי על ידי צוות המשרד</p>
+            <div className="direct-buttons-final"><a className="rfl-btn rfl-whatsapp" href={whatsappHref()} target="_blank" rel="noreferrer"><span>וואטסאפ</span><WhatsAppIcon /></a><a className="rfl-btn rfl-call" href={phoneHref()}><span>התקשרו עכשיו</span><PhoneIcon /></a><Link className="rfl-btn home-primary" href="/check">התחילו בדיקה ראשונית</Link></div>
           </div>
           <div className="callback-wrap-final"><LeadForm /></div>
         </section>
