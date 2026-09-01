@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { phoneHref, whatsappHref } from '@/lib/site'
 
+const CROSSHAIR_ASSET = 'https://www.figma.com/api/mcp/asset/68edcd3f-e132-48cb-a909-7e89495631d6.svg'
+
 export function WhatsAppIcon({ size = 18 }: { size?: number }) {
   return <img src="/figma/whatsapp-filled-18.svg" width={size} height={size} alt="" aria-hidden="true" />
 }
@@ -11,6 +13,10 @@ export function PhoneIcon({ size = 18 }: { size?: number }) {
 
 function Brand() {
   return <Link href="/" className="brand-block"><strong>הוצאת רישיון נשק פרטי</strong><span>בליווי משרד עורכי דין צחי מלול</span></Link>
+}
+
+function OfficeBrand({ footer = false }: { footer?: boolean }) {
+  return <Link href="/" className={`office-brand-final${footer ? ' footer' : ''}`}><span>משרד עורכי דין צחי מלול</span><img src={CROSSHAIR_ASSET} width={footer ? 28 : 32} height={footer ? 28 : 36} alt="" aria-hidden="true" /></Link>
 }
 
 const officialCriteria = [
@@ -41,7 +47,7 @@ const baseDocuments = [
 ] as const
 
 export function HomeHeader() {
-  return <header className="home-header"><nav className="home-nav" aria-label="ניווט ראשי"><a href="#contact">צור קשר</a><a href="#faq">שאלות נפוצות</a><a href="#included" className="active">מה מקבלים בפועל</a></nav><div className="home-brand"><Brand /></div></header>
+  return <header className="home-header"><nav className="home-nav" aria-label="ניווט ראשי"><a href="#contact">צור קשר</a><a href="#faq">שאלות נפוצות</a><a href="#included" className="active">מה מקבלים בפועל</a></nav><OfficeBrand /></header>
 }
 
 export function FlowHeader({ exit = false }: { exit?: boolean }) {
@@ -75,7 +81,7 @@ function DocumentsCard() {
     <div className="top-rule" />
     <h2>מה כדאי להכין מראש?</h2>
     <div className="doc-list-final">
-      {baseDocuments.map(([title, body]) => <div className="doc-row-final" key={title}><span className="doc-check-final" aria-hidden="true">✓</span><div className="doc-copy-final"><strong>{title}</strong><small>{body}</small></div></div>)}
+      {baseDocuments.map(([title, body]) => <div className="doc-row-final" key={title}><div className="doc-copy-final"><strong>{title}</strong><small>{body}</small></div><span className="doc-check-final" aria-hidden="true">✓</span></div>)}
     </div>
     <details className="criteria-accordion-final">
       <summary><img src="/figma/chevron-down-14.svg" width={14} height={14} alt="" aria-hidden="true" /><span>כל התבחינים</span></summary>
@@ -93,7 +99,7 @@ export function LegalSidebar() {
 }
 
 export function HomeFooter() {
-  return <footer className="home-footer-final"><nav><Link href="/privacy">מדיניות פרטיות</Link><span>|</span><Link href="/accessibility">הצהרת נגישות</Link><span>|</span><Link href="/terms">תנאי שימוש</Link></nav><span>בליווי משרד עורכי דין צחי מלול</span></footer>
+  return <footer className="home-footer-final"><nav><Link href="/privacy">מדיניות פרטיות</Link><span>|</span><Link href="/accessibility">הצהרת נגישות</Link><span>|</span><Link href="/terms">תנאי שימוש</Link></nav><OfficeBrand footer /></footer>
 }
 
 export function LegalFooter() {
