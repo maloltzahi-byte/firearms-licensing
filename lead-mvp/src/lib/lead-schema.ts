@@ -1,5 +1,13 @@
 import { z } from 'zod'
-import { ageOptions, citizenshipOptions, residencyOptions, serviceOptions } from './screening'
+import {
+  ageOptions,
+  applicationStatusOptions,
+  citizenshipOptions,
+  hebrewOptions,
+  policeBarrierOptions,
+  residencyOptions,
+  serviceOptions,
+} from './screening'
 
 const normalizePhone = (value: unknown) => typeof value === 'string' ? value.replace(/[\s()-]/g, '') : value
 
@@ -12,10 +20,14 @@ export const leadSchema = z.object({
   website: z.string().max(200).optional().default(''),
   startedAt: z.coerce.number().int().positive(),
   age: z.enum(ageOptions),
+  hebrewBasic: z.enum(hebrewOptions),
   citizenship: z.enum(citizenshipOptions),
   residencyYears: z.union([z.enum(residencyOptions), z.literal('')]).transform((value) => value || null),
   service: z.enum(serviceOptions),
-  locality: z.string().trim().min(1).max(100),
-  criteria: z.string().max(500),
-  unsure: z.enum(['true', 'false']).transform((value) => value === 'true'),
+  applicationStatus: z.enum(applicationStatusOptions),
+  policeBarrier: z.enum(policeBarrierOptions),
+  routeFamilies: z.string().trim().min(1).max(500),
+  locality: z.string().trim().max(100).default(''),
+  criteria: z.string().max(500).optional().default(''),
+  unsure: z.enum(['true', 'false']).optional().default('false').transform((value) => value === 'true'),
 })
