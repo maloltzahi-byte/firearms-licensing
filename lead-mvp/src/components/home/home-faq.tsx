@@ -5,20 +5,19 @@ import { useState } from 'react'
 type Faq = readonly [question: string, answer: string]
 
 export function HomeFaq({ items }: { items: readonly Faq[] }) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [openIndex, setOpenIndex] = useState<number | null>(0)
 
-  return <div className="faq-stack-final">
+  return <div className="rc-faq-list">
     {items.map(([question, answer], index) => {
       const open = openIndex === index
-      return <details className="faq-item-final" key={question} open={open}>
+      return <details className="rc-faq-item" key={question} open={open}>
         <summary onClick={(event) => {
           event.preventDefault()
           setOpenIndex(open ? null : index)
         }}>
-          <img className="faq-chev" src="/figma/chevron-down-14.svg" width={14} height={14} alt="" aria-hidden="true" />
-          <span>{question}</span>
+          <span>{question}</span><b className="rc-faq-symbol" aria-hidden="true">{open ? '−' : '+'}</b>
         </summary>
-        <div className="faq-answer-final">{answer}</div>
+        <div className="rc-faq-answer">{answer}</div>
       </details>
     })}
   </div>
