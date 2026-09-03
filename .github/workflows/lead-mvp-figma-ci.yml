@@ -29,15 +29,12 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       - name: Verify
         run: pnpm verify
-      - name: Assemble standalone browser-QA build
-        run: |
-          mkdir -p .next/standalone/lead-mvp/.next
-          cp -R .next/static .next/standalone/lead-mvp/.next/static
-          cp -R public .next/standalone/lead-mvp/public
-      - name: Upload browser-QA build
+      - name: Package browser-QA runtime
+        run: tar -czf ../lead-mvp-runtime.tgz .next public node_modules package.json next.config.ts
+      - name: Upload browser-QA runtime
         uses: actions/upload-artifact@v4
         with:
-          name: lead-mvp-browser-qa
-          path: lead-mvp/.next/standalone
+          name: lead-mvp-runtime
+          path: lead-mvp-runtime.tgz
           if-no-files-found: error
           retention-days: 1
