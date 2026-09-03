@@ -3,6 +3,11 @@
   .rc-services{height:742px;margin-top:-10px}
   .rc-preflight{height:479px}
   .rc-faq{height:487px}
+  .rc-public-header{direction:ltr}
+  .rc-public-header>a{direction:rtl}
+  .rc-public-brand{direction:rtl}
+  .rc-legal-footer{direction:ltr}
+  .rc-legal-footer nav,.rc-legal-footer>span{direction:rtl}
 }
 
 .rc-locality-depth{position:relative;margin-top:12px}
