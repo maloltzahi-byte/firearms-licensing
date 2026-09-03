@@ -73,6 +73,43 @@ function isExpectedLocalAnalyticsError(text) {
     (text.includes('Refused to execute script') && text.includes('_vercel/insights'))
 }
 
+async function assertWideDesktop(page) {
+  await page.goto(base, { waitUntil: 'networkidle' })
+  const home = await page.evaluate(() => {
+    const root = document.querySelector('.rc-site')?.getBoundingClientRect()
+    const preview = document.querySelector('.rc-preview')?.getBoundingClientRect()
+    const hero = document.querySelector('.rc-hero-copy')?.getBoundingClientRect()
+    const h1 = document.querySelector('.rc-hero-copy h1')
+    return {
+      root: root && { x: root.x, width: root.width },
+      preview: preview && { x: preview.x, width: preview.width },
+      hero: hero && { x: hero.x, width: hero.width },
+      font: h1 ? getComputedStyle(h1).fontFamily : '',
+    }
+  })
+  if (!home.root || Math.abs(home.root.width - 1440) > 1 || Math.abs(home.root.x - 240) > 1) throw new Error(`wide home: canonical root mismatch ${JSON.stringify(home.root)}`)
+  if (!home.preview || Math.abs(home.preview.x - 320) > 1 || Math.abs(home.preview.width - 600) > 1) throw new Error(`wide home: preview mismatch ${JSON.stringify(home.preview)}`)
+  if (!home.hero || Math.abs(home.hero.x - 1000) > 1 || Math.abs(home.hero.width - 560) > 1) throw new Error(`wide home: hero mismatch ${JSON.stringify(home.hero)}`)
+  if (/serif/i.test(home.font)) throw new Error(`wide home: wrong font ${home.font}`)
+  await page.screenshot({ path: `${out}/wide-1920-home.png`, fullPage: false })
+
+  await page.goto(`${base}/check`, { waitUntil: 'networkidle' })
+  const wizard = await page.evaluate(() => {
+    const root = document.querySelector('.rc-flow-page')?.getBoundingClientRect()
+    const side = document.querySelector('.rc-progress-side')?.getBoundingClientRect()
+    const card = document.querySelector('.rc-question-card')?.getBoundingClientRect()
+    return {
+      root: root && { x: root.x, width: root.width },
+      side: side && { x: side.x, width: side.width },
+      card: card && { x: card.x, width: card.width },
+    }
+  })
+  if (!wizard.root || Math.abs(wizard.root.width - 1440) > 1 || Math.abs(wizard.root.x - 240) > 1) throw new Error(`wide wizard: canonical root mismatch ${JSON.stringify(wizard.root)}`)
+  if (!wizard.side || Math.abs(wizard.side.x - 340) > 1 || Math.abs(wizard.side.width - 280) > 1) throw new Error(`wide wizard: sidebar mismatch ${JSON.stringify(wizard.side)}`)
+  if (!wizard.card || Math.abs(wizard.card.x - 656) > 1 || Math.abs(wizard.card.width - 820) > 1) throw new Error(`wide wizard: card mismatch ${JSON.stringify(wizard.card)}`)
+  await page.screenshot({ path: `${out}/wide-1920-step1.png`, fullPage: false })
+}
+
 const browser = await chromium.launch({ headless: true })
 try {
   for (const spec of [
@@ -97,6 +134,11 @@ try {
     if (errors.length) throw new Error(`${spec.prefix}: browser errors\n${errors.join('\n')}`)
     await context.close()
   }
+
+  const wideContext = await browser.newContext({ viewport: { width: 1920, height: 1080 }, locale: 'he-IL' })
+  const widePage = await wideContext.newPage()
+  await assertWideDesktop(widePage)
+  await wideContext.close()
 } finally {
   await browser.close()
 }
