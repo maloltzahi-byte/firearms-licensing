@@ -1,6 +1,7 @@
 /* Final Figma parity corrections — loaded after every legacy layer. */
 @media(min-width:901px){
   .rc-site{min-height:3032px}
+  .rc-flow-page{height:960px;overflow:hidden}
   .rc-services{height:742px;margin-top:-10px}
   .rc-preflight{height:479px}
   .rc-faq{height:487px}
