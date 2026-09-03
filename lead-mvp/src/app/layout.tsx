@@ -11,6 +11,7 @@ import './launch-final.css'
 import './lead-flow-final.css'
 import './figma-sync-2026-09-01.css'
 import './rc-figma-1to1.css'
+import './rc-figma-1to1-fixes.css'
 
 const assistant = Assistant({
   subsets: ['hebrew', 'latin'],
