@@ -1,0 +1,22 @@
+/* Final Figma parity corrections — loaded after every legacy layer. */
+@media(min-width:901px){
+  .rc-services{height:742px;margin-top:-10px}
+  .rc-preflight{height:479px}
+  .rc-faq{height:487px}
+}
+
+.rc-locality-depth{position:relative;margin-top:12px}
+.rc-locality-label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:var(--rc-text)}
+.rc-locality-label input{height:44px;border:1px solid var(--rc-border);border-radius:6px;background:#fff;padding:0 14px;color:var(--rc-text);font-family:inherit;font-size:14px;text-align:right}
+.rc-locality-suggestions{position:absolute;left:16px;right:16px;top:82px;z-index:20;background:#fff;border:1px solid var(--rc-border);border-radius:6px;box-shadow:0 8px 18px rgba(15,36,56,.1);max-height:172px;overflow:auto}
+.rc-locality-suggestions button{width:100%;height:40px;border:0;border-bottom:1px solid var(--rc-rule);background:#fff;text-align:right;padding:0 14px;font:inherit;font-size:13px;color:var(--rc-text);cursor:pointer}
+.rc-locality-suggestions button:hover{background:#f2f7fe}.rc-locality-suggestions button:last-child{border-bottom:0}
+.rc-question-card.step5:has(.rc-locality-depth){height:auto;min-height:820px}
+
+@media(max-width:900px){
+  .rc-services{margin-top:0}
+  .rc-locality-depth{margin-top:14px}
+  .rc-locality-label input{height:48px;border-radius:7px}
+  .rc-locality-suggestions{top:86px}
+  .rc-question-card.step5:has(.rc-locality-depth){min-height:1050px}
+}
