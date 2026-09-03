@@ -6,6 +6,7 @@ import { site } from '@/lib/site'
 import './globals.css'
 import './rc-figma-1to1.css'
 import './rc-figma-1to1-fixes.css'
+import './rc-canonical-shell.css'
 
 const assistant = Assistant({
   subsets: ['hebrew', 'latin'],
