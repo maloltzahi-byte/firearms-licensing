@@ -6,8 +6,16 @@
   .rc-public-header{direction:ltr}
   .rc-public-header>a{direction:rtl}
   .rc-public-brand{direction:rtl}
-  .rc-legal-footer{direction:ltr}
-  .rc-legal-footer nav,.rc-legal-footer>span{direction:rtl}
+
+  .rc-legal-page{min-height:1180px}
+  .rc-legal-top,.rc-legal-header,.rc-legal-footer{direction:ltr}
+  .rc-legal-top>*,.rc-legal-header>*,.rc-legal-footer nav,.rc-legal-footer>span{direction:rtl}
+  .rc-privacy .rc-legal-main{height:706px;min-height:706px}
+  .rc-privacy .rc-legal-content{height:626px}
+  .rc-accessibility .rc-legal-main{height:666px;min-height:666px}
+  .rc-accessibility .rc-legal-content{height:586px}
+  .rc-terms .rc-legal-main{height:632px;min-height:632px}
+  .rc-terms .rc-legal-content{height:552px}
 }
 
 /* Figma places controls on the visual right while preserving RTL text. */
@@ -40,6 +48,16 @@
   .rc-locality-label input{height:48px;border-radius:7px}
   .rc-locality-suggestions{top:86px}
   .rc-question-card.step5:has(.rc-locality-depth){min-height:1050px}
-  .rc-breadcrumb{font-size:0}
+
+  .rc-legal-top span,.rc-legal-top a{display:none}
+  .rc-legal-header{direction:rtl}
+  .rc-legal-brand strong,.rc-legal-brand span{font-size:0;line-height:0}
+  .rc-legal-brand strong::after{content:"משרד עורכי דין צחי מלול";display:block;font-size:16px;line-height:19px;font-weight:600}
+  .rc-legal-brand span::after{content:"רישיון לכלי ירייה פרטי";display:block;font-size:14px;line-height:17px;font-weight:400;color:#fff}
+  .rc-breadcrumb{font-size:0;padding:18px 20px}
   .rc-breadcrumb::before{content:"חזרה לעמוד הבית";font-size:11px;direction:rtl}
+  .rc-legal-main{padding:0 16px;min-height:0}
+  .rc-privacy .rc-legal-main,.rc-privacy .rc-legal-content{height:840px;min-height:840px}
+  .rc-accessibility .rc-legal-main,.rc-accessibility .rc-legal-content,.rc-terms .rc-legal-main,.rc-terms .rc-legal-content{height:800px;min-height:800px}
+  .rc-legal-footer{height:152px;padding:20px}
 }
