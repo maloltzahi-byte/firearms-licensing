@@ -1,3 +1,4 @@
+// Canonical visual gate: 1440 desktop, 390 mobile, and centered 1440 canvas at 1920 viewport.
 import { chromium } from 'playwright'
 import fs from 'node:fs/promises'
 
