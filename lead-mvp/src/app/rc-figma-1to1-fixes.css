@@ -1,11 +1,13 @@
 /* Final Figma parity corrections — loaded after every legacy layer. */
 @media(min-width:901px){
+  .rc-site{min-height:3032px}
   .rc-services{height:742px;margin-top:-10px}
   .rc-preflight{height:479px}
   .rc-faq{height:487px}
   .rc-public-header{direction:ltr}
   .rc-public-header>a{direction:rtl}
   .rc-public-brand{direction:rtl}
+  .rc-result{height:1214px}
 
   .rc-legal-page{min-height:1180px}
   .rc-legal-top,.rc-legal-header,.rc-legal-footer{direction:ltr}
@@ -48,6 +50,22 @@
   .rc-locality-label input{height:48px;border-radius:7px}
   .rc-locality-suggestions{top:86px}
   .rc-question-card.step5:has(.rc-locality-depth){min-height:1050px}
+
+  /* Canonical mobile frame heights and vertical rhythm. */
+  .rc-wizard:has(.step1){min-height:886px}
+  .rc-question-card.step1 .rc-q-nav{margin-top:77px}
+  .rc-question-card.step1 .rc-q-disc{margin-top:15px}
+  .rc-question-card.step3 .rc-q-nav{margin-top:85px}
+  .rc-wizard:has(.step4){min-height:806px}
+  .rc-question-card.step4 .rc-app-status{margin-top:54px}
+  .rc-question-card.step4 .rc-app-status .rc-choice{min-height:54px}
+  .rc-question-card.step4 .rc-barrier{height:164px;margin-top:18px}
+  .rc-question-card.step4 .rc-q-nav{margin-top:28px}
+  .rc-question-card.step4 .rc-q-disc{margin-top:12px}
+  .rc-step5-stage{height:986px;min-height:986px}
+  .rc-question-card.step5 .rc-q-nav{margin-top:30px}
+  .rc-question-card.step5 .rc-q-disc{margin-top:15px}
+  .rc-result{height:1304px}
 
   .rc-legal-top span,.rc-legal-top a{display:none}
   .rc-legal-header{direction:rtl}
