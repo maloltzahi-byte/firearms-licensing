@@ -5,8 +5,14 @@ import { phoneHref } from '@/lib/site'
 
 type Section = { title?: string; body: ReactNode }
 
+function legalPageClass(title: string) {
+  if (title === 'מדיניות פרטיות') return 'rc-privacy'
+  if (title === 'הצהרת נגישות') return 'rc-accessibility'
+  return 'rc-terms'
+}
+
 export function LegalPage({ title, sections }: { title: string; sections: Section[] }) {
-  return <div className="rc-legal-page">
+  return <div className={`rc-legal-page ${legalPageClass(title)}`}>
     <div className="rc-legal-top"><span>שירות פרטי • אינו אתר ממשלתי</span><a href={phoneHref()}>התקשרו עכשיו</a></div>
     <header className="rc-legal-header"><Link href="/">חזרה לעמוד הבית</Link><Link href="/" className="rc-legal-brand"><strong>הוצאת רישיון נשק פרטי</strong><span>בליווי משרד עורכי דין צחי מלול</span></Link></header>
     <div className="rc-breadcrumb">ראשי&nbsp;&nbsp;‹&nbsp;&nbsp;{title}</div>
