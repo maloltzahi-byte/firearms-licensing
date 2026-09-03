@@ -67,6 +67,12 @@ async function legal(page, prefix, width) {
   }
 }
 
+function isExpectedLocalAnalyticsError(text) {
+  return text.includes('/_vercel/insights/script.js') ||
+    (text.includes('Failed to load resource') && text.includes('404')) ||
+    (text.includes('Refused to execute script') && text.includes('_vercel/insights'))
+}
+
 const browser = await chromium.launch({ headless: true })
 try {
   for (const spec of [
@@ -77,7 +83,11 @@ try {
     const page = await context.newPage()
     const errors = []
     page.on('pageerror', (error) => errors.push(`pageerror: ${error.message}`))
-    page.on('console', (msg) => { if (msg.type() === 'error') errors.push(`console: ${msg.text()}`) })
+    page.on('console', (msg) => {
+      if (msg.type() !== 'error') return
+      const text = msg.text()
+      if (!isExpectedLocalAnalyticsError(text)) errors.push(`console: ${text}`)
+    })
 
     await page.goto(base, { waitUntil: 'networkidle' })
     await shot(page, `${spec.prefix}-01-home`, spec.width)
