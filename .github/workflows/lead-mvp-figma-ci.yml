@@ -29,12 +29,26 @@ jobs:
         run: pnpm install --no-frozen-lockfile
       - name: Verify
         run: pnpm verify
-      - name: Package browser-QA runtime
-        run: tar -czf ../lead-mvp-runtime.tgz .next public node_modules package.json next.config.ts
-      - name: Upload browser-QA runtime
+      - name: Install browser QA dependency
+        run: pnpm add -D --ignore-workspace-root-check playwright@1.55.0
+      - name: Install Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Start Lead MVP
+        run: |
+          PORT=3100 HOSTNAME=127.0.0.1 pnpm start > /tmp/lead-mvp-server.log 2>&1 &
+          for i in {1..45}; do
+            if curl -fsS http://127.0.0.1:3100/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/lead-mvp-server.log
+          exit 1
+      - name: Browser parity capture
+        run: node scripts/visual-qa.mjs
+      - name: Upload parity screenshots
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: lead-mvp-runtime
-          path: lead-mvp-runtime.tgz
-          if-no-files-found: error
+          name: lead-mvp-figma-parity-screenshots
+          path: lead-mvp/qa-screenshots
+          if-no-files-found: warn
           retention-days: 1
