@@ -10,6 +10,22 @@
   .rc-legal-footer nav,.rc-legal-footer>span{direction:rtl}
 }
 
+/* Figma places controls on the visual right while preserving RTL text. */
+.rc-progress-row{direction:ltr}
+.rc-progress-row span{direction:rtl;text-align:right}
+.rc-choice{direction:ltr}
+.rc-choice .label{direction:rtl;text-align:right}
+.rc-hebrew-buttons{direction:ltr}
+.rc-hebrew-buttons button{direction:rtl}
+.rc-follow-actions{direction:ltr}
+.rc-follow-actions .rc-choice{direction:ltr}
+.rc-route-grid{direction:ltr}
+.rc-check{direction:ltr}
+.rc-check span{direction:rtl;text-align:right}
+.rc-route-note{direction:rtl;text-align:right}
+.rc-result-actions{direction:ltr}
+.rc-result-actions .rc-btn{direction:rtl}
+
 .rc-locality-depth{position:relative;margin-top:12px}
 .rc-locality-label{display:flex;flex-direction:column;gap:7px;font-size:13px;font-weight:600;color:var(--rc-text)}
 .rc-locality-label input{height:44px;border:1px solid var(--rc-border);border-radius:6px;background:#fff;padding:0 14px;color:var(--rc-text);font-family:inherit;font-size:14px;text-align:right}
@@ -24,4 +40,6 @@
   .rc-locality-label input{height:48px;border-radius:7px}
   .rc-locality-suggestions{top:86px}
   .rc-question-card.step5:has(.rc-locality-depth){min-height:1050px}
+  .rc-breadcrumb{font-size:0}
+  .rc-breadcrumb::before{content:"חזרה לעמוד הבית";font-size:11px;direction:rtl}
 }
