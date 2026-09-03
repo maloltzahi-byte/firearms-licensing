@@ -4,12 +4,6 @@ import { Assistant } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { site } from '@/lib/site'
 import './globals.css'
-import './conversion.css'
-import './figma-final.css'
-import './approved-figma.css'
-import './launch-final.css'
-import './lead-flow-final.css'
-import './figma-sync-2026-09-01.css'
 import './rc-figma-1to1.css'
 import './rc-figma-1to1-fixes.css'
 
@@ -35,5 +29,5 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  return <html lang="he" dir="rtl"><body className={assistant.className}><a className="skip-link" href="#main">דלגו לתוכן הראשי</a>{children}<Analytics /></body></html>
+  return <html lang="he" dir="rtl"><body className={`${assistant.className} ${assistant.variable}`}><a className="skip-link" href="#main">דלגו לתוכן הראשי</a>{children}<Analytics /></body></html>
 }
