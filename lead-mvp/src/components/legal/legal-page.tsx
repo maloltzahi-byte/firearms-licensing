@@ -1,4 +1,16 @@
-import type {ReactNode} from 'react'
-import {Breadcrumb,FlowHeader,LegalFooter,LegalSidebar} from '@/components/gov-shell'
-type Section={title?:string;body:ReactNode}
-export function LegalPage({title,sections}:{title:string;sections:Section[]}){return <div className="legal-page-final"><FlowHeader/><Breadcrumb current={title}/><main id="main" className="legal-layout-final"><LegalSidebar/><article className="legal-content-final"><i className="blue-rule"/><h1>{title}</h1><p className="legal-updated-final">עודכן לאחרונה: 31 באוגוסט 2026</p>{sections.map((s,i)=><section className="legal-section-final" key={`${s.title||'section'}-${i}`}>{s.title&&<h2>{s.title}</h2>}<p>{s.body}</p></section>)}</article></main><LegalFooter/></div>}
+import Link from 'next/link'
+import type { ReactNode } from 'react'
+import { LegalFooter, LegalSidebar } from '@/components/gov-shell'
+import { phoneHref } from '@/lib/site'
+
+type Section = { title?: string; body: ReactNode }
+
+export function LegalPage({ title, sections }: { title: string; sections: Section[] }) {
+  return <div className="rc-legal-page">
+    <div className="rc-legal-top"><span>שירות פרטי • אינו אתר ממשלתי</span><a href={phoneHref()}>התקשרו עכשיו</a></div>
+    <header className="rc-legal-header"><Link href="/">חזרה לעמוד הבית</Link><Link href="/" className="rc-legal-brand"><strong>הוצאת רישיון נשק פרטי</strong><span>בליווי משרד עורכי דין צחי מלול</span></Link></header>
+    <div className="rc-breadcrumb">ראשי&nbsp;&nbsp;‹&nbsp;&nbsp;{title}</div>
+    <main id="main" className="rc-legal-main"><LegalSidebar/><article className="rc-legal-content"><h1>{title}</h1><p className="rc-legal-updated">עודכן לאחרונה: 31 באוגוסט 2026</p>{sections.map((section,index)=><section className="rc-legal-section" key={`${section.title || 'section'}-${index}`}>{section.title&&<h2>{section.title}</h2>}<p>{section.body}</p></section>)}</article></main>
+    <LegalFooter />
+  </div>
+}
