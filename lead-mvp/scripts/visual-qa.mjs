@@ -76,7 +76,7 @@ function isExpectedLocalAnalyticsError(text) {
 const browser = await chromium.launch({ headless: true })
 try {
   for (const spec of [
-    { prefix: 'desktop', width: 1440, height: 1000 },
+    { prefix: 'desktop', width: 1440, height: 960 },
     { prefix: 'mobile', width: 390, height: 844 },
   ]) {
     const context = await browser.newContext({ viewport: { width: spec.width, height: spec.height }, locale: 'he-IL' })
