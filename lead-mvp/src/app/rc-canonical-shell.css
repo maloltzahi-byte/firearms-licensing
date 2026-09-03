@@ -3,6 +3,8 @@ html,body{min-height:100%;background:#eef5fc}body{overflow-x:hidden}.rc-site,.rc
 @media(min-width:901px){
 .rc-site{height:3032px;min-height:3032px;overflow:hidden;background:#eef5fc}.rc-flow-page{height:960px;min-height:960px;overflow:hidden;background:#fff}.rc-result-page{height:1312px;min-height:1312px;overflow:hidden;background:#fff}.rc-legal-page{height:1180px;min-height:1180px;overflow:hidden;background:#eef5fc}
 .rc-home-hero-inner{margin-left:80px!important;margin-right:auto!important}.rc-public-header{direction:ltr}.rc-public-header>a{direction:rtl}.rc-public-brand{direction:rtl}.rc-legal-top,.rc-legal-header,.rc-legal-footer{direction:ltr}.rc-legal-top>*,.rc-legal-header>*,.rc-legal-footer nav,.rc-legal-footer>span{direction:rtl}
+/* Hero flow: Figma H1 y=150, first-row CTAs y=432, call y=496. */
+.rc-hero-copy h1{margin-top:8px!important}.rc-hero-copy .lead{margin-bottom:30px!important}.rc-hero-copy .body{margin-bottom:46px!important}.rc-hero-actions .call{margin-top:-10px!important}
 .rc-choice .label{text-align:left!important}.rc-hebrew-follow h3{position:absolute;left:16px;top:13px;width:360px;text-align:right;margin:0}.rc-hebrew-follow p{position:absolute;left:16px;top:40px;width:360px;text-align:right;margin:0}.rc-hebrew-buttons{left:403px!important;right:auto!important;top:17px!important}
 .rc-question-card.step4 .rc-barrier{margin-top:28px!important}
 /* WHAT WE DO: exact frame y=852, x geometry from Figma 873:1118. */
@@ -35,7 +37,7 @@ html,body{min-height:100%;background:#eef5fc}body{overflow-x:hidden}.rc-site,.rc
 .rc-faq{height:450px!important;padding:24px 0 24px 70px!important;background:var(--rc-soft)!important;position:relative!important}
 .rc-faq-panel{width:1290px!important;height:402px!important;margin-left:0!important;margin-right:auto!important;box-sizing:border-box!important}
 /* FINAL CTA: exact frame y=2560 after 37px transition gap. */
-.rc-final{height:470px!important;margin-top:37px!important}.rc-final-copy{top:64px!important}.rc-final-actions{margin-top:74px!important}
+.rc-final{height:470px!important;margin-top:37px!important}.rc-final-copy{top:64px!important}.rc-final-actions{margin-top:74px!important;row-gap:19px!important}
 .rc-result{height:1214px!important}
 }
 @media(max-width:480px){.rc-site,.rc-flow-page,.rc-result-page,.rc-legal-page{max-width:390px;margin-inline:auto}}
